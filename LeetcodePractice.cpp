@@ -3,10 +3,12 @@
 
 #include <iostream>
 #include <vector>
+#include <deque>
 
 using namespace std;
 
 bool canPlaceFlowers(vector<int>& flowerbed, int n);
+vector<int> maxSlidingWindow(vector<int>& nums, int k);
 
 int main()
 {
@@ -44,4 +46,24 @@ bool canPlaceFlowers(vector<int>& flowerbed, int n)
 		}
 	}
 	return !n;
+}
+
+//239 滑动窗口最大值
+vector<int> maxSlidingWindow(vector<int>& nums, int k)
+{
+	vector<int> vReturn;
+	deque<int> dqIndex;
+	for (int i = 0; i < nums.size(); ++i)
+	{
+		if (!dqIndex.empty() && i - k == dqIndex.front())
+			dqIndex.pop_front();
+		while (!dqIndex.empty() && nums[dqIndex.back()] < nums[i])
+			dqIndex.pop_back();
+
+		dqIndex.push_back(i);
+
+		if (i > k - 2)
+			vReturn.push_back(nums[dqIndex.front()]);
+	}
+	return vReturn;
 }
