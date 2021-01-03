@@ -7,12 +7,20 @@
 
 using namespace std;
 
+struct ListNode {
+	int val;
+	ListNode* next;
+	ListNode(int x) : val(x), next(NULL) {}
+};
+
+
 bool canPlaceFlowers(vector<int>& flowerbed, int n);
 vector<int> maxSlidingWindow(vector<int>& nums, int k);
+ListNode* partition(ListNode* head, int x);
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	std::cout << "Hello World!\n";
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
@@ -26,7 +34,7 @@ int main()
 //   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
 //   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
 
-// 605 种花问题
+//01-01  605 种花问题
 bool canPlaceFlowers(vector<int>& flowerbed, int n)
 {
 	if (!n)
@@ -48,7 +56,7 @@ bool canPlaceFlowers(vector<int>& flowerbed, int n)
 	return !n;
 }
 
-//239 滑动窗口最大值
+//01-02  239 滑动窗口最大值
 vector<int> maxSlidingWindow(vector<int>& nums, int k)
 {
 	vector<int> vReturn;
@@ -66,4 +74,30 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k)
 			vReturn.push_back(nums[dqIndex.front()]);
 	}
 	return vReturn;
+}
+
+//01-03  86 分隔列表
+ListNode* partition(ListNode* head, int x)
+{
+	ListNode* Front = new ListNode(0);
+	ListNode* Head = Front;
+	ListNode* Back = new ListNode(0);
+	ListNode* End = Back;
+	while (nullptr != head)
+	{
+		if (x > head->val)
+		{
+			Front->next = head;
+			Front = Front->next;
+		}
+		else
+		{
+			Back->next = head;
+			Back = Back->next;
+		}
+		head = head->next;
+	}
+	Back->next = nullptr;
+	Front->next = End->next;
+	return Head->next;
 }
