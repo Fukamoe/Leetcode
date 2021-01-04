@@ -17,9 +17,12 @@ struct ListNode {
 bool canPlaceFlowers(vector<int>& flowerbed, int n);
 vector<int> maxSlidingWindow(vector<int>& nums, int k);
 ListNode* partition(ListNode* head, int x);
+int fib(int n);
 
 int main()
 {
+	for (int i = 0; i < 31; ++i)
+		std::cout << fib(i) << std::endl;
 	std::cout << "Hello World!\n";
 }
 
@@ -100,4 +103,10 @@ ListNode* partition(ListNode* head, int x)
 	Back->next = nullptr;
 	Front->next = End->next;
 	return Head->next;
+}
+
+int fib(int n)
+{
+	double d = sqrt(5);
+	return (pow((1 + d) / 2, n) - pow((1 - d) / 2, n)) / d;
 }
