@@ -18,11 +18,10 @@ bool canPlaceFlowers(vector<int>& flowerbed, int n);
 vector<int> maxSlidingWindow(vector<int>& nums, int k);
 ListNode* partition(ListNode* head, int x);
 int fib(int n);
+vector<vector<int>> largeGroupPositions(string s);
 
 int main()
 {
-	for (int i = 0; i < 31; ++i)
-		std::cout << fib(i) << std::endl;
 	std::cout << "Hello World!\n";
 }
 
@@ -104,9 +103,28 @@ ListNode* partition(ListNode* head, int x)
 	Front->next = End->next;
 	return Head->next;
 }
-
+// 509 斐波那契数
 int fib(int n)
 {
 	double d = sqrt(5);
 	return (pow((1 + d) / 2, n) - pow((1 - d) / 2, n)) / d;
+}
+// 830 较大分组的位置
+vector<vector<int>> largeGroupPositions(string s)
+{
+	vector<vector<int>> vRet;
+	s.append("1");
+	int count = 1;
+	for (int i = 0; i < s.length() - 1; ++i)
+	{
+		if (s[i] != s[i + 1])
+		{
+			if (2 < count)
+				vRet.push_back({ i - count + 1, i });
+			count = 1;
+		}
+		else
+			++count;
+	}
+	return vRet;
 }
