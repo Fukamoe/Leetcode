@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <deque>
+#include <unordered_map>
+#include <queue>
 
 using namespace std;
 
@@ -19,6 +21,7 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k);
 ListNode* partition(ListNode* head, int x);
 int fib(int n);
 vector<vector<int>> largeGroupPositions(string s);
+vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries);
 
 int main()
 {
@@ -127,4 +130,58 @@ vector<vector<int>> largeGroupPositions(string s)
 			++count;
 	}
 	return vRet;
+}
+vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries)
+{
+		int nvars = 0;
+		unordered_map<string, int> variables;
+
+		int n = equations.size();
+		for (int i = 0; i < n; i++) {
+			if (variables.find(equations[i][0]) == variables.end()) {
+				variables[equations[i][0]] = nvars++;
+			}
+			if (variables.find(equations[i][1]) == variables.end()) {
+				variables[equations[i][1]] = nvars++;
+			}
+		}
+
+		vector<vector<pair<int, double>>> edges(nvars);
+		for (int i = 0; i < n; i++) {
+			int va = variables[equations[i][0]], vb = variables[equations[i][1]];
+			edges[va].push_back(make_pair(vb, values[i]));
+			edges[vb].push_back(make_pair(va, 1.0 / values[i]));
+		}
+
+		vector<double> ret;
+		for (const auto& q : queries) {
+			double result = -1.0;
+			if (variables.find(q[0]) != variables.end() && variables.find(q[1]) != variables.end()) {
+				int ia = variables[q[0]], ib = variables[q[1]];
+				if (ia == ib) {
+					result = 1.0;
+				}
+				else {
+					queue<int> points;
+					points.push(ia);
+					vector<double> ratios(nvars, -1.0);
+					ratios[ia] = 1.0;
+
+					while (!points.empty() && ratios[ib] < 0) {
+						int x = points.front();
+						points.pop();
+
+						for (const auto edge : edges[x]) {
+							if (ratios[edge.first] < 0) {
+								ratios[edge.first] = ratios[x] * edge.second;
+								points.push(edge.first);
+							}
+						}
+					}
+					result = ratios[ib];
+				}
+			}
+			ret.push_back(result);
+		}
+		return ret;
 }
