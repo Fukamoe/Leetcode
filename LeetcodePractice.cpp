@@ -22,6 +22,9 @@ ListNode* partition(ListNode* head, int x);
 int fib(int n);
 vector<vector<int>> largeGroupPositions(string s);
 vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries);
+int findCircleNum(vector<vector<int>>& isConnected);
+void dfs(vector<vector<int>>& isConnected, vector<int>& isProvince, int provinces, int i);
+
 
 int main()
 {
@@ -185,3 +188,33 @@ vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& v
 		}
 		return ret;
 }
+
+int findCircleNum(vector<vector<int>>& isConnected)
+{
+	int nLen = isConnected.size();
+	vector<int> isProvince(nLen);
+	int Province = 0;
+	for (int i = 0; i < nLen; ++i)
+	{
+		if (!isProvince[i])
+		{
+			dfs(isConnected, isProvince, nLen, i);
+			++Province;
+		}
+	}
+	return Province;
+}
+
+void dfs(vector<vector<int>>& isConnected, vector<int>& isProvince, int provinces, int i)
+{
+	for (int j = 0; j < provinces; ++j)
+	{
+		if (isConnected[i][j] == 1 && !isProvince[j])
+		{
+			isProvince[j] = 1;
+			dfs(isConnected, isProvince, provinces, j);
+		}
+	}
+}
+
+
