@@ -24,7 +24,7 @@ vector<vector<int>> largeGroupPositions(string s);
 vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries);
 int findCircleNum(vector<vector<int>>& isConnected);
 void dfs(vector<vector<int>>& isConnected, vector<int>& isProvince, int provinces, int i);
-
+void rotate(vector<int>& nums, int k);
 
 int main()
 {
@@ -215,6 +215,14 @@ void dfs(vector<vector<int>>& isConnected, vector<int>& isProvince, int province
 			dfs(isConnected, isProvince, provinces, j);
 		}
 	}
+}
+
+void rotate(vector<int>& nums, int k)
+{
+	k = k % nums.size();
+	reverse(nums.begin(), nums.begin() + nums.size() - k);
+	reverse(nums.begin() + nums.size() - k, nums.end());
+	reverse(nums.begin(), nums.end());
 }
 
 
