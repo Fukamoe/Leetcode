@@ -25,6 +25,7 @@ vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& v
 int findCircleNum(vector<vector<int>>& isConnected);
 void dfs(vector<vector<int>>& isConnected, vector<int>& isProvince, int provinces, int i);
 void rotate(vector<int>& nums, int k);
+int maxProfit(vector<int>& prices);
 
 int main()
 {
@@ -223,6 +224,20 @@ void rotate(vector<int>& nums, int k)
 	reverse(nums.begin(), nums.begin() + nums.size() - k);
 	reverse(nums.begin() + nums.size() - k, nums.end());
 	reverse(nums.begin(), nums.end());
+}
+
+int maxProfit(vector<int>& prices)
+{
+	int Buy_1 = INT32_MIN, Sell_1 = INT32_MIN, Buy_2 = 0, Sell_2 = 0;
+
+		for (auto p : prices)
+		{
+			Buy_1 = max(Buy_1, -p);
+			Sell_1 = max(Sell_1, Buy_1 + p);
+			Buy_2 = max(Buy_2, Sell_1 - p);
+			Sell_2 = max(Sell_2, Buy_2 + p);
+		}
+		return Sell_2;
 }
 
 
