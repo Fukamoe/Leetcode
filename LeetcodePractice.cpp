@@ -6,6 +6,7 @@
 #include <deque>
 #include <unordered_map>
 #include <queue>
+#include <string>
 
 using namespace std;
 
@@ -26,6 +27,7 @@ int findCircleNum(vector<vector<int>>& isConnected);
 void dfs(vector<vector<int>>& isConnected, vector<int>& isProvince, int provinces, int i);
 void rotate(vector<int>& nums, int k);
 int maxProfit(vector<int>& prices);
+vector<string> summaryRanges(vector<int>& nums);
 
 int main()
 {
@@ -238,6 +240,22 @@ int maxProfit(vector<int>& prices)
 			Sell_2 = max(Sell_2, Buy_2 + p);
 		}
 		return Sell_2;
+}
+
+vector<string> summaryRanges(vector<int>& nums)
+{
+		vector<string> vRet;
+		int nLen = nums.size();
+		int nStart = 0;
+		for (int i = 0; i < nLen; ++i)
+		{
+			if (i + 1 == nLen || nums[i] + 1 != nums[i + 1])
+			{
+				vRet.push_back(to_string(nums[nStart]) + (nStart == i ? "" : "->" + to_string(nums[i])));
+				nStart = i + 1;
+			}
+		}
+		return vRet;
 }
 
 
