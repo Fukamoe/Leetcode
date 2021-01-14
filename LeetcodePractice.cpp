@@ -66,7 +66,7 @@ vector<int> topSort(vector<int>& deg, vector<vector<int>>& graph, vector<int>& i
 int Find(vector<int>& parent, int index);
 void Union(vector<int>& parent, int index1, int index2);
 vector<int> findRedundantConnection(vector<vector<int>>& edges);
-
+vector<bool> prefixesDivBy5(vector<int>& A);
 
 int main()
 {
@@ -435,6 +435,18 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges)
 		}
 	}
 	return vector<int>{};
+}
+
+vector<bool> prefixesDivBy5(vector<int>& A)
+{
+	vector<bool> list;
+	int prefix = 0;
+	int length = A.size();
+	for (int i = 0; i < length; i++) {
+		prefix = ((prefix << 1) + A[i]) % 5;
+		list.emplace_back(prefix == 0);
+	}
+	return list;
 }
 
 
