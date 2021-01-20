@@ -69,6 +69,8 @@ vector<int> findRedundantConnection(vector<vector<int>>& edges);
 vector<bool> prefixesDivBy5(vector<int>& A);
 void dfs(int x, vector<vector<int>>& edge, vector<int>& vis);
 int removeStones(vector<vector<int>>& stones);
+int maximumProduct(vector<int>& nums);
+
 
 int main()
 {
@@ -481,6 +483,13 @@ int removeStones(vector<vector<int>>& stones)
 		}
 	}
 	return n - num;
+}
+
+int maximumProduct(vector<int>& nums)
+{
+	sort(nums.begin(), nums.end());
+	int n = nums.size();
+	return max(nums[0] * nums[1] * nums[n - 1], nums[n - 3] * nums[n - 2] * nums[n - 1]);
 }
 
 //
