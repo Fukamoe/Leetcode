@@ -672,3 +672,23 @@
 //        return ans;
 //    }
 //};
+//class Solution {
+//public:
+//    unordered_map<int, Employee*> mp;
+//
+//    int dfs(int id) {
+//        Employee* employee = mp[id];
+//        int total = employee->importance;
+//        for (int subId : employee->subordinates) {
+//            total += dfs(subId);
+//        }
+//        return total;
+//    }
+//
+//    int getImportance(vector<Employee*> employees, int id) {
+//        for (auto& employee : employees) {
+//            mp[employee->id] = employee;
+//        }
+//        return dfs(id);
+//    }
+//};
