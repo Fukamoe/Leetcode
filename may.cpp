@@ -325,19 +325,54 @@
 //    {1,    "I"},
 //};
 //
-//class Solution {
-//public:
-//    string intToRoman(int num) {
-//        string roman;
-//        for (const auto& [value, symbol] : valueSymbols) {
-//            while (num >= value) {
-//                num -= value;
-//                roman += symbol;
-//            }
-//            if (num == 0) {
-//                break;
-//            }
-//        }
-//        return roman;
-//    }
-//};
+
+class may
+{
+public:
+	may();
+	~may();
+
+private:
+	void tt(int n);
+};
+
+may::may()
+{
+}
+
+may::~may()
+{
+}
+
+void may::tt(int n)
+{
+	 n = 0;
+}
+class Solution {
+private:
+    unordered_map<char, int> symbolValues = {
+        {'I', 1},
+        {'V', 5},
+        {'X', 10},
+        {'L', 50},
+        {'C', 100},
+        {'D', 500},
+        {'M', 1000},
+    };
+
+public:
+    int romanToInt(string s) {
+        int ans = 0;
+        int n = s.length();
+        for (int i = 0; i < n; ++i) {
+            int value = symbolValues[s[i]];
+            if (i < n - 1 && value < symbolValues[s[i + 1]]) {
+                ans -= value;
+            }
+            else {
+                ans += value;
+            }
+        }
+        return ans;
+    }
+};
