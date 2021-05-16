@@ -325,54 +325,95 @@
 //    {1,    "I"},
 //};
 //
-
-class may
-{
-public:
-	may();
-	~may();
-
-private:
-	void tt(int n);
-};
-
-may::may()
-{
-}
-
-may::~may()
-{
-}
-
-void may::tt(int n)
-{
-	 n = 0;
-}
-class Solution {
-private:
-    unordered_map<char, int> symbolValues = {
-        {'I', 1},
-        {'V', 5},
-        {'X', 10},
-        {'L', 50},
-        {'C', 100},
-        {'D', 500},
-        {'M', 1000},
-    };
-
-public:
-    int romanToInt(string s) {
-        int ans = 0;
-        int n = s.length();
-        for (int i = 0; i < n; ++i) {
-            int value = symbolValues[s[i]];
-            if (i < n - 1 && value < symbolValues[s[i + 1]]) {
-                ans -= value;
-            }
-            else {
-                ans += value;
-            }
-        }
-        return ans;
-    }
-};
+//
+//class may
+//{
+//public:
+//	may();
+//	~may();
+//
+//private:
+//	void tt(int n);
+//};
+//
+//may::may()
+//{
+//}
+//
+//may::~may()
+//{
+//}
+//
+//void may::tt(int n)
+//{
+//	 n = 0;
+//}
+//class Solution {
+//private:
+//    unordered_map<char, int> symbolValues = {
+//        {'I', 1},
+//        {'V', 5},
+//        {'X', 10},
+//        {'L', 50},
+//        {'C', 100},
+//        {'D', 500},
+//        {'M', 1000},
+//    };
+//
+//public:
+//    int romanToInt(string s) {
+//        int ans = 0;
+//        int n = s.length();
+//        for (int i = 0; i < n; ++i) {
+//            int value = symbolValues[s[i]];
+//            if (i < n - 1 && value < symbolValues[s[i + 1]]) {
+//                ans -= value;
+//            }
+//            else {
+//                ans += value;
+//            }
+//        }
+//        return ans;
+//    }
+//}; class Solution {
+//private:
+//    // 最高位的二进制位编号为 30
+//    static constexpr int HIGH_BIT = 30;
+//
+//public:
+//    int findMaximumXOR(vector<int>& nums) {
+//        int x = 0;
+//        for (int k = HIGH_BIT; k >= 0; --k) {
+//            unordered_set<int> seen;
+//            // 将所有的 pre^k(a_j) 放入哈希表中
+//            for (int num : nums) {
+//                // 如果只想保留从最高位开始到第 k 个二进制位为止的部分
+//                // 只需将其右移 k 位
+//                seen.insert(num >> k);
+//            }
+//
+//            // 目前 x 包含从最高位开始到第 k+1 个二进制位为止的部分
+//            // 我们将 x 的第 k 个二进制位置为 1，即为 x = x*2+1
+//            int x_next = x * 2 + 1;
+//            bool found = false;
+//
+//            // 枚举 i
+//            for (int num : nums) {
+//                if (seen.count(x_next ^ (num >> k))) {
+//                    found = true;
+//                    break;
+//                }
+//            }
+//
+//            if (found) {
+//                x = x_next;
+//            }
+//            else {
+//                // 如果没有找到满足等式的 a_i 和 a_j，那么 x 的第 k 个二进制位只能为 0
+//                // 即为 x = x*2
+//                x = x_next - 1;
+//            }
+//        }
+//        return x;
+//    }
+//};
