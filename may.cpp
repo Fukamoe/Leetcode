@@ -15,18 +15,18 @@
 ////};
 ////class Solution {
 ////private:
-////    // ¼«´óÖµ
-////    // Ñ¡Ôñ INT_MAX / 2 µÄÔ­ÒòÊÇ·ÀÖ¹ÕûÊıÏà¼ÓÒç³ö
+////    // æå¤§å€¼
+////    // é€‰æ‹© INT_MAX / 2 çš„åŸå› æ˜¯é˜²æ­¢æ•´æ•°ç›¸åŠ æº¢å‡º
 ////    static constexpr int INFTY = INT_MAX / 2;
 ////
 ////public:
 ////    int minCost(vector<int>& houses, vector<vector<int>>& cost, int m, int n, int target) {
-////        // ½«ÑÕÉ«µ÷ÕûÎª´Ó 0 ¿ªÊ¼±àºÅ£¬Ã»ÓĞ±»Í¿É«±ê¼ÇÎª -1
+////        // å°†é¢œè‰²è°ƒæ•´ä¸ºä» 0 å¼€å§‹ç¼–å·ï¼Œæ²¡æœ‰è¢«æ¶‚è‰²æ ‡è®°ä¸º -1
 ////        for (int& c : houses) {
 ////            --c;
 ////        }
 ////
-////        // dp ËùÓĞÔªËØ³õÊ¼»¯Îª¼«´óÖµ
+////        // dp æ‰€æœ‰å…ƒç´ åˆå§‹åŒ–ä¸ºæå¤§å€¼
 ////        vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int>(target, INFTY)));
 ////
 ////        for (int i = 0; i < m; ++i) {
@@ -129,9 +129,9 @@
 ////                }
 ////                workload -= cur;
 ////            }
-////            // Èç¹ûµ±Ç°¹¤ÈËÎ´±»·ÖÅä¹¤×÷£¬ÄÇÃ´ÏÂÒ»¸ö¹¤ÈËÒ²±ØÈ»Î´±»·ÖÅä¹¤×÷
-////            // »òÕßµ±Ç°¹¤×÷Ç¡ÄÜÊ¹¸Ã¹¤ÈËµÄ¹¤×÷Á¿´ïµ½ÁËÉÏÏŞ
-////            // ÕâÁ½ÖÖÇé¿öÏÂÎÒÃÇÎŞĞè³¢ÊÔ¼ÌĞø·ÖÅä¹¤×÷
+////            // å¦‚æœå½“å‰å·¥äººæœªè¢«åˆ†é…å·¥ä½œï¼Œé‚£ä¹ˆä¸‹ä¸€ä¸ªå·¥äººä¹Ÿå¿…ç„¶æœªè¢«åˆ†é…å·¥ä½œ
+////            // æˆ–è€…å½“å‰å·¥ä½œæ°èƒ½ä½¿è¯¥å·¥äººçš„å·¥ä½œé‡è¾¾åˆ°äº†ä¸Šé™
+////            // è¿™ä¸¤ç§æƒ…å†µä¸‹æˆ‘ä»¬æ— éœ€å°è¯•ç»§ç»­åˆ†é…å·¥ä½œ
 ////            if (workload == 0 || workload + cur == limit) {
 ////                break;
 ////            }
@@ -233,7 +233,7 @@
 ////    }
 ////};
 //
-//#define £» ;
+//#define ï¼› ;
 //#define  itn  int;
 //
 //class MyClass
@@ -377,7 +377,7 @@
 //    }
 //}; class Solution {
 //private:
-//    // ×î¸ßÎ»µÄ¶ş½øÖÆÎ»±àºÅÎª 30
+//    // æœ€é«˜ä½çš„äºŒè¿›åˆ¶ä½ç¼–å·ä¸º 30
 //    static constexpr int HIGH_BIT = 30;
 //
 //public:
@@ -385,19 +385,19 @@
 //        int x = 0;
 //        for (int k = HIGH_BIT; k >= 0; --k) {
 //            unordered_set<int> seen;
-//            // ½«ËùÓĞµÄ pre^k(a_j) ·ÅÈë¹şÏ£±íÖĞ
+//            // å°†æ‰€æœ‰çš„ pre^k(a_j) æ”¾å…¥å“ˆå¸Œè¡¨ä¸­
 //            for (int num : nums) {
-//                // Èç¹ûÖ»Ïë±£Áô´Ó×î¸ßÎ»¿ªÊ¼µ½µÚ k ¸ö¶ş½øÖÆÎ»ÎªÖ¹µÄ²¿·Ö
-//                // Ö»Ğè½«ÆäÓÒÒÆ k Î»
+//                // å¦‚æœåªæƒ³ä¿ç•™ä»æœ€é«˜ä½å¼€å§‹åˆ°ç¬¬ k ä¸ªäºŒè¿›åˆ¶ä½ä¸ºæ­¢çš„éƒ¨åˆ†
+//                // åªéœ€å°†å…¶å³ç§» k ä½
 //                seen.insert(num >> k);
 //            }
 //
-//            // Ä¿Ç° x °üº¬´Ó×î¸ßÎ»¿ªÊ¼µ½µÚ k+1 ¸ö¶ş½øÖÆÎ»ÎªÖ¹µÄ²¿·Ö
-//            // ÎÒÃÇ½« x µÄµÚ k ¸ö¶ş½øÖÆÎ»ÖÃÎª 1£¬¼´Îª x = x*2+1
+//            // ç›®å‰ x åŒ…å«ä»æœ€é«˜ä½å¼€å§‹åˆ°ç¬¬ k+1 ä¸ªäºŒè¿›åˆ¶ä½ä¸ºæ­¢çš„éƒ¨åˆ†
+//            // æˆ‘ä»¬å°† x çš„ç¬¬ k ä¸ªäºŒè¿›åˆ¶ä½ç½®ä¸º 1ï¼Œå³ä¸º x = x*2+1
 //            int x_next = x * 2 + 1;
 //            bool found = false;
 //
-//            // Ã¶¾Ù i
+//            // æšä¸¾ i
 //            for (int num : nums) {
 //                if (seen.count(x_next ^ (num >> k))) {
 //                    found = true;
@@ -409,8 +409,8 @@
 //                x = x_next;
 //            }
 //            else {
-//                // Èç¹ûÃ»ÓĞÕÒµ½Âú×ãµÈÊ½µÄ a_i ºÍ a_j£¬ÄÇÃ´ x µÄµÚ k ¸ö¶ş½øÖÆÎ»Ö»ÄÜÎª 0
-//                // ¼´Îª x = x*2
+//                // å¦‚æœæ²¡æœ‰æ‰¾åˆ°æ»¡è¶³ç­‰å¼çš„ a_i å’Œ a_jï¼Œé‚£ä¹ˆ x çš„ç¬¬ k ä¸ªäºŒè¿›åˆ¶ä½åªèƒ½ä¸º 0
+//                // å³ä¸º x = x*2
 //                x = x_next - 1;
 //            }
 //        }
@@ -419,13 +419,13 @@
 //};
 //class Solution {
 //private:
-//    // x µÄĞÅÏ¢
+//    // x çš„ä¿¡æ¯
 //    int x;
 //    TreeNode* x_parent;
 //    int x_depth;
 //    bool x_found = false;
 //
-//    // y µÄĞÅÏ¢
+//    // y çš„ä¿¡æ¯
 //    int y;
 //    TreeNode* y_parent;
 //    int y_depth;
@@ -444,8 +444,8 @@
 //            tie(y_parent, y_depth, y_found) = tuple{ parent, depth, true };
 //        }
 //
-//        // Èç¹ûÁ½¸ö½Úµã¶¼ÕÒµ½ÁË£¬¾Í¿ÉÒÔÌáÇ°ÍË³ö±éÀú
-//        // ¼´Ê¹²»ÌáÇ°ÍË³ö£¬¶Ô×î»µÇé¿öÏÂµÄÊ±¼ä¸´ÔÓ¶ÈÒ²²»»áÓĞÓ°Ïì
+//        // å¦‚æœä¸¤ä¸ªèŠ‚ç‚¹éƒ½æ‰¾åˆ°äº†ï¼Œå°±å¯ä»¥æå‰é€€å‡ºéå†
+//        // å³ä½¿ä¸æå‰é€€å‡ºï¼Œå¯¹æœ€åæƒ…å†µä¸‹çš„æ—¶é—´å¤æ‚åº¦ä¹Ÿä¸ä¼šæœ‰å½±å“
 //        if (x_found && y_found) {
 //            return;
 //        }
@@ -606,7 +606,7 @@
 //                t->insert(nums[idx]);
 //                ++idx;
 //            }
-//            if (idx == 0) { // ×ÖµäÊ÷Îª¿Õ
+//            if (idx == 0) { // å­—å…¸æ ‘ä¸ºç©º
 //                ans[qid] = -1;
 //            }
 //            else {
@@ -641,20 +641,20 @@
 //};
 //class Solution {
 //private:
-//    // x µÄ·¶Î§Îª [0, 2^10)
+//    // x çš„èŒƒå›´ä¸º [0, 2^10)
 //    static constexpr int MAXX = 1 << 10;
-//    // ¼«´óÖµ£¬ÎªÁË·ÀÖ¹ÕûÊıÒç³öÑ¡Ôñ INT_MAX / 2
+//    // æå¤§å€¼ï¼Œä¸ºäº†é˜²æ­¢æ•´æ•°æº¢å‡ºé€‰æ‹© INT_MAX / 2
 //    static constexpr int INFTY = INT_MAX / 2;
 //
 //public:
 //    int minChanges(vector<int>& nums, int k) {
 //        int n = nums.size();
 //        vector<int> f(MAXX, INFTY);
-//        // ±ß½çÌõ¼ş f(-1,0)=0
+//        // è¾¹ç•Œæ¡ä»¶ f(-1,0)=0
 //        f[0] = 0;
 //
 //        for (int i = 0; i < k; ++i) {
-//            // µÚ i ¸ö×éµÄ¹şÏ£Ó³Éä
+//            // ç¬¬ i ä¸ªç»„çš„å“ˆå¸Œæ˜ å°„
 //            unordered_map<int, int> cnt;
 //            int size = 0;
 //            for (int j = i; j < n; j += k) {
@@ -662,18 +662,18 @@
 //                ++size;
 //            }
 //
-//            // Çó³ö t2
+//            // æ±‚å‡º t2
 //            int t2min = *min_element(f.begin(), f.end());
 //
 //            vector<int> g(MAXX, t2min);
 //            for (int mask = 0; mask < MAXX; ++mask) {
-//                // t1 ÔòĞèÒªÃ¶¾Ù x ²ÅÄÜÇó³ö
+//                // t1 åˆ™éœ€è¦æšä¸¾ x æ‰èƒ½æ±‚å‡º
 //                for (auto [x, countx] : cnt) {
 //                    g[mask] = min(g[mask], f[mask ^ x] - countx);
 //                }
 //            }
 //
-//            // ±ğÍüÁË¼ÓÉÏ size
+//            // åˆ«å¿˜äº†åŠ ä¸Š size
 //            for_each(g.begin(), g.end(), [&](int& val) {val += size; });
 //            f = move(g);
 //        }
@@ -743,11 +743,11 @@
 //    int numSubmatrixSumTarget(vector<vector<int>>& matrix, int target) {
 //        int ans = 0;
 //        int m = matrix.size(), n = matrix[0].size();
-//        for (int i = 0; i < m; ++i) { // Ã¶¾ÙÉÏ±ß½ç
+//        for (int i = 0; i < m; ++i) { // æšä¸¾ä¸Šè¾¹ç•Œ
 //            vector<int> sum(n);
-//            for (int j = i; j < m; ++j) { // Ã¶¾ÙÏÂ±ß½ç
+//            for (int j = i; j < m; ++j) { // æšä¸¾ä¸‹è¾¹ç•Œ
 //                for (int c = 0; c < n; ++c) {
-//                    sum[c] += matrix[j][c]; // ¸üĞÂÃ¿ÁĞµÄÔªËØºÍ
+//                    sum[c] += matrix[j][c]; // æ›´æ–°æ¯åˆ—çš„å…ƒç´ å’Œ
 //                }
 //                ans += subarraySum(sum, target);
 //            }
@@ -775,7 +775,7 @@
 //    vector<bool> canEat(vector<int>& candiesCount, vector<vector<int>>& queries) {
 //        int n = candiesCount.size();
 //
-//        // Ç°×ººÍ
+//        // å‰ç¼€å’Œ
 //        vector<LL> sum(n);
 //        sum[0] = candiesCount[0];
 //        for (int i = 1; i < n; ++i) {
@@ -927,24 +927,49 @@
 //        }
 //    }
 //};
-//class Solution {
-//public:
-//    int guessNumber(int n) {
-//        int left = 1, right = n;
-//        while (left < right) { // Ñ­»·Ö±ÖÁÇø¼ä×óÓÒ¶ËµãÏàÍ¬
-//            int mid = left + (right - left) / 2; // ·ÀÖ¹¼ÆËãÊ±Òç³ö
-//            if (guess(mid) <= 0) {
-//                right = mid; // ´ğ°¸ÔÚÇø¼ä [left, mid] ÖĞ
-//            }
-//            else {
-//                left = mid + 1; // ´ğ°¸ÔÚÇø¼ä [mid+1, right] ÖĞ
-//            }
-//        }
-//        // ´ËÊ±ÓĞ left == right£¬Çø¼äËõÎªÒ»¸öµã£¬¼´Îª´ğ°¸
-//        return left;
-//    }
-//};
-
+// class Solution {
+// public:
+//     int change(int amount, vector<int>& coins) {
+//         vector<int> dp(amount + 1);
+//         dp[0] = 1;
+//         for (int& coin : coins) {
+//             for (int i = coin; i <= amount; i++) {
+//                 dp[i] += dp[i - coin];
+//             }
+//         }
+//         return dp[amount];
+//     }
+// };
+// class Solution {
+// public:
+//     int numSquares(int n) {
+//         vector<int> f(n + 1);
+//         for (int i = 1; i <= n; i++) {
+//             int minn = INT_MAX;
+//             for (int j = 1; j * j <= i; j++) {
+//                 minn = min(minn, f[i - j * j]);
+//             }
+//             f[i] = minn + 1;
+//         }
+//         return f[n];
+//     }
+// };
+// class Solution {
+// public:
+//     int firstBadVersion(int n) {
+//         int left = 1, right = n;
+//         while (left < right) { // å¾ªç¯ç›´è‡³åŒºé—´å·¦å³ç«¯ç‚¹ç›¸åŒ
+//             int mid = left + (right - left) / 2; // é˜²æ­¢è®¡ç®—æ—¶æº¢å‡º
+//             if (isBadVersion(mid)) {
+//                 right = mid; // ç­”æ¡ˆåœ¨åŒºé—´ [left, mid] ä¸­
+//             } else {
+//                 left = mid + 1; // ç­”æ¡ˆåœ¨åŒºé—´ [mid+1, right] ä¸­
+//             }
+//         }
+//         // æ­¤æ—¶æœ‰ left == rightï¼ŒåŒºé—´ç¼©ä¸ºä¸€ä¸ªç‚¹ï¼Œå³ä¸ºç­”æ¡ˆ
+//         return left;
+//     }
+// };
 
 
 
