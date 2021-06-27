@@ -1,220 +1,49 @@
 class Solution {
-public:
-    bool stoneGame(vector<int>& piles) {
-        int length = piles.size();
-        auto dp = vector<vector<int>>(length, vector<int>(length));
-        for (int i = 0; i < length; i++) {
-            dp[i][i] = piles[i];
-        }
-        for (int i = length - 2; i >= 0; i--) {
-            for (int j = i + 1; j < length; j++) {
-                dp[i][j] = max(piles[i] - dp[i + 1][j], piles[j] - dp[i][j - 1]);
-            }
-        }
-        return dp[0][length - 1] > 0;
-    }
-};
-
-class Solution {
-public:
-    enum State {
-        STATE_INITIAL,
-        STATE_INT_SIGN,
-        STATE_INTEGER,
-        STATE_POINT,
-        STATE_POINT_WITHOUT_INT,
-        STATE_FRACTION,
-        STATE_EXP,
-        STATE_EXP_SIGN,
-        STATE_EXP_NUMBER,
-        STATE_END
-    };
-
-    enum CharType {
-        CHAR_NUMBER,
-        CHAR_EXP,
-        CHAR_POINT,
-        CHAR_SIGN,
-        CHAR_ILLEGAL
-    };
-
-    CharType toCharType(char ch) {
-        if (ch >= '0' && ch <= '9') {
-            return CHAR_NUMBER;
-        } else if (ch == 'e' || ch == 'E') {
-            return CHAR_EXP;
-        } else if (ch == '.') {
-            return CHAR_POINT;
-        } else if (ch == '+' || ch == '-') {
-            return CHAR_SIGN;
-        } else {
-            return CHAR_ILLEGAL;
-        }
-    }
-
-    bool isNumber(string s) {
-        unordered_map<State, unordered_map<CharType, State>> transfer{
-            {
-                STATE_INITIAL, {
-                    {CHAR_NUMBER, STATE_INTEGER},
-                    {CHAR_POINT, STATE_POINT_WITHOUT_INT},
-                    {CHAR_SIGN, STATE_INT_SIGN}
-                }
-            }, {
-                STATE_INT_SIGN, {
-                    {CHAR_NUMBER, STATE_INTEGER},
-                    {CHAR_POINT, STATE_POINT_WITHOUT_INT}
-                }
-            }, {
-                STATE_INTEGER, {
-                    {CHAR_NUMBER, STATE_INTEGER},
-                    {CHAR_EXP, STATE_EXP},
-                    {CHAR_POINT, STATE_POINT}
-                }
-            }, {
-                STATE_POINT, {
-                    {CHAR_NUMBER, STATE_FRACTION},
-                    {CHAR_EXP, STATE_EXP}
-                }
-            }, {
-                STATE_POINT_WITHOUT_INT, {
-                    {CHAR_NUMBER, STATE_FRACTION}
-                }
-            }, {
-                STATE_FRACTION,
-                {
-                    {CHAR_NUMBER, STATE_FRACTION},
-                    {CHAR_EXP, STATE_EXP}
-                }
-            }, {
-                STATE_EXP,
-                {
-                    {CHAR_NUMBER, STATE_EXP_NUMBER},
-                    {CHAR_SIGN, STATE_EXP_SIGN}
-                }
-            }, {
-                STATE_EXP_SIGN, {
-                    {CHAR_NUMBER, STATE_EXP_NUMBER}
-                }
-            }, {
-                STATE_EXP_NUMBER, {
-                    {CHAR_NUMBER, STATE_EXP_NUMBER}
-                }
-            }
-        };
-
-        int len = s.length();
-        State st = STATE_INITIAL;
-
-        for (int i = 0; i < len; i++) {
-            CharType typ = toCharType(s[i]);
-            if (transfer[st].find(typ) == transfer[st].end()) {
-                return false;
-            } else {
-                st = transfer[st][typ];
-            }
-        }
-        return st == STATE_INTEGER || st == STATE_POINT || st == STATE_FRACTION || st == STATE_EXP_NUMBER || st == STATE_END;
-    }
-};
-class Solution {
-public:
-    string smallestGoodBase(string n) {
-        long nVal = stol(n);
-        int mMax = floor(log(nVal) / log(2));
-        for (int m = mMax; m > 1; m--) {
-            int k = pow(nVal, 1.0 / m);
-            long mul = 1, sum = 1;
-            for (int i = 0; i < m; i++) {
-                mul *= k;
-                sum += mul;
-            }
-            if (sum == nVal) {
-                return to_string(k);
-            }
-        }
-        return to_string(nVal - 1);
-    }
-};
-class Solution {
-public:
-    int maxLength(vector<string> &arr) {
-        vector<int> masks;
-        for (string &s : arr) {
-            int mask = 0;
-            for (char ch : s) {
-                ch -= 'a';
-                if ((mask >> ch) & 1) { // 若 mask 已有 ch，则说明 s 含有重复字母，无法构成可行解
-                    mask = 0;
-                    break;
-                }
-                mask |= 1 << ch; // 将 ch 加入 mask 中
-            }
-            if (mask > 0) {
-                masks.push_back(mask);
-            }
-        }
-
-        int ans = 0;
-        function<void(int, int)> backtrack = [&](int pos, int mask) {
-            if (pos == masks.size()) {
-                ans = max(ans, __builtin_popcount(mask));
-                return;
-            }
-            if ((mask & masks[pos]) == 0) { // mask 和 masks[pos] 无公共元素
-                backtrack(pos + 1, mask | masks[pos]);
-            }
-            backtrack(pos + 1, mask);
-        };
-        backtrack(0, 0);
-        return ans;
-    }
-};
-class ThroneInheritance {
 private:
-    unordered_map<string, vector<string>> edges;
-    unordered_set<string> dead;
-    string king;
+    vector<vector<int>> neighbors = {{1, 3}, {0, 2, 4}, {1, 5}, {0, 4}, {1, 3, 5}, {2, 4}};
 
 public:
-    ThroneInheritance(string kingName): king{move(kingName)} {}
-    
-    void birth(string parentName, string childName) {
-        edges[move(parentName)].push_back(move(childName));
-    }
-    
-    void death(string name) {
-        dead.insert(move(name));
-    }
-    
-    vector<string> getInheritanceOrder() {
-        vector<string> ans;
-
-        function<void(const string&)> preorder = [&](const string& name) {
-            if (!dead.count(name)) {
-                ans.push_back(name);
+    int slidingPuzzle(vector<vector<int>>& board) {
+        // 枚举 status 通过一次交换操作得到的状态
+        auto get = [&](string& status) -> vector<string> {
+            vector<string> ret;
+            int x = status.find('0');
+            for (int y: neighbors[x]) {
+                swap(status[x], status[y]);
+                ret.push_back(status);
+                swap(status[x], status[y]);
             }
-            if (edges.count(name)) {
-                for (const string& childName: edges[name]) {
-                    preorder(childName);
-                }
-            }
+            return ret;
         };
 
-        preorder(king);
-        return ans;
-    }
-};
-class Solution {
-public:
-    vector<string> readBinaryWatch(int turnedOn) {
-        vector<string> ans;
-        for (int i = 0; i < 1024; ++i) {
-            int h = i >> 6, m = i & 63; // 用位运算取出高 4 位和低 6 位
-            if (h < 12 && m < 60 && __builtin_popcount(i) == turnedOn) {
-                ans.push_back(to_string(h) + ":" + (m < 10 ? "0" : "") + to_string(m));
+        string initial;
+        for (int i = 0; i < 2; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                initial += char(board[i][j] + '0');
             }
         }
-        return ans;
+        if (initial == "123450") {
+            return 0;
+        }
+
+        queue<pair<string, int>> q;
+        q.emplace(initial, 0);
+        unordered_set<string> seen = {initial};
+
+        while (!q.empty()) {
+            auto [status, step] = q.front();
+            q.pop();
+            for (auto&& next_status: get(status)) {
+                if (!seen.count(next_status)) {
+                    if (next_status == "123450") {
+                        return step + 1;
+                    }
+                    q.emplace(next_status, step + 1);
+                    seen.insert(move(next_status));
+                }
+            }
+        }
+
+        return -1;
     }
 };
