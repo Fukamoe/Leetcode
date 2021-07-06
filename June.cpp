@@ -1,64 +1,43 @@
 class Solution {
 public:
-    string countOfAtoms(string formula) {
-        int i = 0, n = formula.length();
-
-        auto parseAtom = [&]() -> string {
-            string atom;
-            atom += formula[i++]; // 扫描首字母
-            while (i < n && islower(formula[i])) {
-                atom += formula[i++]; // 扫描首字母后的小写字母
-            }
-            return atom;
-        };
-
-        auto parseNum = [&]() -> int {
-            if (i == n || !isdigit(formula[i])) {
-                return 1; // 不是数字，视作 1
-            }
-            int num = 0;
-            while (i < n && isdigit(formula[i])) {
-                num = num * 10 + int(formula[i++] - '0'); // 扫描数字
-            }
-            return num;
-        };
-
-        stack<unordered_map<string, int>> stk;
-        stk.push({});
-        while (i < n) {
-            char ch = formula[i];
-            if (ch == '(') {
-                i++;
-                stk.push({}); // 将一个空的哈希表压入栈中，准备统计括号内的原子数量
-            } else if (ch == ')') {
-                i++;
-                int num = parseNum(); // 括号右侧数字
-                auto atomNum = stk.top();
-                stk.pop(); // 弹出括号内的原子数量
-                for (auto &[atom, v] : atomNum) {
-                    stk.top()[atom] += v * num; // 将括号内的原子数量乘上 num，加到上一层的原子数量中
-                }
-            } else {
-                string atom = parseAtom();
-                int num = parseNum();
-                stk.top()[atom] += num; // 统计原子数量
-            }
+    vector<vector<string>> displayTable(vector<vector<string>> &orders) {
+        // 从订单中获取餐品名称和桌号，统计每桌点餐数量
+        unordered_set<string> nameSet;
+        unordered_map<int, unordered_map<string, int>> foodsCnt;
+        for (auto &order : orders) {
+            nameSet.insert(order[2]);
+            int id = stoi(order[1]);
+            ++foodsCnt[id][order[2]];
         }
 
-        auto &atomNum = stk.top();
-        vector<pair<string, int>> pairs;
-        for (auto &[atom, v] : atomNum) {
-            pairs.emplace_back(atom, v);
+        // 提取餐品名称，并按字母顺序排列
+        int n = nameSet.size();
+        vector<string> names;
+        for (auto &name : nameSet) {
+            names.push_back(name);
         }
-        sort(pairs.begin(), pairs.end());
+        sort(names.begin(), names.end());
 
-        string ans;
-        for (auto &p : pairs) {
-            ans += p.first;
-            if (p.second > 1) {
-                ans += to_string(p.second);
+        // 提取桌号，并按餐桌桌号升序排列
+        int m = foodsCnt.size();
+        vector<int> ids;
+        for (auto &[id, _] : foodsCnt) {
+            ids.push_back(id);
+        }
+        sort(ids.begin(), ids.end());
+
+        // 填写点菜展示表
+        vector<vector<string>> table(m + 1, vector<string>(n + 1));
+        table[0][0] = "Table";
+        copy(names.begin(), names.end(), table[0].begin() + 1);
+        for (int i = 0; i < m; ++i) {
+            int id = ids[i];
+            auto &cnt = foodsCnt[id];
+            table[i + 1][0] = to_string(id);
+            for (int j = 0; j < n; ++j) {
+                table[i + 1][j + 1] = to_string(cnt[names[j]]);
             }
         }
-        return ans;
+        return table;
     }
 };
