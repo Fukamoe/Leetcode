@@ -1,35 +1,25 @@
 class Solution {
 public:
-    static constexpr int mod = 1'000'000'007;
-
-    int minAbsoluteSumDiff(vector<int>& nums1, vector<int>& nums2) {
-        vector<int> rec(nums1);
-        sort(rec.begin(), rec.end());
-        int sum = 0, maxn = 0;
-        int n = nums1.size();
-        for (int i = 0; i < n; i++) {
-            int diff = abs(nums1[i] - nums2[i]);
-            sum = (sum + diff) % mod;
-            int j = lower_bound(rec.begin(), rec.end(), nums2[i]) - rec.begin();
-            if (j < n) {
-                maxn = max(maxn, diff - (rec[j] - nums2[i]));
-            }
-            if (j > 0) {
-                maxn = max(maxn, diff - (nums2[i] - rec[j - 1]));
+    int binarySearch(vector<int>& nums, int target, bool lower) {
+        int left = 0, right = (int)nums.size() - 1, ans = (int)nums.size();
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] > target || (lower && nums[mid] >= target)) {
+                right = mid - 1;
+                ans = mid;
+            } else {
+                left = mid + 1;
             }
         }
-        return (sum - maxn + mod) % mod;
+        return ans;
     }
-};
-class Solution {
-public:
-    int maximumElementAfterDecrementingAndRearranging(vector<int> &arr) {
-        int n = arr.size();
-        sort(arr.begin(), arr.end());
-        arr[0] = 1;
-        for (int i = 1; i < n; ++i) {
-            arr[i] = min(arr[i], arr[i - 1] + 1);
+
+    int search(vector<int>& nums, int target) {
+        int leftIdx = binarySearch(nums, target, true);
+        int rightIdx = binarySearch(nums, target, false) - 1;
+        if (leftIdx <= rightIdx && rightIdx < nums.size() && nums[leftIdx] == target && nums[rightIdx] == target) {
+            return rightIdx - leftIdx + 1;
         }
-        return arr.back();
+        return 0;
     }
 };
