@@ -1,12 +1,19 @@
 class Solution {
 public:
-    int minPairSum(vector<int>& nums) {
-        int n = nums.size();
-        int res = 0;
-        sort(nums.begin(), nums.end());
-        for (int i = 0; i < n / 2; ++i) {
-            res = max(res, nums[i] + nums[n - 1 - i]);
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        unordered_set<ListNode *> visited;
+        ListNode *temp = headA;
+        while (temp != nullptr) {
+            visited.insert(temp);
+            temp = temp->next;
         }
-        return res;
+        temp = headB;
+        while (temp != nullptr) {
+            if (visited.count(temp)) {
+                return temp;
+            }
+            temp = temp->next;
+        }
+        return nullptr;
     }
 };
