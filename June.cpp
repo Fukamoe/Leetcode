@@ -1,19 +1,17 @@
 class Solution {
 public:
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        unordered_set<ListNode *> visited;
-        ListNode *temp = headA;
-        while (temp != nullptr) {
-            visited.insert(temp);
-            temp = temp->next;
+    unordered_map<Node*, Node*> cachedNode;
+
+    Node* copyRandomList(Node* head) {
+        if (head == nullptr) {
+            return nullptr;
         }
-        temp = headB;
-        while (temp != nullptr) {
-            if (visited.count(temp)) {
-                return temp;
-            }
-            temp = temp->next;
+        if (!cachedNode.count(head)) {
+            Node* headNew = new Node(head->val);
+            cachedNode[head] = headNew;
+            headNew->next = copyRandomList(head->next);
+            headNew->random = copyRandomList(head->random);
         }
-        return nullptr;
+        return cachedNode[head];
     }
 };
