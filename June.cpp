@@ -1,17 +1,19 @@
 class Solution {
 public:
-    unordered_map<Node*, Node*> cachedNode;
-
-    Node* copyRandomList(Node* head) {
-        if (head == nullptr) {
-            return nullptr;
+    bool isCovered(vector<vector<int>>& ranges, int left, int right) {
+        vector<int> diff(52, 0);   // 差分数组
+        for (auto&& range: ranges) {
+            ++diff[range[0]];
+            --diff[range[1]+1];
         }
-        if (!cachedNode.count(head)) {
-            Node* headNew = new Node(head->val);
-            cachedNode[head] = headNew;
-            headNew->next = copyRandomList(head->next);
-            headNew->random = copyRandomList(head->random);
+        // 前缀和
+        int curr = 0;
+        for (int i = 1; i <= 50; ++i) {
+            curr += diff[i];
+            if (i >= left && i <= right && curr <= 0) {
+                return false;
+            }
         }
-        return cachedNode[head];
+        return true;
     }
 };
