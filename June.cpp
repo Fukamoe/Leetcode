@@ -1,19 +1,18 @@
 class Solution {
 public:
-    bool isCovered(vector<vector<int>>& ranges, int left, int right) {
-        vector<int> diff(52, 0);   // 差分数组
-        for (auto&& range: ranges) {
-            ++diff[range[0]];
-            --diff[range[1]+1];
+    string maximumTime(string time) {
+        if (time[0] == '?') {
+            time[0] = ('4' <= time[1] && time[1] <= '9') ? '1' : '2';
         }
-        // 前缀和
-        int curr = 0;
-        for (int i = 1; i <= 50; ++i) {
-            curr += diff[i];
-            if (i >= left && i <= right && curr <= 0) {
-                return false;
-            }
+        if (time[1] == '?') {
+            time[1] = (time[0] == '2') ? '3' : '9';
         }
-        return true;
+        if (time[3] == '?') {
+            time[3] = '5';
+        }
+        if (time[4] == '?') {
+            time[4] = '9';
+        }
+        return time;
     }
 };
