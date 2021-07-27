@@ -1,23 +1,24 @@
 class Solution {
 public:
-    int minOperations(vector<int> &target, vector<int> &arr) {
-        int n = target.size();
-        unordered_map<int, int> pos;
-        for (int i = 0; i < n; ++i) {
-            pos[target[i]] = i;
-        }
-        vector<int> d;
-        for (int val : arr) {
-            if (pos.count(val)) {
-                int idx = pos[val];
-                auto it = lower_bound(d.begin(), d.end(), idx);
-                if (it != d.end()) {
-                    *it = idx;
-                } else {
-                    d.push_back(idx);
-                }
+    int findSecondMinimumValue(TreeNode* root) {
+        int ans = -1;
+        int rootvalue = root->val;
+
+        function<void(TreeNode*)> dfs = [&](TreeNode* node) {
+            if (!node) {
+                return;
             }
-        }
-        return n - d.size();
+            if (ans != -1 && node->val >= ans) {
+                return;
+            }
+            if (node->val > rootvalue) {
+                ans = node->val;
+            }
+            dfs(node->left);
+            dfs(node->right);
+        };
+
+        dfs(root);
+        return ans;
     }
 };
