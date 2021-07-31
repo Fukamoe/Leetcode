@@ -1,29 +1,28 @@
 class Solution {
 public:
-    int getReverse(int label, int row) {
-        return (1 << row - 1) + (1 << row) - 1 - label;
-    }
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        vector<tuple<int, int, int>> nodes;
 
-    vector<int> pathInZigZagTree(int label) {
-        int row = 1, rowStart = 1;
-        while (rowStart * 2 <= label) {
-            row++;
-            rowStart *= 2;
-        }
-        if (row % 2 == 0) {
-            label = getReverse(label, row);
-        }
-        vector<int> path;
-        while (row > 0) {
-            if (row % 2 == 0) {
-                path.push_back(getReverse(label, row));
-            } else {
-                path.push_back(label);
+        function<void(TreeNode*, int, int)> dfs = [&](TreeNode* node, int row, int col) {
+            if (!node) {
+                return;
             }
-            row--;
-            label >>= 1;
+            nodes.emplace_back(col, row, node->val);
+            dfs(node->left, row + 1, col - 1);
+            dfs(node->right, row + 1, col + 1);
+        };
+
+        dfs(root, 0, 0);
+        sort(nodes.begin(), nodes.end());
+        vector<vector<int>> ans;
+        int lastcol = INT_MIN;
+        for (const auto& [col, row, value]: nodes) {
+            if (col != lastcol) {
+                lastcol = col;
+                ans.emplace_back();
+            }
+            ans.back().push_back(value);
         }
-        reverse(path.begin(), path.end());
-        return path;
+        return ans;
     }
 };
