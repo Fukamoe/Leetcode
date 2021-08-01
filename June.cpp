@@ -1,27 +1,28 @@
 class Solution {
 public:
-    vector<vector<int>> verticalTraversal(TreeNode* root) {
-        vector<tuple<int, int, int>> nodes;
-
-        function<void(TreeNode*, int, int)> dfs = [&](TreeNode* node, int row, int col) {
-            if (!node) {
-                return;
+    vector<int> kWeakestRows(vector<vector<int>>& mat, int k) {
+        int m = mat.size(), n = mat[0].size();
+        vector<pair<int, int>> power;
+        for (int i = 0; i < m; ++i) {
+            int l = 0, r = n - 1, pos = -1;
+            while (l <= r) {
+                int mid = (l + r) / 2;
+                if (mat[i][mid] == 0) {
+                    r = mid - 1;
+                }
+                else {
+                    pos = mid;
+                    l = mid + 1;
+                }
             }
-            nodes.emplace_back(col, row, node->val);
-            dfs(node->left, row + 1, col - 1);
-            dfs(node->right, row + 1, col + 1);
-        };
+            power.emplace_back(pos + 1, i);
+        }
 
-        dfs(root, 0, 0);
-        sort(nodes.begin(), nodes.end());
-        vector<vector<int>> ans;
-        int lastcol = INT_MIN;
-        for (const auto& [col, row, value]: nodes) {
-            if (col != lastcol) {
-                lastcol = col;
-                ans.emplace_back();
-            }
-            ans.back().push_back(value);
+        priority_queue q(greater<pair<int, int>>(), move(power));
+        vector<int> ans;
+        for (int i = 0; i < k; ++i) {
+            ans.push_back(q.top().second);
+            q.pop();
         }
         return ans;
     }
