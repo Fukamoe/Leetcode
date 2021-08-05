@@ -1,34 +1,29 @@
 class Solution {
 public:
-    int triangleNumber(vector<int>& nums) {
-        int n = nums.size();
-        sort(nums.begin(), nums.end());
-        int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j < n; ++j) {
-                int left = j + 1, right = n - 1, k = j;
-                while (left <= right) {
-                    int mid = (left + right) / 2;
-                    if (nums[mid] < nums[i] + nums[j]) {
-                        k = mid;
-                        left = mid + 1;
-                    }
-                    else {
-                        right = mid - 1;
-                    }
+    vector<int> eventualSafeNodes(vector<vector<int>> &graph) {
+        int n = graph.size();
+        vector<int> color(n);
+
+        function<bool(int)> safe = [&](int x) {
+            if (color[x] > 0) {
+                return color[x] == 2;
+            }
+            color[x] = 1;
+            for (int y : graph[x]) {
+                if (!safe(y)) {
+                    return false;
                 }
-                ans += k - j;
+            }
+            color[x] = 2;
+            return true;
+        };
+
+        vector<int> ans;
+        for (int i = 0; i < n; ++i) {
+            if (safe(i)) {
+                ans.push_back(i);
             }
         }
         return ans;
-    }
-};Sorted[left]) {
-            left++;
-        }
-        int right = nums.size() - 1;
-        while (nums[right] == numsSorted[right]) {
-            right--;
-        }
-        return right - left + 1;
     }
 };
