@@ -1,32 +1,35 @@
 class Solution {
 public:
-    int shortestPathLength(vector<vector<int>>& graph) {
-        int n = graph.size();
-        queue<tuple<int, int, int>> q;
-        vector<vector<int>> seen(n, vector<int>(1 << n));
-        for (int i = 0; i < n; ++i) {
-            q.emplace(i, 1 << i, 0);
-            seen[i][1 << i] = true;
-        }
+    bool circularArrayLoop(vector<int>& nums) {
+        int n = nums.size();
+        auto next = [&](int cur) {
+            return ((cur + nums[cur]) % n + n) % n; // 保证返回值在 [0,n) 中
+        };
 
-        int ans = 0;
-        while (!q.empty()) {
-            auto [u, mask, dist] = q.front();
-            q.pop();
-            if (mask == (1 << n) - 1) {
-                ans = dist;
-                break;
+        for (int i = 0; i < n; i++) {
+            if (!nums[i]) {
+                continue;
             }
-            // 搜索相邻的节点
-            for (int v: graph[u]) {
-                // 将 mask 的第 v 位置为 1
-                int mask_v = mask | (1 << v);
-                if (!seen[v][mask_v]) {
-                    q.emplace(v, mask_v, dist + 1);
-                    seen[v][mask_v] = true;
+            int slow = i, fast = next(i);
+            // 判断非零且方向相同
+            while (nums[slow] * nums[fast] > 0 && nums[slow] * nums[next(fast)] > 0) {
+                if (slow == fast) {
+                    if (slow != next(slow)) {
+                        return true;
+                    } else {
+                        break;
+                    }
                 }
+                slow = next(slow);
+                fast = next(next(fast));
+            }
+            int add = i;
+            while (nums[add] * nums[next(add)] > 0) {
+                int tmp = add;
+                add = next(add);
+                nums[tmp] = 0;
             }
         }
-        return ans;
+        return false;
     }
 };
