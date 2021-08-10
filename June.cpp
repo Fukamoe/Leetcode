@@ -1,22 +1,24 @@
 class Solution {
 public:
-    int nthSuperUglyNumber(int n, vector<int>& primes) {
-        unordered_set<long> seen;
-        priority_queue<long, vector<long>, greater<long>> heap;
-        seen.insert(1);
-        heap.push(1);
-        int ugly = 0;
-        for (int i = 0; i < n; i++) {
-            long curr = heap.top();
-            heap.pop();
-            ugly = (int)curr;
-            for (int prime : primes) {
-                long next = curr * prime;
-                if (seen.insert(next).second) {
-                    heap.push(next);
-                }
-            }
+    int numberOfArithmeticSlices(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1) {
+            return 0;
         }
-        return ugly;
+
+        int d = nums[0] - nums[1], t = 0;
+        int ans = 0;
+        // 因为等差数列的长度至少为 3，所以可以从 i=2 开始枚举
+        for (int i = 2; i < n; ++i) {
+            if (nums[i - 1] - nums[i] == d) {
+                ++t;
+            }
+            else {
+                d = nums[i - 1] - nums[i];
+                t = 0;
+            }
+            ans += t;
+        }
+        return ans;
     }
 };
