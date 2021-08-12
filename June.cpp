@@ -1,43 +1,20 @@
 class Solution {
 public:
-    int numberOfArithmeticSlices(vector<int>& nums) {
-        int n = nums.size();
-        if (n == 1) {
-            return 0;
-        }
-
-        int d = nums[0] - nums[1], t = 0;
-        int ans = 0;
-        // 因为等差数列的长度至少为 3，所以可以从 i=2 开始枚举
-        for (int i = 2; i < n; ++i) {
-            if (nums[i - 1] - nums[i] == d) {
-                ++t;
+    int longestPalindromeSubseq(string s) {
+        int n = s.length();
+        vector<vector<int>> dp(n, vector<int>(n));
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i][i] = 1;
+            char c1 = s[i];
+            for (int j = i + 1; j < n; j++) {
+                char c2 = s[j];
+                if (c1 == c2) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else {
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+                }
             }
-            else {
-                d = nums[i - 1] - nums[i];
-                t = 0;
-            }
-            ans += t;
         }
-        return ans;
+        return dp[0][n - 1];
     }
 };
-class Solution {
-public:
-    int numberOfArithmeticSlices(vector<int> &nums) {
-        int ans = 0;
-        int n = nums.size();
-        vector<unordered_map<long long, int>> f(n);
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < i; ++j) {
-                long long d = 1LL * nums[i] - nums[j];
-                auto it = f[j].find(d);
-                int cnt = it == f[j].end() ? 0 : it->second;
-                ans += cnt;
-                f[i][d] += cnt + 1;
-            }
-        }
-        return ans;
-    }
-};
-
