@@ -1,20 +1,15 @@
 class Solution {
 public:
-    int longestPalindromeSubseq(string s) {
-        int n = s.length();
-        vector<vector<int>> dp(n, vector<int>(n));
-        for (int i = n - 1; i >= 0; i--) {
-            dp[i][i] = 1;
-            char c1 = s[i];
-            for (int j = i + 1; j < n; j++) {
-                char c2 = s[j];
-                if (c1 == c2) {
-                    dp[i][j] = dp[i + 1][j - 1] + 2;
-                } else {
-                    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
-                }
-            }
+    int countDigitOne(int n) {
+        // mulk 表示 10^k
+        // 在下面的代码中，可以发现 k 并没有被直接使用到（都是使用 10^k）
+        // 但为了让代码看起来更加直观，这里保留了 k
+        long long mulk = 1;
+        int ans = 0;
+        for (int k = 0; n >= mulk; ++k) {
+            ans += (n / (mulk * 10)) * mulk + min(max(n % (mulk * 10) - mulk + 1, 0LL), mulk);
+            mulk *= 10;
         }
-        return dp[0][n - 1];
+        return ans;
     }
 };
