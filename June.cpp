@@ -1,15 +1,31 @@
 class Solution {
 public:
-    int countDigitOne(int n) {
-        // mulk 表示 10^k
-        // 在下面的代码中，可以发现 k 并没有被直接使用到（都是使用 10^k）
-        // 但为了让代码看起来更加直观，这里保留了 k
-        long long mulk = 1;
-        int ans = 0;
-        for (int k = 0; n >= mulk; ++k) {
-            ans += (n / (mulk * 10)) * mulk + min(max(n % (mulk * 10) - mulk + 1, 0LL), mulk);
-            mulk *= 10;
+    int unhappyFriends(int n, vector<vector<int>>& preferences, vector<vector<int>>& pairs) {
+        vector<vector<int>> order(n, vector<int>(n));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n - 1; ++j) {
+                order[i][preferences[i][j]] = j;
+            }
         }
-        return ans;
+        vector<int> match(n);
+        for (const auto& pr: pairs) {
+            match[pr[0]] = pr[1];
+            match[pr[1]] = pr[0];
+        }
+
+        int unhappyCount = 0;
+        for (int x = 0; x < n; ++x) {
+            int y = match[x];
+            int index = order[x][y];
+            for (int i = 0; i < index; ++i) {
+                int u = preferences[x][i];
+                int v = match[u];
+                if (order[u][x] < order[u][v]) {
+                    ++unhappyCount;
+                    break;
+                }
+            }
+        }
+        return unhappyCount;
     }
 };
