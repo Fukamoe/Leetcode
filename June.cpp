@@ -1,29 +1,34 @@
 class Solution {
 public:
-    static constexpr int MOD = 1'000'000'007;
+    vector<vector<int>> match;
+    vector<int> vis;
+    int num;
 
-    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
-        vector<vector<int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        int outCounts = 0;
-        vector<vector<vector<int>>> dp(maxMove + 1, vector<vector<int>>(m, vector<int>(n)));
-        dp[0][startRow][startColumn] = 1;
-        for (int i = 0; i < maxMove; i++) {
-            for (int j = 0; j < m; j++) {
-                for (int k = 0; k < n; k++) {
-                    int count = dp[i][j][k];
-                    if (count > 0) {
-                        for (auto &direction : directions) {
-                            int j1 = j + direction[0], k1 = k + direction[1];
-                            if (j1 >= 0 && j1 < m && k1 >= 0 && k1 < n) {
-                                dp[i + 1][j1][k1] = (dp[i + 1][j1][k1] + count) % MOD;
-                            } else {
-                                outCounts = (outCounts + count) % MOD;
-                            }
-                        }
-                    }
+    void backtrack(int index, int n) {
+        if (index == n + 1) {
+            num++;
+            return;
+        }
+        for (auto &x : match[index]) {
+            if (!vis[x]) {
+                vis[x] = true;
+                backtrack(index + 1, n);
+                vis[x] = false;
+            }
+        }
+    }
+
+    int countArrangement(int n) {
+        vis.resize(n + 1);
+        match.resize(n + 1);
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (i % j == 0 || j % i == 0) {
+                    match[i].push_back(j);
                 }
             }
         }
-        return outCounts;
+        backtrack(1, n);
+        return num;
     }
 };
