@@ -1,23 +1,34 @@
 class Solution {
 public:
-    bool checkRecord(string s) {
-        int absents = 0, lates = 0;
-        for (auto &ch : s) {
-            if (ch == 'A') {
-                absents++;
-                if (absents >= 2) {
-                    return false;
+    static constexpr int MOD = 1'000'000'007;
+
+    int checkRecord(int n) {
+        vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(2, vector<int>(3)));  // 长度，A 的数量，结尾连续 L 的数量
+        dp[0][0][0] = 1;
+        for (int i = 1; i <= n; i++) {
+            // 以 P 结尾的数量
+            for (int j = 0; j <= 1; j++) {
+                for (int k = 0; k <= 2; k++) {
+                    dp[i][j][0] = (dp[i][j][0] + dp[i - 1][j][k]) % MOD;
                 }
             }
-            if (ch == 'L') {
-                lates++;
-                if (lates >= 3) {
-                    return false;
+            // 以 A 结尾的数量
+            for (int k = 0; k <= 2; k++) {
+                dp[i][1][0] = (dp[i][1][0] + dp[i - 1][0][k]) % MOD;
+            }
+            // 以 L 结尾的数量
+            for (int j = 0; j <= 1; j++) {
+                for (int k = 1; k <= 2; k++) {
+                    dp[i][j][k] = (dp[i][j][k] + dp[i - 1][j][k - 1]) % MOD;
                 }
-            } else {
-                lates = 0;
             }
         }
-        return true;
+        int sum = 0;
+        for (int j = 0; j <= 1; j++) {
+            for (int k = 0; k <= 2; k++) {
+                sum = (sum + dp[n][j][k]) % MOD;
+            }
+        }
+        return sum;
     }
 };
