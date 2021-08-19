@@ -1,34 +1,25 @@
 class Solution {
 public:
-    static constexpr int MOD = 1'000'000'007;
+    string reverseVowels(string s) {
+        auto isVowel = [vowels = "aeiouAEIOU"s](char ch) {
+            return vowels.find(ch) != string::npos;
+        };
 
-    int checkRecord(int n) {
-        vector<vector<vector<int>>> dp(n + 1, vector<vector<int>>(2, vector<int>(3)));  // 长度，A 的数量，结尾连续 L 的数量
-        dp[0][0][0] = 1;
-        for (int i = 1; i <= n; i++) {
-            // 以 P 结尾的数量
-            for (int j = 0; j <= 1; j++) {
-                for (int k = 0; k <= 2; k++) {
-                    dp[i][j][0] = (dp[i][j][0] + dp[i - 1][j][k]) % MOD;
-                }
+        int n = s.size();
+        int i = 0, j = n - 1;
+        while (i < j) {
+            while (i < n && !isVowel(s[i])) {
+                ++i;
             }
-            // 以 A 结尾的数量
-            for (int k = 0; k <= 2; k++) {
-                dp[i][1][0] = (dp[i][1][0] + dp[i - 1][0][k]) % MOD;
+            while (j > 0 && !isVowel(s[j])) {
+                --j;
             }
-            // 以 L 结尾的数量
-            for (int j = 0; j <= 1; j++) {
-                for (int k = 1; k <= 2; k++) {
-                    dp[i][j][k] = (dp[i][j][k] + dp[i - 1][j][k - 1]) % MOD;
-                }
+            if (i < j) {
+                swap(s[i], s[j]);
+                ++i;
+                --j;
             }
         }
-        int sum = 0;
-        for (int j = 0; j <= 1; j++) {
-            for (int k = 0; k <= 2; k++) {
-                sum = (sum + dp[n][j][k]) % MOD;
-            }
-        }
-        return sum;
+        return s;
     }
 };
