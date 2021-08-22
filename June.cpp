@@ -1,33 +1,18 @@
 class Solution {
 public:
-    string reverseStr(string s, int k) {
-        int n = s.length();
-        for (int i = 0; i < n; i += 2 * k) {
-            reverse(s.begin() + i, s.begin() + min(i + k, n));
-        }
-        return s;
+    int manhattanDistance(vector<int>& point1, vector<int>& point2) {
+        return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1]);
     }
-};
-class Solution {
-public:
-    int compress(vector<char>& chars) {
-        int n = chars.size();
-        int write = 0, left = 0;
-        for (int read = 0; read < n; read++) {
-            if (read == n - 1 || chars[read] != chars[read + 1]) {
-                chars[write++] = chars[read];
-                int num = read - left + 1;
-                if (num > 1) {
-                    int anchor = write;
-                    while (num > 0) {
-                        chars[write++] = num % 10 + '0';
-                        num /= 10;
-                    }
-                    reverse(&chars[anchor], &chars[write]);
-                }
-                left = read + 1;
+
+    bool escapeGhosts(vector<vector<int>>& ghosts, vector<int>& target) {
+        vector<int> source(2);
+        int distance = manhattanDistance(source, target);
+        for (auto& ghost : ghosts) {
+            int ghostDistance = manhattanDistance(ghost, target);
+            if (ghostDistance <= distance) {
+                return false;
             }
         }
-        return write;
+        return true;
     }
 };
