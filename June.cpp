@@ -1,18 +1,14 @@
 class Solution {
 public:
-    int manhattanDistance(vector<int>& point1, vector<int>& point2) {
-        return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1]);
-    }
-
-    bool escapeGhosts(vector<vector<int>>& ghosts, vector<int>& target) {
-        vector<int> source(2);
-        int distance = manhattanDistance(source, target);
-        for (auto& ghost : ghosts) {
-            int ghostDistance = manhattanDistance(ghost, target);
-            if (ghostDistance <= distance) {
-                return false;
-            }
+    int getMaximumGenerated(int n) {
+        if (n == 0) {
+            return 0;
         }
-        return true;
+        vector<int> nums(n + 1);
+        nums[1] = 1;
+        for (int i = 2; i <= n; ++i) {
+            nums[i] = nums[i / 2] + i % 2 * nums[i / 2 + 1];
+        }
+        return *max_element(nums.begin(), nums.end());
     }
 };
