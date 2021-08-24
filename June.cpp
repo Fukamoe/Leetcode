@@ -1,14 +1,21 @@
 class Solution {
+private:
+    static constexpr int INF = 10000 * 101 + 1;
+
 public:
-    int getMaximumGenerated(int n) {
-        if (n == 0) {
-            return 0;
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<vector<int>> f(k + 2, vector<int>(n, INF));
+        f[0][src] = 0;
+        for (int t = 1; t <= k + 1; ++t) {
+            for (auto&& flight: flights) {
+                int j = flight[0], i = flight[1], cost = flight[2];
+                f[t][i] = min(f[t][i], f[t - 1][j] + cost);
+            }
         }
-        vector<int> nums(n + 1);
-        nums[1] = 1;
-        for (int i = 2; i <= n; ++i) {
-            nums[i] = nums[i / 2] + i % 2 * nums[i / 2 + 1];
+        int ans = INF;
+        for (int t = 1; t <= k + 1; ++t) {
+            ans = min(ans, f[t][dst]);
         }
-        return *max_element(nums.begin(), nums.end());
+        return (ans == INF ? -1 : ans);
     }
 };
