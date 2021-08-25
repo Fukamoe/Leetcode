@@ -1,21 +1,23 @@
 class Solution {
-private:
-    static constexpr int INF = 10000 * 101 + 1;
-
 public:
-    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        vector<vector<int>> f(k + 2, vector<int>(n, INF));
-        f[0][src] = 0;
-        for (int t = 1; t <= k + 1; ++t) {
-            for (auto&& flight: flights) {
-                int j = flight[0], i = flight[1], cost = flight[2];
-                f[t][i] = min(f[t][i], f[t - 1][j] + cost);
-            }
+    vector<vector<int>> ans;
+    vector<int> stk;
+
+    void dfs(vector<vector<int>>& graph, int x, int n) {
+        if (x == n) {
+            ans.push_back(stk);
+            return;
         }
-        int ans = INF;
-        for (int t = 1; t <= k + 1; ++t) {
-            ans = min(ans, f[t][dst]);
+        for (auto& y : graph[x]) {
+            stk.push_back(y);
+            dfs(graph, y, n);
+            stk.pop_back();
         }
-        return (ans == INF ? -1 : ans);
+    }
+
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        stk.push_back(0);
+        dfs(graph, 0, graph.size() - 1);
+        return ans;
     }
 };
