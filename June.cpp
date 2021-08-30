@@ -1,45 +1,16 @@
-class MedianFinder {
+class Solution {
+private:
+    mt19937 gen;
+    uniform_int_distribution<int> dis;
+    vector<int> pre;
+
 public:
-    priority_queue<int, vector<int>, less<int>> queMin;
-    priority_queue<int, vector<int>, greater<int>> queMax;
-
-    MedianFinder() {}
-
-    void addNum(int num) {
-        if (queMin.empty() || num <= queMin.top()) {
-            queMin.push(num);
-            if (queMax.size() + 1 < queMin.size()) {
-                queMax.push(queMin.top());
-                queMin.pop();
-            }
-        } else {
-            queMax.push(num);
-            if (queMax.size() > queMin.size()) {
-                queMin.push(queMax.top());
-                queMax.pop();
-            }
-        }
+    Solution(vector<int>& w): gen(random_device{}()), dis(1, accumulate(w.begin(), w.end(), 0)) {
+        partial_sum(w.begin(), w.end(), back_inserter(pre));
     }
-
-    double findMedian() {
-        if (queMin.size() > queMax.size()) {
-            return queMin.top();
-        }
-        return (queMin.top() + queMax.top()) / 2.0;
+    
+    int pickIndex() {
+        int x = dis(gen);
+        return lower_bound(pre.begin(), pre.end(), x) - pre.begin();
     }
 };
-class Solution {
-    public int sumOddLengthSubarrays(int[] arr) {
-        int sum = 0;
-        int n = arr.length;
-        for (int start = 0; start < n; start++) {
-            for (int length = 1; start + length <= n; length += 2) {
-                int end = start + length - 1;
-                for (int i = start; i <= end; i++) {
-                    sum += arr[i];
-                }
-            }
-        }
-        return sum;
-    }
-}
