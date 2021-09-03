@@ -1,16 +1,11 @@
 class Solution {
 public:
-    ListNode* getKthFromEnd(ListNode* head, int k) {
-        int n = 0;
-        ListNode* node = nullptr;
-
-        for (node = head; node; node = node->next) {
-            n++;
+    vector<int> smallestK(vector<int>& arr, int k) {
+        vector<int> vec(k, 0);
+        sort(arr.begin(), arr.end());
+        for (int i = 0; i < k; ++i) {
+            vec[i] = arr[i];
         }
-        for (node = head; n > k; n--) {
-            node = node->next;
-        }
-      
-        return node;
+        return vec;
     }
 };
