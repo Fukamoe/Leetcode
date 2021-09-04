@@ -1,11 +1,16 @@
 class Solution {
 public:
-    vector<int> smallestK(vector<int>& arr, int k) {
-        vector<int> vec(k, 0);
-        sort(arr.begin(), arr.end());
-        for (int i = 0; i < k; ++i) {
-            vec[i] = arr[i];
+    int fib(int n) {
+        int MOD = 1000000007;
+        if (n < 2) {
+            return n;
         }
-        return vec;
+        int p = 0, q = 0, r = 1;
+        for (int i = 2; i <= n; ++i) {
+            p = q; 
+            q = r; 
+            r = (p + q)%MOD;
+        }
+        return r;
     }
 };
