@@ -1,16 +1,12 @@
 class Solution {
 public:
-    int fib(int n) {
-        int MOD = 1000000007;
-        if (n < 2) {
-            return n;
-        }
-        int p = 0, q = 0, r = 1;
-        for (int i = 2; i <= n; ++i) {
-            p = q; 
-            q = r; 
-            r = (p + q)%MOD;
-        }
-        return r;
+    int rand10() {
+        int row, col, idx;
+        do {
+            row = rand7();
+            col = rand7();
+            idx = col + (row - 1) * 7;
+        } while (idx > 40);
+        return 1 + (idx - 1) % 10;
     }
 };
