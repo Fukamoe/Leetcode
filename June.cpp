@@ -1,12 +1,18 @@
 class Solution {
 public:
-    int rand10() {
-        int row, col, idx;
-        do {
-            row = rand7();
-            col = rand7();
-            idx = col + (row - 1) * 7;
-        } while (idx > 40);
-        return 1 + (idx - 1) % 10;
+    int search(vector<int>& nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        while(low <= high){
+            int mid = (high - low) / 2 + low;
+            int num = nums[mid];
+            if (num == target) {
+                return mid;
+            } else if (num > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return -1;
     }
 };
