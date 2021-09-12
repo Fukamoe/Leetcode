@@ -1,30 +1,33 @@
 class Solution {
 public:
-    int findIntegers(int n) {
-        vector<int> dp(31);
-        dp[0] = dp[1] = 1;
-        for (int i = 2; i < 31; ++i) {
-            dp[i] = dp[i - 1] + dp[i - 2];
+    bool checkValidString(string s) {
+        int n = s.size();
+        vector<vector<bool>> dp = vector<vector<bool>>(n,vector<bool>(n,false));
+
+        for (int i = 0; i < n; i++) {
+            if (s[i] == '*') {
+                dp[i][i] = true;
+            }
         }
 
-        int pre = 0, res = 0;
-        for (int i = 29; i >= 0; --i) {
-            int val = 1 << i;
-            if ((n & val) != 0) {
-                res += dp[i + 1];
-                if (pre == 1) {
-                    break;
+        for (int i = 1; i < n; i++) {
+            char c1 = s[i - 1]; 
+            char c2 = s[i];
+            dp[i - 1][i] = (c1 == '(' || c1 == '*') && (c2 == ')' || c2 == '*');
+        }
+
+        for (int i = n - 3; i >= 0; i--) {
+            char c1 = s[i];
+            for (int j = i + 2; j < n; j++) {
+                char c2 = s[j];
+                if ((c1 == '(' || c1 == '*') && (c2 == ')' || c2 == '*')) {
+                    dp[i][j] = dp[i + 1][j - 1];
                 }
-                pre = 1;
-            } else {
-                pre = 0;
-            }
-
-            if (i == 0) {
-                ++res;
+                for (int k = i; k < j && !dp[i][j]; k++) {
+                    dp[i][j] = dp[i][k] && dp[k + 1][j];
+                }
             }
         }
-
-        return res;
+        return dp[0][n - 1];
     }
 };
