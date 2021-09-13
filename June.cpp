@@ -1,33 +1,17 @@
 class Solution {
 public:
-    bool checkValidString(string s) {
-        int n = s.size();
-        vector<vector<bool>> dp = vector<vector<bool>>(n,vector<bool>(n,false));
-
-        for (int i = 0; i < n; i++) {
-            if (s[i] == '*') {
-                dp[i][i] = true;
+    int numberOfBoomerangs(vector<vector<int>> &points) {
+        int ans = 0;
+        for (auto &p : points) {
+            unordered_map<int, int> cnt;
+            for (auto &q : points) {
+                int dis = (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1]);
+                ++cnt[dis];
+            }
+            for (auto &[_, m] : cnt) {
+                ans += m * (m - 1);
             }
         }
-
-        for (int i = 1; i < n; i++) {
-            char c1 = s[i - 1]; 
-            char c2 = s[i];
-            dp[i - 1][i] = (c1 == '(' || c1 == '*') && (c2 == ')' || c2 == '*');
-        }
-
-        for (int i = n - 3; i >= 0; i--) {
-            char c1 = s[i];
-            for (int j = i + 2; j < n; j++) {
-                char c2 = s[j];
-                if ((c1 == '(' || c1 == '*') && (c2 == ')' || c2 == '*')) {
-                    dp[i][j] = dp[i + 1][j - 1];
-                }
-                for (int k = i; k < j && !dp[i][j]; k++) {
-                    dp[i][j] = dp[i][k] && dp[k + 1][j];
-                }
-            }
-        }
-        return dp[0][n - 1];
+        return ans;
     }
 };
