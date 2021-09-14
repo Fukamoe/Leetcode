@@ -1,17 +1,13 @@
-class Solution {
-public:
-    int numberOfBoomerangs(vector<vector<int>> &points) {
-        int ans = 0;
-        for (auto &p : points) {
-            unordered_map<int, int> cnt;
-            for (auto &q : points) {
-                int dis = (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1]);
-                ++cnt[dis];
-            }
-            for (auto &[_, m] : cnt) {
-                ans += m * (m - 1);
-            }
-        }
-        return ans;
-    }
-};
+class Solution:
+    def findLongestWord(self, s: str, dictionary: List[str]) -> str:
+        res = ""
+        for t in dictionary:
+            i = j = 0
+            while i < len(t) and j < len(s):
+                if t[i] == s[j]:
+                    i += 1
+                j += 1
+            if i == len(t):
+                if len(t) > len(res) or (len(t) == len(res) and t < res):
+                    res = t
+        return res
