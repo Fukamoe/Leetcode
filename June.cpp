@@ -6,8 +6,4 @@ class Solution:
             while i < len(t) and j < len(s):
                 if t[i] == s[j]:
                     i += 1
-                j += 1
-            if i == len(t):
-                if len(t) > len(res) or (len(t) == len(res) and t < res):
-                    res = t
-        return res
+  
