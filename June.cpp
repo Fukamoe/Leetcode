@@ -1,16 +1,28 @@
 class Solution {
 public:
-    int minSteps(int n) {
-        vector<int> f(n + 1);
-        for (int i = 2; i <= n; ++i) {
-            f[i] = INT_MAX;
-            for (int j = 1; j * j <= i; ++j) {
-                if (i % j == 0) {
-                    f[i] = min(f[i], f[j] + i / j);
-                    f[i] = min(f[i], f[i / j] + j);
+    int findNumberOfLIS(vector<int> &nums) {
+        int n = nums.size(), maxLen = 0, ans = 0;
+        vector<int> dp(n), cnt(n);
+        for (int i = 0; i < n; ++i) {
+            dp[i] = 1;
+            cnt[i] = 1;
+            for (int j = 0; j < i; ++j) {
+                if (nums[i] > nums[j]) {
+                    if (dp[j] + 1 > dp[i]) {
+                        dp[i] = dp[j] + 1;
+                        cnt[i] = cnt[j]; // 重置计数
+                    } else if (dp[j] + 1 == dp[i]) {
+                        cnt[i] += cnt[j];
+                    }
                 }
             }
+            if (dp[i] > maxLen) {
+                maxLen = dp[i];
+                ans = cnt[i]; // 重置计数
+            } else if (dp[i] == maxLen) {
+                ans += cnt[i];
+            }
         }
-        return f[n];
+        return ans;
     }
 };
