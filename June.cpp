@@ -1,28 +1,18 @@
 class Solution {
 public:
-    int rootSum(TreeNode* root, int targetSum) {
-        if (!root) {
-            return 0;
+    int findMinMoves(vector<int> &machines) {
+        int tot = accumulate(machines.begin(), machines.end(), 0);
+        int n = machines.size();
+        if (tot % n) {
+            return -1;
         }
-
-        int ret = 0;
-        if (root->val == targetSum) {
-            ret++;
-        } 
-
-        ret += rootSum(root->left, targetSum - root->val);
-        ret += rootSum(root->right, targetSum - root->val);
-        return ret;
-    }
-
-    int pathSum(TreeNode* root, int targetSum) {
-        if (!root) {
-            return 0;
+        int avg = tot / n;
+        int ans = 0, sum = 0;
+        for (int num: machines) {
+            num -= avg;
+            sum += num;
+            ans = max(ans, max(abs(sum), num));
         }
-        
-        int ret = rootSum(root, targetSum);
-        ret += pathSum(root->left, targetSum);
-        ret += pathSum(root->right, targetSum);
-        return ret;
+        return ans;
     }
 };
