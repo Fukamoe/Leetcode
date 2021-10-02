@@ -1,15 +1,17 @@
 class Solution {
 public:
-    string destCity(vector<vector<string>> &paths) {
-        unordered_set<string> citiesA;
-        for (auto &path : paths) {
-            citiesA.insert(path[0]);
+    string toHex(int num) {
+        if (num == 0) {
+            return "0";
         }
-        for (auto &path : paths) {
-            if (!citiesA.count(path[1])) {
-                return path[1];
+        string sb;
+        for (int i = 7; i >= 0; i --) {
+            int val = (num >> (4 * i)) & 0xf;
+            if (sb.length() > 0 || val > 0) {
+                char digit = val < 10 ? (char) ('0' + val) : (char) ('a' + val - 10);
+                sb.push_back(digit);
             }
         }
-        return "";
+        return sb;
     }
 };
