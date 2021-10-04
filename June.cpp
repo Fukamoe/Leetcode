@@ -1,41 +1,23 @@
-func fractionToDecimal(numerator, denominator int) string {
-    if numerator%denominator == 0 {
-        return strconv.Itoa(numerator / denominator)
+class Solution {
+public:
+    string licenseKeyFormatting(string s, int k) {
+        string ans;
+        int cnt = 0;
+        
+        for (int i = s.size() - 1; i >= 0; i--) {
+            if (s[i] != '-') {
+                ans.push_back(toupper(s[i]));
+                cnt++;
+                if (cnt % k == 0) {
+                    ans.push_back('-');
+                }  
+            }
+        }
+        if (ans.size() > 0 && ans.back() == '-') {
+            ans.pop_back();
+        }
+        reverse(ans.begin(), ans.end());
+        
+        return ans;
     }
-
-    s := []byte{}
-    if numerator < 0 != (denominator < 0) {
-        s = append(s, '-')
-    }
-
-    // 整数部分
-    numerator = abs(numerator)
-    denominator = abs(denominator)
-    integerPart := numerator / denominator
-    s = append(s, strconv.Itoa(integerPart)...)
-    s = append(s, '.')
-
-    // 小数部分
-    indexMap := map[int]int{}
-    remainder := numerator % denominator
-    for remainder != 0 && indexMap[remainder] == 0 {
-        indexMap[remainder] = len(s)
-        remainder *= 10
-        s = append(s, '0'+byte(remainder/denominator))
-        remainder %= denominator
-    }
-    if remainder > 0 { // 有循环节
-        insertIndex := indexMap[remainder]
-        s = append(s[:insertIndex], append([]byte{'('}, s[insertIndex:]...)...)
-        s = append(s, ')')
-    }
-
-    return string(s)
-}
-
-func abs(x int) int {
-    if x < 0 {
-        return -x
-    }
-    return x
-}
+};
