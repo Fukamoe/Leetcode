@@ -1,13 +1,14 @@
 class Solution {
 public:
-    int thirdMax(vector<int> &nums) {
-        set<int> s;
-        for (int num : nums) {
-            s.insert(num);
-            if (s.size() > 3) {
-                s.erase(s.begin());
+    int countSegments(string s) {
+        int segmentCount = 0;
+
+        for (int i = 0; i < s.size(); i++) {
+            if ((i == 0 || s[i - 1] == ' ') && s[i] != ' ') {
+                segmentCount++;
             }
         }
-        return s.size() == 3 ? *s.begin() : *s.rbegin();
+
+        return segmentCount;
     }
 };
