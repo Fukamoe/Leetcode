@@ -1,14 +1,16 @@
 class Solution {
+    const int L = 10;
 public:
-    int countSegments(string s) {
-        int segmentCount = 0;
-
-        for (int i = 0; i < s.size(); i++) {
-            if ((i == 0 || s[i - 1] == ' ') && s[i] != ' ') {
-                segmentCount++;
+    vector<string> findRepeatedDnaSequences(string s) {
+        vector<string> ans;
+        unordered_map<string, int> cnt;
+        int n = s.length();
+        for (int i = 0; i <= n - L; ++i) {
+            string sub = s.substr(i, L);
+            if (++cnt[sub] == 2) {
+                ans.push_back(sub);
             }
         }
-
-        return segmentCount;
+        return ans;
     }
 };
