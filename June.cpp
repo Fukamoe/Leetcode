@@ -1,20 +1,14 @@
 class Solution {
 public:
-    vector<string> fizzBuzz(int n) {
-        vector<string> answer;
-        for (int i = 1; i <= n; i++) {
-            string curr;
-            if (i % 3 == 0) {
-                curr　+= "Fizz";
+    int peakIndexInMountainArray(vector<int>& arr) {
+        int n = arr.size();
+        int ans = -1;
+        for (int i = 1; i < n - 1; ++i) {
+            if (arr[i] > arr[i + 1]) {
+                ans = i;
+                break;
             }
-            if (i % 5 == 0) {
-                curr += "Buzz";
-            }
-            if (curr.size() == 0) {
-                curr += to_string(i);
-            }            
-            answer.emplace_back(curr);
         }
-        return answer;
+        return ans;
     }
 };
