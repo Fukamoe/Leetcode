@@ -1,20 +1,16 @@
 class Solution {
 public:
-    int kthSmallest(TreeNode* root, int k) {
-        stack<TreeNode *> stack;
-        while (root != nullptr || stack.size() > 0) {
-            while (root != nullptr) {
-                stack.push(root);
-                root = root->left;
+    int findComplement(int num) {
+        int highbit = 0;
+        for (int i = 1; i <= 30; ++i) {
+            if (num >= (1 << i)) {
+                highbit = i;
             }
-            root = stack.top();
-            stack.pop();
-            --k;
-            if (k == 0) {
+            else {
                 break;
-            }
-            root = root->right;
+            }            
         }
-        return root->val;
+        int mask = (highbit == 30 ? 0x7fffffff : (1 << (highbit + 1)) - 1);
+        return num ^ mask;
     }
 };
