@@ -1,11 +1,29 @@
-class Solution {
+class PeekingIterator : public Iterator {
 public:
-    int minMoves(vector<int>& nums) {
-        int minNum = *min_element(nums.begin(),nums.end());
-        int res = 0;
-        for (int num : nums) {
-            res += num - minNum;
+    PeekingIterator(const vector<int>& nums) : Iterator(nums) {
+        flag = Iterator::hasNext();
+        if (flag) {
+            nextElement = Iterator::next();
         }
-        return res;
     }
+    
+    int peek() {
+        return nextElement;
+    }
+    
+    int next() {
+        int ret = nextElement;
+        flag = Iterator::hasNext();
+        if (flag) {
+            nextElement = Iterator::next();
+        }
+        return ret;
+    }
+    
+    bool hasNext() const {
+        return flag;
+    }
+private:
+    int nextElement;
+    bool flag;
 };
