@@ -1,29 +1,19 @@
-class PeekingIterator : public Iterator {
+class Solution {
 public:
-    PeekingIterator(const vector<int>& nums) : Iterator(nums) {
-        flag = Iterator::hasNext();
-        if (flag) {
-            nextElement = Iterator::next();
+    vector<int> majorityElement(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans;
+        unordered_map<int, int> cnt;
+
+        for (auto & v : nums) {
+            cnt[v]++;
         }
-    }
-    
-    int peek() {
-        return nextElement;
-    }
-    
-    int next() {
-        int ret = nextElement;
-        flag = Iterator::hasNext();
-        if (flag) {
-            nextElement = Iterator::next();
+        for (auto & v : cnt) {
+            if (v.second > n / 3) {
+                ans.push_back(v.first);
+            }
         }
-        return ret;
+
+        return ans;
     }
-    
-    bool hasNext() const {
-        return flag;
-    }
-private:
-    int nextElement;
-    bool flag;
 };
