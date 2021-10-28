@@ -1,75 +1,33 @@
 class Solution {
-public:
-    vector<string> res;
-    vector<string> removeInvalidParentheses(string s) {
-        int lremove = 0;
-        int rremove = 0;
+    vector<int> vis;
 
-        for (char c : s) {
-            if (c == '(') {
-                lremove++;
-            } else if (c == ')') {
-                if (lremove == 0) {
-                    rremove++;
-                } else {
-                    lremove--;
-                }
-            }
-        }
-        helper(s, 0, 0, 0, lremove, rremove);
-        return res;
+    bool isPowerOfTwo(int n) {
+        return (n & (n - 1)) == 0;
     }
 
-    void helper(string str, int start, int lcount, int rcount, int lremove, int rremove) {
-        if (lremove == 0 && rremove == 0) {
-            if (isValid(str)) {
-                res.push_back(str);
-            }
-            return;
+    bool backtrack(string &nums, int idx, int num) {
+        if (idx == nums.length()) {
+            return isPowerOfTwo(num);
         }
-
-        for (int i = start; i < str.size(); i++) {
-            if (i != start && str[i] == str[i - 1]) {
+        for (int i = 0; i < nums.length(); ++i) {
+            // 不能有前导零
+            if ((num == 0 && nums[i] == '0') || vis[i] || (i > 0 && !vis[i - 1] && nums[i] == nums[i - 1])) {
                 continue;
             }
-            // 如果剩余的字符无法满足去掉的数量要求，直接返回
-            if (lremove + rremove > str.size() - i) {
-                return;
-            } 
-            // 尝试去掉一个左括号
-            if (lremove > 0 && str[i] == '(') {
-                helper(str.substr(0, i) + str.substr(i + 1), i, lcount, rcount, lremove - 1, rremove);
+            vis[i] = 1;
+            if (backtrack(nums, idx + 1, num * 10 + nums[i] - '0')) {
+                return true;
             }
-            // 尝试去掉一个右括号
-            if (rremove > 0 && str[i] == ')') {
-                helper(str.substr(0, i) + str.substr(i + 1), i, lcount, rcount, lremove, rremove - 1);
-            }
-            if (str[i] == ')') {
-                lcount++;
-            } else if (str[i] == ')') {
-                rcount++;
-            }
-            // 当前右括号的数量大于左括号的数量则为非法,直接返回.
-            if (rcount > lcount) {
-                break;
-            }
+            vis[i] = 0;
         }
+        return false;
     }
 
-    inline bool isValid(const string & str) {
-        int cnt = 0;
-
-        for (int i = 0; i < str.size(); i++) {
-            if (str[i] == '(') {
-                cnt++;
-            } else if (str[i] == ')') {
-                cnt--;
-                if (cnt < 0) {
-                    return false;
-                }
-            }
-        }
-
-        return cnt == 0;
+public:
+    bool reorderedPowerOf2(int n) {
+        string nums = to_string(n);
+        sort(nums.begin(), nums.end());
+        vis.resize(nums.length());
+        return backtrack(nums, 0, 0);
     }
 };
