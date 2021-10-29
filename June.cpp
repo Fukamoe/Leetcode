@@ -1,33 +1,27 @@
 class Solution {
-    vector<int> vis;
-
-    bool isPowerOfTwo(int n) {
-        return (n & (n - 1)) == 0;
-    }
-
-    bool backtrack(string &nums, int idx, int num) {
-        if (idx == nums.length()) {
-            return isPowerOfTwo(num);
-        }
-        for (int i = 0; i < nums.length(); ++i) {
-            // 不能有前导零
-            if ((num == 0 && nums[i] == '0') || vis[i] || (i > 0 && !vis[i - 1] && nums[i] == nums[i - 1])) {
-                continue;
-            }
-            vis[i] = 1;
-            if (backtrack(nums, idx + 1, num * 10 + nums[i] - '0')) {
+public:
+    bool isSelfCrossing(vector<int>& distance) {
+        int n = distance.size();
+        for (int i = 3; i < n; ++i) {
+            // 第 1 类路径交叉的情况
+            if (distance[i] >= distance[i - 2] && distance[i - 1] <= distance[i - 3]) {
                 return true;
             }
-            vis[i] = 0;
+
+            // 第 2 类路径交叉的情况
+            if (i == 4 && (distance[3] == distance[1]
+                && distance[4] >= distance[2] - distance[0])) {
+                return true;
+            }
+
+            // 第 3 类路径交叉的情况
+            if (i >= 5 && (distance[i - 3] - distance[i - 5] <= distance[i - 1]
+                && distance[i - 1] <= distance[i - 3]
+                && distance[i] >= distance[i - 2] - distance[i - 4]
+                && distance[i - 2] > distance[i - 4])) {
+                return true;
+            }
         }
         return false;
-    }
-
-public:
-    bool reorderedPowerOf2(int n) {
-        string nums = to_string(n);
-        sort(nums.begin(), nums.end());
-        vis.resize(nums.length());
-        return backtrack(nums, 0, 0);
     }
 };
