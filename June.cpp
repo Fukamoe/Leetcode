@@ -1,6 +1,7 @@
 class Solution {
 public:
-    int distributeCandies(vector<int> &candyType) {
-        return min(unordered_set<int>(candyType.begin(), candyType.end()).size(), candyType.size() / 2);
+    void deleteNode(ListNode* node) {
+        node->val = node->next->val;
+        node->next = node->next->next;
     }
 };
