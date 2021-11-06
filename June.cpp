@@ -1,12 +1,13 @@
 class Solution {
 public:
-    int longestSubsequence(vector<int> &arr, int difference) {
-        int ans = 0;
-        unordered_map<int, int> dp;
-        for (int v: arr) {
-            dp[v] = dp[v - difference] + 1;
-            ans = max(ans, dp[v]);
+    int missingNumber(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int n = nums.size();
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != i) {
+                return i;
+            }
         }
-        return ans;
+        return n;
     }
 };
