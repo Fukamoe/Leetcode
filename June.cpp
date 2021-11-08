@@ -1,11 +1,20 @@
 class Solution {
 public:
-    int maxCount(int m, int n, vector<vector<int>>& ops) {
-        int mina = m, minb = n;
-        for (const auto& op: ops) {
-            mina = min(mina, op[0]);
-            minb = min(minb, op[1]);
+    string getHint(string secret, string guess) {
+        int bulls = 0;
+        vector<int> cntS(10), cntG(10);
+        for (int i = 0; i < secret.length(); ++i) {
+            if (secret[i] == guess[i]) {
+                ++bulls;
+            } else {
+                ++cntS[secret[i] - '0'];
+                ++cntG[guess[i] - '0'];
+            }
         }
-        return mina * minb;
+        int cows = 0;
+        for (int i = 0; i < 10; ++i) {
+            cows += min(cntS[i], cntG[i]);
+        }
+        return to_string(bulls) + "A" + to_string(cows) + "B";
     }
 };
