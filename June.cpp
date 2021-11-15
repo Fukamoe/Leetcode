@@ -1,22 +1,6 @@
-class MapSum {
+class Solution {
 public:
-    MapSum() {
-
+    int bulbSwitch(int n) {
+        return sqrt(n + 0.5);
     }
-    
-    void insert(string key, int val) {
-        cnt[key] = val;
-    }
-    
-    int sum(string prefix) {
-        int res = 0;
-        for (auto & [key,val] : cnt) {
-            if (key.substr(0, prefix.size()) == prefix) {
-                res += val;
-            }
-        }
-        return res;
-    }
-private:
-    unordered_map<string, int> cnt;
 };
