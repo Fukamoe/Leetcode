@@ -1,50 +1,23 @@
-typedef pair<int, int> Point;
-
 class Solution {
 public:
-    bool isRectangleCover(vector<vector<int>>& rectangles) {
-        long area = 0;
-        int minX = rectangles[0][0], minY = rectangles[0][1], maxX = rectangles[0][2], maxY = rectangles[0][3];
-        map<Point, int> cnt;
-        for (auto & rect : rectangles) {
-            int x = rect[0], y = rect[1], a = rect[2], b = rect[3];
-            area += (long) (a - x) * (b - y);
-
-            minX = min(minX, x);
-            minY = min(minY, y);
-            maxX = max(maxX, a);
-            maxY = max(maxY, b);
-
-            Point point1({x, y});
-            Point point2({x, b});
-            Point point3({a, y});
-            Point point4({a, b});
-
-            cnt[point1] += 1;
-            cnt[point2] += 1;
-            cnt[point3] += 1;
-            cnt[point4] += 1;
-        }
-
-        Point pointMinMin({minX, minY});
-        Point pointMinMax({minX, maxY});
-        Point pointMaxMin({maxX, minY});
-        Point pointMaxMax({maxX, maxY});
-        if (area != (long long) (maxX - minX) * (maxY - minY) || !cnt.count(pointMinMin) || !cnt.count(pointMinMax) || !cnt.count(pointMaxMin) || !cnt.count(pointMaxMax)) {
-            return false;
-        }
-
-        cnt.erase(pointMinMin);
-        cnt.erase(pointMinMax);
-        cnt.erase(pointMaxMin);
-        cnt.erase(pointMaxMax);
-
-        for (auto & entry : cnt) {
-            int value = entry.second;
-            if (value != 2 && value != 4) {
-                return false;
+    int maxProduct(vector<string>& words) {
+        int length = words.size();
+        vector<int> masks(length);
+        for (int i = 0; i < length; i++) {
+            string word = words[i];
+            int wordLength = word.size();
+            for (int j = 0; j < wordLength; j++) {
+                masks[i] |= 1 << (word[j] - 'a');
             }
         }
-        return true;
+        int maxProd = 0;
+        for (int i = 0; i < length; i++) {
+            for (int j = i + 1; j < length; j++) {
+                if ((masks[i] & masks[j]) == 0) {
+                    maxProd = max(maxProd, int(words[i].size() * words[j].size()));
+                }
+            }
+        }
+        return maxProd;
     }
 };
