@@ -1,23 +1,19 @@
 class Solution {
 public:
-    int maxProduct(vector<string>& words) {
-        int length = words.size();
-        vector<int> masks(length);
-        for (int i = 0; i < length; i++) {
-            string word = words[i];
-            int wordLength = word.size();
-            for (int j = 0; j < wordLength; j++) {
-                masks[i] |= 1 << (word[j] - 'a');
-            }
-        }
-        int maxProd = 0;
-        for (int i = 0; i < length; i++) {
-            for (int j = i + 1; j < length; j++) {
-                if ((masks[i] & masks[j]) == 0) {
-                    maxProd = max(maxProd, int(words[i].size() * words[j].size()));
-                }
-            }
-        }
-        return maxProd;
+    int ans = 0;
+
+    int findTilt(TreeNode* root) {
+        dfs(root);
+        return ans;
     }
+
+    int dfs(TreeNode* node) {
+        if (node == nullptr) {
+            return 0;
+        }
+        int sumLeft = dfs(node->left);
+        int sumRight = dfs(node->right);
+        ans += abs(sumLeft - sumRight);
+        return sumLeft + sumRight + node->val;
+    } 
 };
