@@ -1,19 +1,12 @@
 class Solution {
 public:
-    int ans = 0;
-
-    int findTilt(TreeNode* root) {
-        dfs(root);
-        return ans;
-    }
-
-    int dfs(TreeNode* node) {
-        if (node == nullptr) {
+    int integerReplacement(int n) {
+        if (n == 1) {
             return 0;
         }
-        int sumLeft = dfs(node->left);
-        int sumRight = dfs(node->right);
-        ans += abs(sumLeft - sumRight);
-        return sumLeft + sumRight + node->val;
-    } 
+        if (n % 2 == 0) {
+            return 1 + integerReplacement(n / 2);
+        }
+        return 2 + min(integerReplacement(n / 2), integerReplacement(n / 2 + 1));
+    }
 };
