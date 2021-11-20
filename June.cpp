@@ -1,12 +1,17 @@
 class Solution {
 public:
-    int integerReplacement(int n) {
-        if (n == 1) {
-            return 0;
+    int findLHS(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int begin = 0;
+        int res = 0;
+        for (int end = 0; end < nums.size(); end++) {
+            while (nums[end] - nums[begin] > 1) {
+                begin++;
+            }
+            if (nums[end] - nums[begin] == 1) {
+                res = max(res, end - begin + 1);
+            }
         }
-        if (n % 2 == 0) {
-            return 1 + integerReplacement(n / 2);
-        }
-        return 2 + min(integerReplacement(n / 2), integerReplacement(n / 2 + 1));
+        return res;
     }
 };
