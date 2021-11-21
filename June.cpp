@@ -1,17 +1,15 @@
 class Solution {
 public:
-    int findLHS(vector<int>& nums) {
-        sort(nums.begin(),nums.end());
-        int begin = 0;
-        int res = 0;
-        for (int end = 0; end < nums.size(); end++) {
-            while (nums[end] - nums[begin] > 1) {
-                begin++;
-            }
-            if (nums[end] - nums[begin] == 1) {
-                res = max(res, end - begin + 1);
-            }
+    int maxDepth(Node* root) {
+        if (root == nullptr) {
+            return 0;
         }
-        return res;
+        int maxChildDepth = 0;
+        vector<Node *> children = root->children;
+        for (auto child : children) {
+            int childDepth = maxDepth(child);
+            maxChildDepth = max(maxChildDepth, childDepth);
+        }
+        return maxChildDepth + 1;
     }
 };
