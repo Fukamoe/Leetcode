@@ -1,31 +1,33 @@
 class Solution {
 public:
-    Solution(vector<int>& nums) {
-        this->nums = nums;
-        this->original.resize(nums.size());
-        copy(nums.begin(), nums.end(), original.begin());
-    }
-    
-    vector<int> reset() {
-        copy(original.begin(), original.end(), nums.begin());
-        return nums;
-    }
-    
-    vector<int> shuffle() {
-        vector<int> shuffled = vector<int>(nums.size());
-        list<int> lst(nums.begin(), nums.end());
-      
-        for (int i = 0; i < nums.size(); ++i) {
-            int j = rand()%(lst.size());
-            auto it = lst.begin();
-            advance(it, j);
-            shuffled[i] = *it;
-            lst.erase(it);
+    bool buddyStrings(string s, string goal) {
+        if (s.size() != goal.size()) {
+            return false;
         }
-        copy(shuffled.begin(), shuffled.end(), nums.begin());
-        return nums;
+        
+        if (s == goal) {
+            vector<int> count(26);
+            for (int i = 0; i < s.size(); i++) {
+                count[s[i] - 'a']++;
+                if (count[s[i] - 'a'] > 1) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            int first = -1, second = -1;
+            for (int i = 0; i < s.size(); i++) {
+                if (s[i] != goal[i]) {
+                    if (first == -1)
+                        first = i;
+                    else if (second == -1)
+                        second = i;
+                    else
+                        return false;
+                }
+            }
+
+            return (second != -1 && s[first] == goal[second] && s[second] == goal[first]);
+        }
     }
-private:
-    vector<int> nums;
-    vector<int> original;
 };
