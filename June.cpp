@@ -1,33 +1,16 @@
 class Solution {
 public:
-    vector<int> findAnagrams(string s, string p) {
-        int sLen = s.size(), pLen = p.size();
-
-        if (sLen < pLen) {
-            return vector<int>();
-        }
-
-        vector<int> ans;
-        vector<int> sCount(26);
-        vector<int> pCount(26);
-        for (int i = 0; i < pLen; ++i) {
-            ++sCount[s[i] - 'a'];
-            ++pCount[p[i] - 'a'];
-        }
-
-        if (sCount == pCount) {
-            ans.emplace_back(0);
-        }
-
-        for (int i = 0; i < sLen - pLen; ++i) {
-            --sCount[s[i] - 'a'];
-            ++sCount[s[i + pLen] - 'a'];
-
-            if (sCount == pCount) {
-                ans.emplace_back(i + 1);
+    vector<int> kthSmallestPrimeFraction(vector<int>& arr, int k) {
+        int n = arr.size();
+        vector<pair<int, int>> frac;
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                frac.emplace_back(arr[i], arr[j]);
             }
         }
-
-        return ans;
+        sort(frac.begin(), frac.end(), [&](const auto& x, const auto& y) {
+            return x.first * y.second < x.second * y.first;
+        });
+        return {frac[k - 1].first, frac[k - 1].second};
     }
 };
