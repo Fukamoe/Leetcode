@@ -1,16 +1,33 @@
 class Solution {
 public:
-    vector<int> kthSmallestPrimeFraction(vector<int>& arr, int k) {
-        int n = arr.size();
-        vector<pair<int, int>> frac;
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j < n; ++j) {
-                frac.emplace_back(arr[i], arr[j]);
+    int findNthDigit(int n) {
+        int low = 1, high = 9;
+        while (low < high) {
+            int mid = (high - low) / 2 + low;
+            if (totalDigits(mid) < n) {
+                low = mid + 1;
+            } else {
+                high = mid;
             }
         }
-        sort(frac.begin(), frac.end(), [&](const auto& x, const auto& y) {
-            return x.first * y.second < x.second * y.first;
-        });
-        return {frac[k - 1].first, frac[k - 1].second};
+        int d = low;
+        int prevDigits = totalDigits(d - 1);
+        int index = n - prevDigits - 1;
+        int start = (int) pow(10, d - 1);
+        int num = start + index / d;
+        int digitIndex = index % d;
+        int digit = (num / (int) (pow(10, d - digitIndex - 1))) % 10;
+        return digit;
+    }
+
+    int totalDigits(int length) {
+        int digits = 0;
+        int curLength = 1, curCount = 9;
+        while (curLength <= length) {
+            digits += curLength * curCount;
+            curLength++;
+            curCount *= 10;
+        }
+        return digits;
     }
 };
