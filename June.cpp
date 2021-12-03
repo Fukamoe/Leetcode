@@ -1,20 +1,29 @@
 class Solution {
 public:
-    vector<string> findRelativeRanks(vector<int>& score) {
-        int n = score.size();
-        string desc[3] = {"Gold Medal", "Silver Medal", "Bronze Medal"};
-        vector<pair<int, int>> arr;
-
-        for (int i = 0; i < n; ++i) {
-            arr.emplace_back(make_pair(-score[i], i));
+    int largestSumAfterKNegations(vector<int>& nums, int k) {
+        unordered_map<int, int> freq;
+        for (int num: nums) {
+            freq[num] += 1;
         }
-        sort(arr.begin(), arr.end());
-        vector<string> ans(n);
-        for (int i = 0; i < n; ++i) {
-            if (i >= 3) {
-                ans[arr[i].second] = to_string(i + 1);
-            } else {
-                ans[arr[i].second] = desc[i];
+        int ans = accumulate(nums.begin(), nums.end(), 0);
+        for (int i = -100; i < 0; ++i) {
+            if (freq[i]) {
+                int ops = min(k, freq[i]);
+                ans += (-i) * ops * 2;
+                freq[i] -= ops;
+                freq[-i] += ops;
+                k -= ops;
+                if (k == 0) {
+                    break;
+                }
+            }
+        }
+        if (k > 0 && k % 2 == 1 && !freq[0]) {
+            for (int i = 1; i <= 100; ++i) {
+                if (freq[i]) {
+                    ans -= i * 2;
+                    break;
+                }
             }
         }
         return ans;
