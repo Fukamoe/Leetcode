@@ -1,19 +1,25 @@
 class Solution {
-public:
-    bool canConstruct(string ransomNote, string magazine) {
-        if (ransomNote.size() > magazine.size()) {
-            return false;
-        }
-        vector<int> cnt(26);
-        for (auto & c : magazine) {
-            cnt[c - 'a']++;
-        }
-        for (auto & c : ransomNote) {
-            cnt[c - 'a']--;
-            if (cnt[c - 'a'] < 0) {
-                return false;
+    const int MOD = 1337;
+
+    int pow(int x, int n) {
+        int res = 1;
+        while (n) {
+            if (n % 2) {
+                res = (long) res * x % MOD;
             }
+            x = (long) x * x % MOD;
+            n /= 2;
         }
-        return true;
+        return res;
+    }
+
+public:
+    int superPow(int a, vector<int> &b) {
+        int ans = 1;
+        for (int i = b.size() - 1; i >= 0; --i) {
+            ans = (long) ans * pow(a, b[i]) % MOD;
+            a = pow(a, 10);
+        }
+        return ans;
     }
 };
