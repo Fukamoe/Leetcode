@@ -1,28 +1,30 @@
 class Solution {
 public:
-    vector<int> loudAndRich(vector<vector<int>> &richer, vector<int> &quiet) {
-        int n = quiet.size();
-        vector<vector<int>> g(n);
-        for (auto &r : richer) {
-            g[r[1]].emplace_back(r[0]);
+    int visiblePoints(vector<vector<int>>& points, int angle, vector<int>& location) {
+        int sameCnt = 0;
+        vector<double> polarDegrees;
+        for (auto & point : points) {
+            if (point[0] == location[0] && point[1] == location[1]) {
+                sameCnt++;
+                continue;
+            }
+            double degree = atan2(point[1] - location[1], point[0] - location[0]);
+            polarDegrees.emplace_back(degree);
+        }
+        sort(polarDegrees.begin(), polarDegrees.end());
+
+        int m = polarDegrees.size();
+        for (int i = 0; i < m; ++i) {
+            polarDegrees.emplace_back(polarDegrees[i] + 2 * M_PI);
         }
 
-        vector<int> ans(n, -1);
-        function<void(int)> dfs = [&](int x) {
-            if (ans[x] != -1) {
-                return;
-            }
-            ans[x] = x;
-            for (int y : g[x]) {
-                dfs(y);
-                if (quiet[ans[y]] < quiet[ans[x]]) {
-                    ans[x] = ans[y];
-                }
-            }
-        };
-        for (int i = 0; i < n; ++i) {
-            dfs(i);
+        int maxCnt = 0; 
+        double degree = angle * M_PI / 180;
+        for (int i = 0; i < m; ++i) {
+            auto it = upper_bound(polarDegrees.begin() + i, polarDegrees.end(), polarDegrees[i] + degree);
+            int curr = it - polarDegrees.begin() - i;
+            maxCnt = max(maxCnt, curr);
         }
-        return ans;
+        return maxCnt + sameCnt;
     }
 };
