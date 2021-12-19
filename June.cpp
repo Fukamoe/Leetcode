@@ -1,23 +1,18 @@
 class Solution {
 public:
-    int countBattleships(vector<vector<char>>& board) {
-        int row = board.size();
-        int col = board[0].size();
-        int ans = 0;
-        for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < col; ++j) {
-                if (board[i][j] == 'X') {
-                    board[i][j] = '.';
-                    for (int k = j + 1; k < col && board[i][k] == 'X'; ++k) {
-                        board[i][k] = '.';
-                    }                    
-                    for (int k = i + 1; k < row && board[k][j] == 'X'; ++k) {
-                        board[k][j] = '.';
-                    }
-                    ans++;
-                }
+    int findJudge(int n, vector<vector<int>>& trust) {
+        vector<int> inDegrees(n + 1);
+        vector<int> outDegrees(n + 1);
+        for (auto& edge : trust) {
+            int x = edge[0], y = edge[1];
+            ++inDegrees[y];
+            ++outDegrees[x];
+        }
+        for (int i = 1; i <= n; ++i) {
+            if (inDegrees[i] == n - 1 && outDegrees[i] == 0) {
+                return i;
             }
         }
-        return ans;
+        return -1;
     }
 };
