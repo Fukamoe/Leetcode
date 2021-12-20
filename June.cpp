@@ -1,18 +1,16 @@
 class Solution {
 public:
-    int findJudge(int n, vector<vector<int>>& trust) {
-        vector<int> inDegrees(n + 1);
-        vector<int> outDegrees(n + 1);
-        for (auto& edge : trust) {
-            int x = edge[0], y = edge[1];
-            ++inDegrees[y];
-            ++outDegrees[x];
+    int findRadius(vector<int> &houses, vector<int> &heaters) {
+        int ans = 0;
+        sort(heaters.begin(), heaters.end());
+        for (int house: houses) {
+            int j = upper_bound(heaters.begin(), heaters.end(), house) - heaters.begin();
+            int i = j - 1;
+            int rightDistance = j >= heaters.size() ? INT_MAX : heaters[j] - house;
+            int leftDistance = i < 0 ? INT_MAX : house - heaters[i];
+            int curDistance = min(leftDistance, rightDistance);
+            ans = max(ans, curDistance);
         }
-        for (int i = 1; i <= n; ++i) {
-            if (inDegrees[i] == n - 1 && outDegrees[i] == 0) {
-                return i;
-            }
-        }
-        return -1;
+        return ans;
     }
 };
