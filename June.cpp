@@ -1,16 +1,19 @@
 class Solution {
 public:
-    int findRadius(vector<int> &houses, vector<int> &heaters) {
-        int ans = 0;
-        sort(heaters.begin(), heaters.end());
-        for (int house: houses) {
-            int j = upper_bound(heaters.begin(), heaters.end(), house) - heaters.begin();
-            int i = j - 1;
-            int rightDistance = j >= heaters.size() ? INT_MAX : heaters[j] - house;
-            int leftDistance = i < 0 ? INT_MAX : house - heaters[i];
-            int curDistance = min(leftDistance, rightDistance);
-            ans = max(ans, curDistance);
+    int dayOfYear(string date) {
+        int year = stoi(date.substr(0, 4));
+        int month = stoi(date.substr(5, 2));
+        int day = stoi(date.substr(8, 2));
+
+        int amount[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
+            ++amount[1];
         }
-        return ans;
+
+        int ans = 0;
+        for (int i = 0; i < month - 1; ++i) {
+            ans += amount[i];
+        }
+        return ans + day;
     }
 };
