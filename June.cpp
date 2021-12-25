@@ -1,45 +1,32 @@
-typedef pair<int,int> pii;
-
 class Solution {
 public:
-    int eatenApples(vector<int>& apples, vector<int>& days) {
-        int ans = 0;
-        priority_queue<pii, vector<pii>, greater<pii>> pq;
-        int n = apples.size();
-        int i = 0;
-        while (i < n) {
-            while (!pq.empty() && pq.top().first <= i) {
-                pq.pop();
-            }
-            int rottenDay = i + days[i];
-            int count = apples[i];
-            if (count > 0) {
-                pq.emplace(rottenDay, count);
-            }
-            if (!pq.empty()) {
-                pii curr = pq.top();
-                pq.pop();
-                curr.second--;
-                if (curr.second != 0) {                  
-                    pq.emplace(curr.first, curr.second);
+    bool isEvenOddTree(TreeNode* root) {
+        queue<TreeNode*> qu;
+        qu.push(root);
+        int level = 0;
+        while (!qu.empty()) {
+            int size = qu.size();
+            int prev = level % 2 == 0 ? INT_MIN : INT_MAX;
+            for (int i = 0; i < size; i++) {
+                TreeNode * node = qu.front();
+                qu.pop();
+                int value = node->val;
+                if (level % 2 == value % 2) {
+                    return false;
                 }
-                ans++;
+                if ((level % 2 == 0 && value <= prev) || (level % 2 == 1 && value >= prev)) {
+                    return false;
+                }
+                prev = value;
+                if (node->left != nullptr) {
+                    qu.push(node->left);
+                }
+                if (node->right != nullptr) {
+                    qu.push(node->right);
+                }
             }
-            i++;
+            level++;
         }
-        while (!pq.empty()) {
-            while (!pq.empty() && pq.top().first <= i) {
-                pq.pop();
-            }
-            if (pq.empty()) {
-                break;
-            }
-            pii curr = pq.top();
-            pq.pop();
-            int num = min(curr.first - i, curr.second);
-            ans += num;
-            i += num;
-        }
-        return ans;
+        return true;
     }
 };
