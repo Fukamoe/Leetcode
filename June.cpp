@@ -1,32 +1,28 @@
 class Solution {
 public:
-    bool isEvenOddTree(TreeNode* root) {
-        queue<TreeNode*> qu;
-        qu.push(root);
-        int level = 0;
-        while (!qu.empty()) {
-            int size = qu.size();
-            int prev = level % 2 == 0 ? INT_MIN : INT_MAX;
-            for (int i = 0; i < size; i++) {
-                TreeNode * node = qu.front();
-                qu.pop();
-                int value = node->val;
-                if (level % 2 == value % 2) {
-                    return false;
-                }
-                if ((level % 2 == 0 && value <= prev) || (level % 2 == 1 && value >= prev)) {
-                    return false;
-                }
-                prev = value;
-                if (node->left != nullptr) {
-                    qu.push(node->left);
-                }
-                if (node->right != nullptr) {
-                    qu.push(node->right);
-                }
+    vector<string> findOcurrences(string text, string first, string second) {
+        vector<string> words;
+        int s = 0, e = 0, len = text.length();
+        while (true) {
+            while (s < len && text[s] == ' ') {
+                s++;
             }
-            level++;
+            if (s >= len) {
+                break;
+            }
+            e = s + 1;
+            while (e < len && text[e] != ' ') {
+                e++;
+            }
+            words.push_back(text.substr(s, e - s));
+            s = e + 1;
         }
-        return true;
+        vector<string> ret;
+        for (int i = 2; i < words.size(); i++) {
+            if (words[i - 2] == first && words[i - 1] == second) {
+                ret.push_back(words[i]);
+            }
+        }
+        return ret;
     }
 };
