@@ -1,28 +1,21 @@
 class Solution {
 public:
-    vector<string> findOcurrences(string text, string first, string second) {
-        vector<string> words;
-        int s = 0, e = 0, len = text.length();
-        while (true) {
-            while (s < len && text[s] == ' ') {
-                s++;
+    int numFriendRequests(vector<int>& ages) {
+        int n = ages.size();
+        sort(ages.begin(), ages.end());
+        int left = 0, right = 0, ans = 0;
+        for (int age: ages) {
+            if (age < 15) {
+                continue;
             }
-            if (s >= len) {
-                break;
+            while (ages[left] <= 0.5 * age + 7) {
+                ++left;
             }
-            e = s + 1;
-            while (e < len && text[e] != ' ') {
-                e++;
+            while (right + 1 < n && ages[right + 1] <= age) {
+                ++right;
             }
-            words.push_back(text.substr(s, e - s));
-            s = e + 1;
+            ans += right - left;
         }
-        vector<string> ret;
-        for (int i = 2; i < words.size(); i++) {
-            if (words[i - 2] == first && words[i - 1] == second) {
-                ret.push_back(words[i]);
-            }
-        }
-        return ret;
+        return ans;
     }
 };
