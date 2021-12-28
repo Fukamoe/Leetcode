@@ -1,21 +1,66 @@
+struct Trie {
+    bool isEnd;
+    vector<Trie *> children;
+    Trie() {
+        this->children = vector<Trie *>(26, nullptr);
+        this->isEnd = false;
+    }
+};
+
 class Solution {
 public:
-    int numFriendRequests(vector<int>& ages) {
-        int n = ages.size();
-        sort(ages.begin(), ages.end());
-        int left = 0, right = 0, ans = 0;
-        for (int age: ages) {
-            if (age < 15) {
+    Trie * trie = new Trie();
+
+    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+        vector<string> ans;
+        sort(words.begin(), words.end(), [&](const string & a, const string & b){
+            return a.size() < b.size(); 
+        });
+        for (int i = 0; i < words.size(); i++) {
+            string word = words[i];
+            if (word.size() == 0) {
                 continue;
             }
-            while (ages[left] <= 0.5 * age + 7) {
-                ++left;
+            if (dfs(word, 0)) {
+                ans.emplace_back(word);
+            } else {
+                insert(word);
             }
-            while (right + 1 < n && ages[right + 1] <= age) {
-                ++right;
-            }
-            ans += right - left;
         }
         return ans;
+    }
+
+    bool dfs(const string & word, int start) {
+        if (word.size() == start) {
+            return true;
+        }
+        Trie * node = trie;
+        for (int i = start; i < word.size(); i++) {
+            char ch = word[i];
+            int index = ch - 'a';
+            node = node->children[index];
+            if (node == nullptr) {
+                return false;
+            }
+            if (node->isEnd) {
+                if (dfs(word, i + 1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    void insert(const string & word) {
+        Trie * node = trie;
+        for (int i = 0; i < word.size(); i++) {
+            char ch = word[i];
+            int index = ch - 'a';
+            if (node->children[index] == nullptr) {
+                node->children[index] = new Trie();
+            }
+            node = node->children[index];
+        }
+        node->isEnd = true;
     }
 };
