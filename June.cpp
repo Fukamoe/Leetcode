@@ -1,19 +1,30 @@
 class Solution {
 public:
-    int countQuadruplets(vector<int>& nums) {
-        int n = nums.size();
-        int ans = 0;
-        for (int a = 0; a < n; ++a) {
-            for (int b = a + 1; b < n; ++b) {
-                for (int c = b + 1; c < n; ++c) {
-                    for (int d = c + 1; d < n; ++d) {
-                        if (nums[a] + nums[b] + nums[c] == nums[d]) {
-                            ++ans;
-                        }
-                    }
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        int n = hand.size();
+        if (n % groupSize != 0) {
+            return false;
+        }
+        sort(hand.begin(), hand.end());
+        unordered_map<int, int> cnt;
+        for (auto & num : hand) {
+            cnt[num]++;
+        }
+        for (auto & x : hand) {
+            if (!cnt.count(x)) {
+                continue;
+            }
+            for (int j = 0; j < groupSize; j++) {
+                int num = x + j;
+                if (!cnt.count(num)) {
+                    return false;
+                }
+                cnt[num]--;
+                if (cnt[num] == 0) {
+                    cnt.erase(num);
                 }
             }
         }
-        return ans;
+        return true;
     }
 };
