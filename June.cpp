@@ -1,30 +1,19 @@
 class Solution {
 public:
-    bool isNStraightHand(vector<int>& hand, int groupSize) {
-        int n = hand.size();
-        if (n % groupSize != 0) {
+    bool checkPerfectNumber(int num) {
+        if (num == 1) {
             return false;
         }
-        sort(hand.begin(), hand.end());
-        unordered_map<int, int> cnt;
-        for (auto & num : hand) {
-            cnt[num]++;
-        }
-        for (auto & x : hand) {
-            if (!cnt.count(x)) {
-                continue;
-            }
-            for (int j = 0; j < groupSize; j++) {
-                int num = x + j;
-                if (!cnt.count(num)) {
-                    return false;
-                }
-                cnt[num]--;
-                if (cnt[num] == 0) {
-                    cnt.erase(num);
+
+        int sum = 1;
+        for (int d = 2; d * d <= num; ++d) {
+            if (num % d == 0) {
+                sum += d;
+                if (d * d < num) {
+                    sum += num / d;
                 }
             }
         }
-        return true;
+        return sum == num;
     }
 };
