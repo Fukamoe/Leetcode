@@ -1,19 +1,13 @@
 class Solution {
 public:
-    bool checkPerfectNumber(int num) {
-        if (num == 1) {
-            return false;
+    vector<vector<int>> construct2DArray(vector<int> &original, int m, int n) {
+        vector<vector<int>> ans;
+        if (original.size() != m * n) {
+            return ans;
         }
-
-        int sum = 1;
-        for (int d = 2; d * d <= num; ++d) {
-            if (num % d == 0) {
-                sum += d;
-                if (d * d < num) {
-                    sum += num / d;
-                }
-            }
+        for (auto it = original.begin(); it != original.end(); it += n) {
+            ans.emplace_back(it, it + n);
         }
-        return sum == num;
+        return ans;
     }
 };
