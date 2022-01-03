@@ -1,18 +1,19 @@
 class Solution {
 public:
-    int lastRemaining(int n) {
-        int a1 = 1;
-        int k = 0, cnt = n, step = 1;
-        while (cnt > 1) {
-            if (k % 2 == 0) { // 正向
-                a1 = a1 + step;
-            } else { // 反向
-                a1 = (cnt % 2 == 0) ? a1 : a1 + step;
-            }
-            k++;
-            cnt = cnt >> 1;
-            step = step << 1;
+    string dayOfTheWeek(int day, int month, int year) {
+        vector<string> week = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        vector<int> monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30};
+        /* 输入年份之前的年份的天数贡献 */
+        int days = 365 * (year - 1971) + (year - 1969) / 4;
+        /* 输入年份中，输入月份之前的月份的天数贡献 */
+        for (int i = 0; i < month - 1; ++i) {
+            days += monthDays[i];
         }
-        return a1;
+        if ((year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) && month >= 3) {
+            days += 1;
+        }
+        /* 输入月份中的天数贡献 */
+        days += day;
+        return week[(days + 3) % 7];
     }
 };
