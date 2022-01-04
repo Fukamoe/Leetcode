@@ -1,19 +1,55 @@
+const int MOUSE_WIN = 1;
+const int CAT_WIN = 2;
+const int DRAW = 0;
+const int MAXN = 51;
+
 class Solution {
 public:
-    string dayOfTheWeek(int day, int month, int year) {
-        vector<string> week = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-        vector<int> monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30};
-        /* 输入年份之前的年份的天数贡献 */
-        int days = 365 * (year - 1971) + (year - 1969) / 4;
-        /* 输入年份中，输入月份之前的月份的天数贡献 */
-        for (int i = 0; i < month - 1; ++i) {
-            days += monthDays[i];
+    int n;
+    int dp[MAXN][MAXN][MAXN*2];
+    vector<vector<int>> graph;
+    
+    int catMouseGame(vector<vector<int>>& graph) {
+        this->n = graph.size();
+        this->graph = graph;
+        memset(dp, -1, sizeof(dp));
+        return getResult(1, 2, 0);
+    }
+
+    int getResult(int mouse, int cat, int turns) {
+        if (turns == n * 2) {
+            return DRAW;
         }
-        if ((year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) && month >= 3) {
-            days += 1;
+        if (dp[mouse][cat][turns] < 0) {
+            if (mouse == 0) {
+                dp[mouse][cat][turns] = MOUSE_WIN;
+            } else if (cat == mouse) {
+                dp[mouse][cat][turns] = CAT_WIN;
+            } else {
+                getNextResult(mouse, cat, turns);
+            }
         }
-        /* 输入月份中的天数贡献 */
-        days += day;
-        return week[(days + 3) % 7];
+        return dp[mouse][cat][turns];
+    }
+
+    void getNextResult(int mouse, int cat, int turns) {
+        int curMove = turns % 2 == 0 ? mouse : cat;
+        int defaultResult = curMove == mouse ? CAT_WIN : MOUSE_WIN;
+        int result = defaultResult;
+        for (int next : graph[curMove]) {
+            if (curMove == cat && next == 0) {
+                continue;
+            }
+            int nextMouse = curMove == mouse ? next : mouse;
+            int nextCat = curMove == cat ? next : cat;
+            int nextResult = getResult(nextMouse, nextCat, turns + 1);
+            if (nextResult != defaultResult) {
+                result = nextResult;
+                if (result != DRAW) {
+                    break;
+                }
+            }
+        }
+        dp[mouse][cat][turns] = result;
     }
 };
