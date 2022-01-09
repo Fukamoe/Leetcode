@@ -1,15 +1,17 @@
 class Solution {
 public:
-    vector<int> grayCode(int n) {
-        vector<int> ret;
-        ret.reserve(1 << n);
-        ret.push_back(0);
-        for (int i = 1; i <= n; i++) {
-            int m = ret.size();
-            for (int j = m - 1; j >= 0; j--) {
-                ret.push_back(ret[j] | (1 << (i - 1)));
+    char slowestKey(vector<int>& releaseTimes, string keysPressed) {
+        int n = releaseTimes.size();
+        char ans = keysPressed[0];
+        int maxTime = releaseTimes[0];
+        for (int i = 1; i < n; i++) {
+            char key = keysPressed[i];
+            int time = releaseTimes[i] - releaseTimes[i - 1];
+            if (time > maxTime || (time == maxTime && key > ans)) {
+                ans = key;
+                maxTime = time;
             }
         }
-        return ret;
+        return ans;
     }
 };
