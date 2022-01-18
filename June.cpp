@@ -1,22 +1,20 @@
 class Solution {
+    int getMinutes(string &t) {
+        return (int(t[0] - '0') * 10 + int(t[1] - '0')) * 60 + int(t[3] - '0') * 10 + int(t[4] - '0');
+    }
+
 public:
-    int countVowelPermutation(int n) {
-        long long mod = 1e9 + 7;
-        vector<long long> dp(5, 1);
-        vector<long long> ndp(5);
-        for (int i = 2; i <= n; ++i) {
-            /* a前面可以为e,u,i */
-            ndp[0] = (dp[1] + dp[2] + dp[4]) % mod;
-            /* e前面可以为a,i */
-            ndp[1] = (dp[0] + dp[2]) % mod;
-            /* i前面可以为e,o */
-            ndp[2] = (dp[1] + dp[3]) % mod;
-            /* o前面可以为i */
-            ndp[3] = dp[2];
-            /* u前面可以为i,o */
-            ndp[4] = (dp[2] + dp[3]) % mod;
-            dp = ndp;
+    int findMinDifference(vector<string> &timePoints) {
+        sort(timePoints.begin(), timePoints.end());
+        int ans = INT_MAX;
+        int t0Minutes = getMinutes(timePoints[0]);
+        int preMinutes = t0Minutes;
+        for (int i = 1; i < timePoints.size(); ++i) {
+            int minutes = getMinutes(timePoints[i]);
+            ans = min(ans, minutes - preMinutes); // 相邻时间的时间差
+            preMinutes = minutes;
         }
-        return accumulate(dp.begin(), dp.end(), 0LL) % mod;
+        ans = min(ans, t0Minutes + 1440 - preMinutes); // 首尾时间的时间差
+        return ans;
     }
 };
