@@ -1,15 +1,21 @@
 class Solution {
 public:
-    bool containsNearbyDuplicate(vector<int>& nums, int k) {
-        unordered_map<int, int> dictionary;
-        int length = nums.size();
-        for (int i = 0; i < length; i++) {
-            int num = nums[i];
-            if (dictionary.count(num) && i - dictionary[num] <= k) {
-                return true;
+    bool stoneGameIX(vector<int>& stones) {
+        int cnt0 = 0, cnt1 = 0, cnt2 = 0;
+        for (int val: stones) {
+            if (int type = val % 3; type == 0) {
+                ++cnt0;
             }
-            dictionary[num] = i;
+            else if (type == 1) {
+                ++cnt1;
+            }
+            else {
+                ++cnt2;
+            }
         }
-        return false;
+        if (cnt0 % 2 == 0) {
+            return cnt1 >= 1 && cnt2 >= 1;
+        }
+        return cnt1 - cnt2 > 2 || cnt2 - cnt1 > 2;
     }
 };
