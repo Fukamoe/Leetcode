@@ -1,21 +1,40 @@
 class Solution {
 public:
-    bool stoneGameIX(vector<int>& stones) {
-        int cnt0 = 0, cnt1 = 0, cnt2 = 0;
-        for (int val: stones) {
-            if (int type = val % 3; type == 0) {
-                ++cnt0;
+    int minJumps(vector<int>& arr) {
+        unordered_map<int, vector<int>> idxSameValue;
+        for (int i = 0; i < arr.size(); i++) {
+            idxSameValue[arr[i]].push_back(i);
+        }
+        unordered_set<int> visitedIndex;
+        queue<pair<int, int>> q;
+        q.emplace(0, 0);
+        visitedIndex.emplace(0);
+        while (!q.empty()) {
+            auto [idx, step] = q.front();
+            q.pop();
+            if (idx == arr.size() - 1) {
+                return step;
             }
-            else if (type == 1) {
-                ++cnt1;
+            int v = arr[idx];
+            step++;
+            if (idxSameValue.count(v)) {
+                for (auto & i : idxSameValue[v]) {
+                    if (!visitedIndex.count(i)) {
+                        visitedIndex.emplace(i);
+                        q.emplace(i, step);
+                    }
+                }
+                idxSameValue.erase(v);
             }
-            else {
-                ++cnt2;
+            if (idx + 1 < arr.size() && !visitedIndex.count(idx + 1)) {
+                visitedIndex.emplace(idx + 1);
+                q.emplace(idx + 1, step);
+            }
+            if (idx - 1 >= 0 && !visitedIndex.count(idx - 1)) {
+                visitedIndex.emplace(idx - 1);
+                q.emplace(idx - 1, step);
             }
         }
-        if (cnt0 % 2 == 0) {
-            return cnt1 >= 1 && cnt2 >= 1;
-        }
-        return cnt1 - cnt2 > 2 || cnt2 - cnt1 > 2;
+        return -1;
     }
 };
