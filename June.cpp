@@ -1,12 +1,35 @@
-class Solution {
+class StockPrice {
 public:
-    int removePalindromeSub(string s) {
-        int n = s.size();
-        for (int i = 0; i < n / 2; ++i) {
-            if (s[i] != s[n - 1 - i]) {
-                return 2;
+    StockPrice() {
+        this->maxTimestamp = 0;
+    }
+    
+    void update(int timestamp, int price) {
+        maxTimestamp = max(maxTimestamp, timestamp);
+        int prevPrice = timePriceMap.count(timestamp) ? timePriceMap[timestamp] : 0;
+        timePriceMap[timestamp] = price;
+        if (prevPrice > 0) {
+            auto it = prices.find(prevPrice);
+            if (it != prices.end()) {
+                prices.erase(it);
             }
         }
-        return 1;
+        prices.emplace(price);
     }
+    
+    int current() {
+        return timePriceMap[maxTimestamp];
+    }
+    
+    int maximum() {
+        return *prices.rbegin();
+    }
+    
+    int minimum() {
+        return *prices.begin();
+    }
+private:
+    int maxTimestamp;
+    unordered_map<int, int> timePriceMap;
+    multiset<int> prices;
 };
