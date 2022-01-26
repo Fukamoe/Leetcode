@@ -1,17 +1,32 @@
-class Solution {
+class DetectSquares {
 public:
-    int numberOfMatches(int n) {
-        int ans = 0;
-        while (n > 1) {
-            if (n % 2 == 0) {
-                ans += n / 2;
-                n /= 2;
-            }
-            else {
-                ans += (n - 1) / 2;
-                n = (n - 1) / 2 + 1;
+    unordered_map<int, unordered_map<int, int>> cnt;
+    DetectSquares() {
+
+    }
+    
+    void add(vector<int> point) {
+        int x = point[0], y = point[1];
+        cnt[y][x]++;
+    }
+    
+    int count(vector<int> point) {
+        int res = 0;
+        int x = point[0], y = point[1];
+        if (!cnt.count(y)) {
+            return 0;
+        }
+        unordered_map<int, int> & yCnt = cnt[y];
+        for (auto & [col, colCnt] : cnt) {
+            if (col != y) {
+                // 根据对称性，这里可以不用取绝对值
+                int d = col - y;
+                res += (colCnt.count(x) ? colCnt[x] : 0) * (yCnt.count(x + d) ? yCnt[x + d] : 0) * 
+                       (colCnt.count(x + d)? colCnt[x + d] : 0);
+                res += (colCnt.count(x) ? colCnt[x] : 0) * (yCnt.count(x - d) ? yCnt[x - d] : 0) * 
+                       (colCnt.count(x - d) ? colCnt[x - d] : 0);
             }
         }
-        return ans;
+        return res;
     }
 };
