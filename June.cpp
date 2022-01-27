@@ -19,10 +19,6 @@ public:
         unordered_map<int, int> & yCnt = cnt[y];
         for (auto & [col, colCnt] : cnt) {
             if (col != y) {
-                // 根据对称性，这里可以不用取绝对值
-                int d = col - y;
-                res += (colCnt.count(x) ? colCnt[x] : 0) * (yCnt.count(x + d) ? yCnt[x + d] : 0) * 
-                       (colCnt.count(x + d)? colCnt[x + d] : 0);
                 res += (colCnt.count(x) ? colCnt[x] : 0) * (yCnt.count(x - d) ? yCnt[x - d] : 0) * 
                        (colCnt.count(x - d) ? colCnt[x - d] : 0);
             }
