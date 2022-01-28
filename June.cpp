@@ -1,28 +1,19 @@
-class DetectSquares {
+class Solution {
 public:
-    unordered_map<int, unordered_map<int, int>> cnt;
-    DetectSquares() {
-
-    }
-    
-    void add(vector<int> point) {
-        int x = point[0], y = point[1];
-        cnt[y][x]++;
-    }
-    
-    int count(vector<int> point) {
-        int res = 0;
-        int x = point[0], y = point[1];
-        if (!cnt.count(y)) {
-            return 0;
-        }
-        unordered_map<int, int> & yCnt = cnt[y];
-        for (auto & [col, colCnt] : cnt) {
-            if (col != y) {
-                res += (colCnt.count(x) ? colCnt[x] : 0) * (yCnt.count(x - d) ? yCnt[x - d] : 0) * 
-                       (colCnt.count(x - d) ? colCnt[x - d] : 0);
+    int numberOfWeakCharacters(vector<vector<int>>& properties) {
+        sort(properties.begin(), properties.end(), [](const vector<int> & a, const vector<int> & b) {
+            return a[0] == b[0] ? (a[1] < b[1]) : (a[0] > b[0]);
+        });
+        
+        int maxDef = 0;
+        int ans = 0;
+        for (auto & p : properties) {
+            if (p[1] < maxDef) {
+                ans++;
+            } else {
+                maxDef = p[1];
             }
         }
-        return res;
+        return ans;
     }
 };
