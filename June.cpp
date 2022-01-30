@@ -1,29 +1,24 @@
-int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
 class Solution {
 public:
-    vector<vector<int>> highestPeak(vector<vector<int>> &isWater) {
-        int m = isWater.size(), n = isWater[0].size();
-        vector<vector<int>> ans(m, vector<int>(n, -1)); // -1 表示该格子尚未被访问过
-        queue<pair<int, int>> q;
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (isWater[i][j]) {
-                    ans[i][j] = 0;
-                    q.emplace(i, j); // 将所有水域入队
-                }
+    vector<string> uncommonFromSentences(string s1, string s2) {
+        unordered_map<string, int> freq;
+        
+        auto insert = [&](const string& s) {
+            stringstream ss(s);
+            string word;
+            while (ss >> word) {
+                ++freq[move(word)];
             }
-        }
-        while (!q.empty()) {
-            auto &p = q.front();
-            for (auto &dir : dirs) {
-                int x = p.first + dir[0], y = p.second + dir[1];
-                if (0 <= x && x < m && 0 <= y && y < n && ans[x][y] == -1) {
-                    ans[x][y] = ans[p.first][p.second] + 1;
-                    q.emplace(x, y);
-                }
+        };
+
+        insert(s1);
+        insert(s2);
+
+        vector<string> ans;
+        for (const auto& [word, occ]: freq) {
+            if (occ == 1) {
+                ans.push_back(word);
             }
-            q.pop();
         }
         return ans;
     }
