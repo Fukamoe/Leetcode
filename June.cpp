@@ -1,11 +1,24 @@
 class Solution {
 public:
-    int numberOfSteps(int num) {
-        int ret = 0;
-        while (num) {
-            ret += (num > 1 ? 1 : 0) + (num & 0x01);
-            num >>= 1;
+    string longestNiceSubstring(string s) {
+        int n = s.size();
+        int maxPos = 0;
+        int maxLen = 0;
+        for (int i = 0; i < n; ++i) {
+            int lower = 0;
+            int upper = 0;
+            for (int j = i; j < n; ++j) {
+                if (islower(s[j])) {
+                    lower |= 1 << (s[j] - 'a');
+                } else {
+                    upper |= 1 << (s[j] - 'A');
+                }
+                if (lower == upper && j - i + 1 > maxLen) {
+                    maxPos = i;
+                    maxLen = j - i + 1;
+                }
+            }
         }
-        return ret;
+        return s.substr(maxPos, maxLen);
     }
 };
