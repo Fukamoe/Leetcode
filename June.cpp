@@ -1,14 +1,14 @@
 class Solution {
 public:
-    int countKDifference(vector<int>& nums, int k) {
-        int res = 0, n = nums.size();
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j < n; ++j) {
-                if (abs(nums[i] - nums[j]) == k) {
-                    ++res;
+    vector<string> simplifiedFractions(int n) {
+        vector<string> ans;
+        for (int denominator = 2; denominator <= n; ++denominator) {
+            for (int numerator = 1; numerator < denominator; ++numerator) {
+                if (__gcd(numerator, denominator) == 1) {
+                    ans.emplace_back(to_string(numerator) + "/" + to_string(denominator));
                 }
             }
         }
-        return res;
+        return ans;
     }
-};
+};00
