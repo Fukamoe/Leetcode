@@ -1,14 +1,12 @@
 class Solution {
 public:
-    vector<string> simplifiedFractions(int n) {
-        vector<string> ans;
-        for (int denominator = 2; denominator <= n; ++denominator) {
-            for (int numerator = 1; numerator < denominator; ++numerator) {
-                if (__gcd(numerator, denominator) == 1) {
-                    ans.emplace_back(to_string(numerator) + "/" + to_string(denominator));
-                }
-            }
+    int minimumDifference(vector<int>& nums, int k) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        int ans = INT_MAX;
+        for (int i = 0; i + k - 1 < n; ++i) {
+            ans = min(ans, nums[i + k - 1] - nums[i]);
         }
         return ans;
     }
-};00
+};
