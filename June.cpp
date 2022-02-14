@@ -1,22 +1,15 @@
 class Solution {
 public:
-    int maxNumberOfBalloons(string text) {
-        vector<int> cnt(5);
-        for (auto & ch : text) {
-            if (ch == 'b') {
-                cnt[0]++;
-            } else if (ch == 'a') {
-                cnt[1]++;
-            } else if (ch == 'l') {
-                cnt[2]++;
-            } else if (ch == 'o') {
-                cnt[3]++;
-            } else if (ch == 'n') {
-                cnt[4]++;
+    int singleNonDuplicate(vector<int>& nums) {
+        int low = 0, high = nums.size() - 1;
+        while (low < high) {
+            int mid = (high - low) / 2 + low;
+            if (nums[mid] == nums[mid ^ 1]) {
+                low = mid + 1;
+            } else {
+                high = mid;
             }
         }
-        cnt[2] /= 2;
-        cnt[3] /= 2;
-        return *min_element(cnt.begin(), cnt.end());
+        return nums[low];
     }
 };
