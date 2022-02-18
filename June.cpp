@@ -1,27 +1,16 @@
 class Solution {
 public:
-    int checkWays(vector<vector<int>>& pairs) {
-        unordered_map<int, unordered_set<int>> adj;
-        for (auto &p : pairs) {
-            adj[p[0]].emplace(p[1]);
-            adj[p[1]].emplace(p[0]);
+    int findCenter(vector<vector<int>>& edges) {
+        int n = edges.size() + 1;
+        vector<int> degrees(n + 1);
+        for (auto & edge : edges) {
+            degrees[edge[0]]++;
+            degrees[edge[1]]++;
         }
-       
- 
-
-            /* 检测 neighbours 是否是 adj[parent] 的子集 */
-            for (auto &neighbour : neighbours) {
-                if (neighbour == parent) {
-                    continue;
-                }
-                if (!adj[parent].count(neighbour)) {
-                    return 0;
-                }
-            }
-            if (parentDegree == currDegree) {
-                res = 2;
+        for (int i = 1; ; i++) {
+            if (degrees[i] == n - 1) {
+                return i;
             }
         }
-        return res;
     }
 };
