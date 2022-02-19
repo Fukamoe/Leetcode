@@ -1,25 +1,17 @@
 class Solution {
 public:
-    vector<vector<int>> dirs = {{-2, -1}, {-2, 1}, {2, -1}, {2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}};
-
-    double knightProbability(int n, int k, int row, int column) {
-        vector<vector<vector<double>>> dp(k + 1, vector<vector<double>>(n, vector<double>(n)));
-        for (int step = 0; step <= k; step++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (step == 0) {
-                        dp[step][i][j] = 1;
-                    } else {
-                        for (auto & dir : dirs) {
-                            int ni = i + dir[0], nj = j + dir[1];
-                            if (ni >= 0 && ni < n && nj >= 0 && nj < n) {
-                                dp[step][i][j] += dp[step - 1][ni][nj] / 8;
-                            }
-                        }
-                    }
-                }
+    vector<int> pancakeSort(vector<int>& arr) {
+        vector<int> ret;
+        for (int n = arr.size(); n > 1; n--) {
+            int index = max_element(arr.begin(), arr.begin() + n) - arr.begin();
+            if (index == n - 1) {
+                continue;
             }
+            reverse(arr.begin(), arr.begin() + index + 1);
+            reverse(arr.begin(), arr.begin() + n);
+            ret.push_back(index + 1);
+            ret.push_back(n);
         }
-        return dp[k][row][column];
+        return ret;
     }
 };
