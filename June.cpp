@@ -1,38 +1,57 @@
 class Solution {
+private:
+    static constexpr array<int, 10> primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};
+    static constexpr int num_max = 30;
+    static constexpr int mod = 1000000007;
+
 public:
-    string pushDominoes(string dominoes) {
-        int n = dominoes.size();
-        queue<int> q;
-        vector<int> time(n, - 1);
-        vector<string> force(n);
-        for (int i = 0; i < n; i++) {
-            if (dominoes[i] != '.') {
-                q.emplace(i);
-                time[i] = 0;
-                force[i].push_back(dominoes[i]);
-            }
+    int numberOfGoodSubsets(vector<int>& nums) {
+        vector<int> freq(num_max + 1);
+        for (int num: nums) {
+            ++freq[num];
         }
 
-        string res(n, '.');
-        while (!q.empty()) {
-            int i = q.front();
-            q.pop();
-            if (force[i].size() == 1) {
-                char f = force[i][0];
-                res[i] = f;
-                int ni = (f == 'L') ? (i - 1) : (i + 1);
-                if (ni >= 0 and ni < n) {
-                    int t = time[i];
-                    if (time[ni] == -1) {
-                        q.emplace(ni);
-                        time[ni] = t + 1;
-                        force[ni].push_back(f);
-                    } else if(time[ni] == t + 1) {
-                        force[ni].push_back(f);
-                    }
+        vector<int> f(1 << primes.size());
+        f[0] = 1;
+        for (int _ = 0; _ < freq[1]; ++_) {
+            f[0] = f[0] * 2 % mod;
+        }
+        
+        for (int i = 2; i <= num_max; ++i) {
+            if (!freq[i]) {
+                continue;
+            }
+            
+            // 检查 i 的每个质因数是否均不超过 1 个
+            int subset = 0, x = i;
+            bool check = true;
+            for (int j = 0; j < primes.size(); ++j) {
+                int prime = primes[j];
+                if (x % (prime * prime) == 0) {
+                    check = false;
+                    break;
+                }
+                if (x % prime == 0) {
+                    subset |= (1 << j);
+                }
+            }
+            if (!check) {
+                continue;
+            }
+
+            // 动态规划
+            for (int mask = (1 << primes.size()) - 1; mask > 0; --mask) {
+                if ((mask & subset) == subset) {
+                    f[mask] = (f[mask] + static_cast<long long>(f[mask ^ subset]) * freq[i]) % mod;
                 }
             }
         }
-        return res;
+
+        int ans = 0;
+        for (int mask = 1, mask_max = (1 << primes.size()); mask < mask_max; ++mask) {
+            ans = (ans + f[mask]) % mod;
+        }
+        
+        return ans;
     }
 };
