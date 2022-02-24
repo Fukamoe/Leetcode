@@ -1,22 +1,20 @@
 class Solution {
 public:
-    string reverseOnlyLetters(string s) {
-        int n = s.size();
-        int left = 0, right = n - 1;
-        while (true) {
-            while (left < right && !isalpha(s[left])) { // 判断左边是否扫描到字母
-                left++;
+    vector<int> findBall(vector<vector<int>> &grid) {
+        int n = grid[0].size();
+        vector<int> ans(n);
+        for (int j = 0; j < n; ++j) {
+            int col = j; // 球的初始列
+            for (auto &row : grid) {
+                int dir = row[col];
+                col += dir; // 移动球
+                if (col < 0 || col == n || row[col] != dir) { // 到达侧边或 V 形
+                    col = -1;
+                    break;
+                }
             }
-            while (right > left && !isalpha(s[right])) { // 判断右边是否扫描到字母
-                right--;
-            }
-            if (left >= right) {
-                break;
-            }
-            swap(s[left], s[right]);
-            left++;
-            right--;
+            ans[j] = col; // col >= 0 为成功到达底部
         }
-        return s;
+        return ans;
     }
 };
