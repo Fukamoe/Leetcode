@@ -1,20 +1,13 @@
 class Solution {
 public:
-    vector<int> findBall(vector<vector<int>> &grid) {
-        int n = grid[0].size();
-        vector<int> ans(n);
-        for (int j = 0; j < n; ++j) {
-            int col = j; // 球的初始列
-            for (auto &row : grid) {
-                int dir = row[col];
-                col += dir; // 移动球
-                if (col < 0 || col == n || row[col] != dir) { // 到达侧边或 V 形
-                    col = -1;
-                    break;
-                }
-            }
-            ans[j] = col; // col >= 0 为成功到达底部
-        }
-        return ans;
+    string complexNumberMultiply(string num1, string num2) {
+        regex re("\\+|i"); 
+        vector<string> complex1(sregex_token_iterator(num1.begin(), num1.end(), re, -1), std::sregex_token_iterator());
+        vector<string> complex2(sregex_token_iterator(num2.begin(), num2.end(), re, -1), std::sregex_token_iterator());
+        int real1 = stoi(complex1[0]);
+        int imag1 = stoi(complex1[1]);
+        int real2 = stoi(complex2[0]);
+        int imag2 = stoi(complex2[1]);
+        return to_string(real1 * real2 - imag1 * imag2) + "+" + to_string(real1 * imag2 + imag1 * real2) + "i";
     }
 };
