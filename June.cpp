@@ -1,43 +1,30 @@
 class Solution {
-private:
-    vector<int> delta;
-    int ans = 0, cnt = 0, zero, n;
-
 public:
-    void dfs(vector<vector<int>> &requests, int pos) {
-        if (pos == requests.size()) {
-            if (zero == n) {
-                ans = max(ans, cnt);
-            }
-            return;
+    string convert(string s, int numRows) {
+        int n = s.length(), r = numRows;
+        if (r == 1 || r >= n) {
+            return s;
         }
-
-        // 不选 requests[pos]
-        dfs(requests, pos + 1);
-
-        // 选 requests[pos]
-        int z = zero;
-        ++cnt;
-        auto &r = requests[pos];
-        int x = r[0], y = r[1];
-        zero -= delta[x] == 0;
-        --delta[x];
-        zero += delta[x] == 0;
-        zero -= delta[y] == 0;
-        ++delta[y];
-        zero += delta[y] == 0;
-        dfs(requests, pos + 1);
-        --delta[y];
-        ++delta[x];
-        --cnt;
-        zero = z;
-    }
-
-    int maximumRequests(int n, vector<vector<int>> &requests) {
-        delta.resize(n);
-        zero = n;
-        this->n = n;
-        dfs(requests, 0);
+        int t = r * 2 - 2;
+        int c = (n + t - 1) / t * (r - 1);
+        vector<string> mat(r, string(c, 0));
+        for (int i = 0, x = 0, y = 0; i < n; ++i) {
+            mat[x][y] = s[i];
+            if (i % t < r - 1) {
+                ++x; // 向下移动
+            } else {
+                --x;
+                ++y; // 向右上移动
+            }
+        }
+        string ans;
+        for (auto &row : mat) {
+            for (char ch : row) {
+                if (ch) {
+                    ans += ch;
+                }
+            }
+        }
         return ans;
     }
 };
