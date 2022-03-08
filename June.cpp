@@ -1,20 +1,33 @@
 class Solution {
 public:
-    string convertToBase7(int num) {
-        if (num == 0) {
-            return "0";
+    vector<int> platesBetweenCandles(string s, vector<vector<int>>& queries) {
+        int n = s.length();
+        vector<int> preSum(n);
+        for (int i = 0, sum = 0; i < n; i++) {
+            if (s[i] == '*') {
+                sum++;
+            }
+            preSum[i] = sum;
         }
-        bool negative = num < 0;
-        num = abs(num);
-        string digits;
-        while (num > 0) {
-            digits.push_back(num % 7 + '0');
-            num /= 7;
+        vector<int> left(n);
+        for (int i = 0, l = -1; i < n; i++) {
+            if (s[i] == '|') {
+                l = i;
+            }
+            left[i] = l;
         }
-        if (negative) {
-            digits.push_back('-');
+        vector<int> right(n);
+        for (int i = n - 1, r = -1; i >= 0; i--) {
+            if (s[i] == '|') {
+                r = i;
+            }
+            right[i] = r;
         }
-        reverse(digits.begin(), digits.end());
-        return digits;
+        vector<int> ans;
+        for (auto& query : queries) {
+            int x = right[query[0]], y = left[query[1]];
+            ans.push_back(x == -1 || y == -1 || x >= y ? 0 : preSum[y] - preSum[x]);
+        }
+        return ans;
     }
 };
