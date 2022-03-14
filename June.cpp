@@ -1,44 +1,25 @@
 class Solution {
 public:
-    static const int MASK1 = 1 << 7;
-    static const int MASK2 = (1 << 7) + (1 << 6);
-
-    bool isValid(int num) {
-        return (num & MASK2) == MASK1;
-    }
-
-    int getBytes(int num) {
-        if ((num & MASK1) == 0) {
-            return 1;
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+        unordered_map<string, int> index;
+        for (int i = 0; i < list1.size(); i++) {
+            index[list1[i]] = i;
         }
-        int n = 0;
-        int mask = MASK1;
-        while ((num & mask) != 0) {
-            n++;
-            if (n > 4) {
-                return -1;
-            }
-            mask >>= 1;
-        }
-        return n >= 2 ? n : -1;
-    }
 
-    bool validUtf8(vector<int>& data) {
-        int m = data.size();
-        int index = 0;
-        while (index < m) {
-            int num = data[index];
-            int n = getBytes(num);
-            if (n < 0 || index + n > m) {
-                return false;
-            }
-            for (int i = 1; i < n; i++) {
-                if (!isValid(data[index + i])) {
-                    return false;
+        vector<string> ret;
+        int indexSum = INT_MAX;
+        for (int i = 0; i < list2.size(); i++) {
+            if (index.count(list2[i]) > 0) {
+                int j = index[list2[i]];
+                if (i + j < indexSum) {
+                    ret.clear();
+                    ret.push_back(list2[i]);
+                    indexSum = i + j;
+                } else if (i + j == indexSum) {
+                    ret.push_back(list2[i]);
                 }
             }
-            index += n;
         }
-        return true;
+        return ret;
     }
 };
