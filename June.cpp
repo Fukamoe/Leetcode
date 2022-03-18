@@ -1,17 +1,32 @@
-class Solution {
+class Bank {
+private:
+    vector<long long> balance;
+
 public:
-    string longestWord(vector<string> &words) {
-        sort(words.begin(), words.end(), [](const string &a, const string &b) {
-            return a.size() != b.size() ? a.size() < b.size() : a > b;
-        });
-        string longest;
-        unordered_set<string> candidates = {""};
-        for (const auto &word: words) {
-            if (candidates.count(word.substr(0, word.size() - 1))) {
-                candidates.emplace(word);
-                longest = word;
-            }
+    Bank(vector<long long>& balance) : balance(balance) {}
+
+    bool transfer(int account1, int account2, long long money) {
+        if (account1 > balance.size() || account2 > balance.size() || balance[account1 - 1] < money) {
+            return false;
         }
-        return longest;
+        balance[account1 - 1] -= money;
+        balance[account2 - 1] += money;
+        return true;
+    }
+
+    bool deposit(int account, long long money) {
+        if (account > balance.size()) {
+            return false;
+        }
+        balance[account - 1] += money;
+        return true;
+    }
+
+    bool withdraw(int account, long long money) {
+        if (account > balance.size() || balance[account - 1] < money) {
+            return false;
+        }
+        balance[account - 1] -= money;
+        return true;
     }
 };
