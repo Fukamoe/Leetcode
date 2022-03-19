@@ -1,32 +1,15 @@
-class Bank {
-private:
-    vector<long long> balance;
-
+class Solution {
 public:
-    Bank(vector<long long>& balance) : balance(balance) {}
-
-    bool transfer(int account1, int account2, long long money) {
-        if (account1 > balance.size() || account2 > balance.size() || balance[account1 - 1] < money) {
-            return false;
+    string tree2str(TreeNode *root) {
+        if (root == nullptr) {
+            return "";
         }
-        balance[account1 - 1] -= money;
-        balance[account2 - 1] += money;
-        return true;
-    }
-
-    bool deposit(int account, long long money) {
-        if (account > balance.size()) {
-            return false;
+        if (root->left == nullptr && root->right == nullptr) {
+            return to_string(root->val);
         }
-        balance[account - 1] += money;
-        return true;
-    }
-
-    bool withdraw(int account, long long money) {
-        if (account > balance.size() || balance[account - 1] < money) {
-            return false;
+        if (root->right == nullptr) {
+            return to_string(root->val) + "(" + tree2str(root->left) + ")";
         }
-        balance[account - 1] -= money;
-        return true;
+        return to_string(root->val) + "(" + tree2str(root->left) + ")(" + tree2str(root->right) + ")";
     }
 };
