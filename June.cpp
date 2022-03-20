@@ -1,15 +1,36 @@
 class Solution {
 public:
-    string tree2str(TreeNode *root) {
-        if (root == nullptr) {
-            return "";
+    int networkBecomesIdle(vector<vector<int>>& edges, vector<int>& patience) {
+        int n = patience.size();       
+        vector<vector<int>> adj(n);
+        vector<bool> visit(n, false);  
+        for (auto & v : edges) {
+            adj[v[0]].emplace_back(v[1]);
+            adj[v[1]].emplace_back(v[0]);
         }
-        if (root->left == nullptr && root->right == nullptr) {
-            return to_string(root->val);
+
+        queue<int> qu;
+        qu.emplace(0);
+        visit[0] = true;
+        int dist = 1;
+        int ans = 0;
+        while (!qu.empty()) {
+            int sz = qu.size();
+            for (int i = 0; i < sz; ++i) {
+                int curr = qu.front();
+                qu.pop();
+                for (auto & v : adj[curr]) {
+                    if (visit[v]) {
+                        continue;
+                    }
+                    qu.emplace(v);
+                    int time = patience[v] * ((2 * dist - 1) / patience[v]) + 2 * dist + 1;
+                    ans = max(ans, time);
+                    visit[v] = true;
+                }
+            }
+            dist++;
         }
-        if (root->right == nullptr) {
-            return to_string(root->val) + "(" + tree2str(root->left) + ")";
-        }
-        return to_string(root->val) + "(" + tree2str(root->left) + ")(" + tree2str(root->right) + ")";
+        return ans;
     }
 };
