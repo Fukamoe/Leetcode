@@ -1,15 +1,17 @@
 class Solution {
 public:
-    unordered_set<int> hashTable;
-
-    bool findTarget(TreeNode *root, int k) {
-        if (root == nullptr) {
-            return false;
-        }
-        if (hashTable.count(k - root->val)) {
-            return true;
-        }
-        hashTable.insert(root->val);
-        return findTarget(root->left, k) || findTarget(root->right, k);
+    bool winnerOfGame(string colors) {
+        int freq[2] = {0, 0};
+        char cur = 'C';
+        int cnt = 0;
+        for (char c : colors) {
+            if (c != cur) {
+                cur = c;
+                cnt = 1;
+            } else if (++cnt >= 3) {
+                ++freq[cur - 'A'];
+            }
+        }            
+        return freq[0] > freq[1];
     }
 };
