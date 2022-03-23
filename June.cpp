@@ -1,17 +1,30 @@
 class Solution {
 public:
-    bool winnerOfGame(string colors) {
-        int freq[2] = {0, 0};
-        char cur = 'C';
-        int cnt = 0;
-        for (char c : colors) {
-            if (c != cur) {
-                cur = c;
-                cnt = 1;
-            } else if (++cnt >= 3) {
-                ++freq[cur - 'A'];
+    int getSteps(int curr, long n) {
+        int steps = 0;
+        long first = curr;
+        long last = curr;
+        while (first <= n) {
+            steps += min(last, n) - first + 1;
+            first = first * 10;
+            last = last * 10 + 9;
+        }
+        return steps;
+    }
+
+    int findKthNumber(int n, int k) {
+        int curr = 1;
+        k--;
+        while (k > 0) {
+            int steps = getSteps(curr, n);
+            if (steps <= k) {
+                k -= steps;
+                curr++;
+            } else {
+                curr = curr*10;
+                k--;
             }
-        }            
-        return freq[0] > freq[1];
+        }
+        return curr;
     }
 };
