@@ -1,30 +1,22 @@
 class Solution {
 public:
-    int getSteps(int curr, long n) {
-        int steps = 0;
-        long first = curr;
-        long last = curr;
-        while (first <= n) {
-            steps += min(last, n) - first + 1;
-            first = first * 10;
-            last = last * 10 + 9;
-        }
-        return steps;
-    }
-
-    int findKthNumber(int n, int k) {
-        int curr = 1;
-        k--;
-        while (k > 0) {
-            int steps = getSteps(curr, n);
-            if (steps <= k) {
-                k -= steps;
-                curr++;
-            } else {
-                curr = curr*10;
-                k--;
+    vector<vector<int>> imageSmoother(vector<vector<int>>& img) {
+        int m = img.size(), n = img[0].size();
+        vector<vector<int>> ret(m, vector<int>(n));
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int num = 0, sum = 0;
+                for (int x = i - 1; x <= i + 1; x++) {
+                    for (int y = j - 1; y <= j + 1; y++) {
+                        if (x >= 0 && x < m && y >= 0 && y < n) {
+                            num++;
+                            sum += img[x][y];
+                        }
+                    }
+                }
+                ret[i][j] = sum / num;
             }
         }
-        return curr;
+        return ret;
     }
 };
