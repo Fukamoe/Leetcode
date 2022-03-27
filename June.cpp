@@ -1,29 +1,20 @@
 class Solution {
 public:
-    int calPoints(vector<string>& ops) {
-        int ret = 0;
-        vector<int> points;
-        for (auto &op : ops) {
-            int n = points.size();
-            switch (op[0]) {
-                case '+':
-                    ret += points[n - 1] + points[n - 2];
-                    points.push_back(points[n - 1] + points[n - 2]);
-                    break;
-                case 'D':
-                    ret += 2 * points[n - 1];
-                    points.push_back(2 * points[n - 1]);
-                    break;
-                case 'C':
-                    ret -= points[n - 1];
-                    points.pop_back();
-                    break;
-                default:
-                    ret += stoi(op);
-                    points.push_back(stoi(op));
-                    break;
-            }
+    vector<int> missingRolls(vector<int>& rolls, int mean, int n) {
+        int m = rolls.size();
+        int sum = mean * (n + m);
+        int missingSum = sum;
+        for (int & roll : rolls) {
+            missingSum -= roll;
         }
-        return ret;
+        if (missingSum < n || missingSum > 6 * n) {
+            return {};
+        }
+        int quotient = missingSum / n, remainder = missingSum % n;
+        vector<int> missing(n);
+        for (int i = 0; i < n; i++) {
+            missing[i] = quotient + (i < remainder ? 1 : 0);
+        }
+        return missing;
     }
 };
