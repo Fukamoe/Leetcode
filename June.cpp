@@ -1,15 +1,20 @@
 class Solution {
 public:
-    bool hasAlternatingBits(int n) {
-        int prev = 2;
-        while (n != 0) {
-            int cur = n % 2;
-            if (cur == prev) {
-                return false;
+    int maxConsecutiveChar(string& answerKey, int k, char ch) {
+        int n = answerKey.length();
+        int ans = 0;
+        for (int left = 0, right = 0, sum = 0; right < n; right++) {
+            sum += answerKey[right] != ch;
+            while (sum > k) {
+                sum -= answerKey[left++] != ch;
             }
-            prev = cur;
-            n /= 2;
+            ans = max(ans, right - left + 1);
         }
-        return true;
+        return ans;
+    }
+
+    int maxConsecutiveAnswers(string answerKey, int k) {
+        return max(maxConsecutiveChar(answerKey, k, 'T'),
+                   maxConsecutiveChar(answerKey, k, 'F'));
     }
 };
