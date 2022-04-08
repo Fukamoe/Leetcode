@@ -1,22 +1,28 @@
 class Solution {
 public:
-    bool rotateString(string s, string goal) {
-        int m = s.size(), n = goal.size();
-        if (m != n) {
-            return false;
+    vector<vector<int>> levelOrder(Node* root) {
+        if (!root) {
+            return {};
         }
-        for (int i = 0; i < n; i++) {
-            bool flag = true;
-            for (int j = 0; j < n; j++) {
-                if (s[(i + j) % n] != goal[j]) {
-                    flag = false;
-                    break;
+
+        vector<vector<int>> ans;
+        queue<Node*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            int cnt = q.size();
+            vector<int> level;
+            for (int i = 0; i < cnt; ++i) {
+                Node* cur = q.front();
+                q.pop();
+                level.push_back(cur->val);
+                for (Node* child: cur->children) {
+                    q.push(child);
                 }
             }
-            if (flag) {
-                return true;
-            }
+            ans.push_back(move(level));
         }
-        return false;
+
+        return ans;
     }
 };
