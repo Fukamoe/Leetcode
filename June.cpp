@@ -1,28 +1,21 @@
 class Solution {
 public:
-    vector<vector<int>> levelOrder(Node* root) {
-        if (!root) {
-            return {};
-        }
-
-        vector<vector<int>> ans;
-        queue<Node*> q;
-        q.push(root);
-
-        while (!q.empty()) {
-            int cnt = q.size();
-            vector<int> level;
-            for (int i = 0; i < cnt; ++i) {
-                Node* cur = q.front();
-                q.pop();
-                level.push_back(cur->val);
-                for (Node* child: cur->children) {
-                    q.push(child);
-                }
+    bool reachingPoints(int sx, int sy, int tx, int ty) {
+        while (tx > sx && ty > sy && tx != ty) {
+            if (tx > ty) {
+                tx %= ty;
+            } else {
+                ty %= tx;
             }
-            ans.push_back(move(level));
         }
-
-        return ans;
+        if (tx == sx && ty == sy) {
+            return true;
+        } else if (tx == sx) {
+            return ty > sy && (ty - sy) % tx == 0;
+        } else if (ty == sy) {
+            return tx > sx && (tx - sx) % ty == 0;
+        } else {
+            return false;
+        }
     }
 };
