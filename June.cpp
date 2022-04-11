@@ -1,21 +1,17 @@
-const static string MORSE[] = {
-        ".-", "-...", "-.-.", "-..", ".", "..-.", "--.",
-        "....", "..", ".---", "-.-", ".-..", "--", "-.",
-        "---", ".--.", "--.-", ".-.", "...", "-", "..-",
-        "...-", ".--", "-..-", "-.--", "--.."
-};
-
 class Solution {
 public:
-    int uniqueMorseRepresentations(vector<string> &words) {
-        unordered_set<string> seen;
-        for (auto &word: words) {
-            string code;
-            for (auto &c: word) {
-                code.append(MORSE[c - 'a']);
-            }
-            seen.emplace(code);
+    int countNumbersWithUniqueDigits(int n) {
+        if (n == 0) {
+            return 1;
         }
-        return seen.size();
+        if (n == 1) {
+            return 10;
+        }
+        int ans = 10, cur = 9;
+        for (int i = 0; i < n - 1; ++i) {
+            cur *= 9 - i;
+            ans += cur;
+        }
+        return ans;
     }
 };
