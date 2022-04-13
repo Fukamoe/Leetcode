@@ -1,17 +1,18 @@
+const int MAX_WIDTH = 100;
+
 class Solution {
 public:
-    int countNumbersWithUniqueDigits(int n) {
-        if (n == 0) {
-            return 1;
+    vector<int> numberOfLines(vector<int>& widths, string s) {
+        int lines = 1;
+        int width = 0;
+        for (auto & c : s) {
+            int need = widths[c - 'a'];
+            width += need;
+            if (width > MAX_WIDTH) {
+                lines++;
+                width = need;
+            }
         }
-        if (n == 1) {
-            return 10;
-        }
-        int ans = 10, cur = 9;
-        for (int i = 0; i < n - 1; ++i) {
-            cur *= 9 - i;
-            ans += cur;
-        }
-        return ans;
+        return {lines, width};
     }
 };
