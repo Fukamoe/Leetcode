@@ -1,10 +1,34 @@
 class Solution {
 public:
-    int maximumWealth(vector<vector<int>>& accounts) {
-        int maxWealth = INT_MIN;
-        for (auto &account : accounts) {
-            maxWealth = max(maxWealth, accumulate(account.begin(), account.end(), 0));
+    int index = 0;
+
+    NestedInteger deserialize(string s) {
+        if (s[index] == '[') {
+            index++;
+            NestedInteger ni;
+            while (s[index] != ']') {
+                ni.add(deserialize(s));
+                if (s[index] == ',') {
+                    index++;
+                }
+            }
+            index++;
+            return ni;
+        } else {
+            bool negative = false;
+            if (s[index] == '-') {
+                negative = true;
+                index++;
+            }
+            int num = 0;
+            while (index < s.size() && isdigit(s[index])) {
+                num = num * 10 + s[index] - '0';
+                index++;
+            }
+            if (negative) {
+                num *= -1;
+            }
+            return NestedInteger(num);
         }
-        return maxWealth;
     }
 };
