@@ -1,34 +1,20 @@
 class Solution {
 public:
-    int index = 0;
-
-    NestedInteger deserialize(string s) {
-        if (s[index] == '[') {
-            index++;
-            NestedInteger ni;
-            while (s[index] != ']') {
-                ni.add(deserialize(s));
-                if (s[index] == ',') {
-                    index++;
+    int largestPalindrome(int n) {
+        if (n == 1) {
+            return 9;
+        }
+        int upper = pow(10, n) - 1;
+        for (int left = upper;; --left) { // 枚举回文数的左半部分
+            long p = left;
+            for (int x = left; x > 0; x /= 10) {
+                p = p * 10 + x % 10; // 翻转左半部分到其自身末尾，构造回文数 p
+            }
+            for (long x = upper; x * x >= p; --x) {
+                if (p % x == 0) { // x 是 p 的因子
+                    return p % 1337;
                 }
             }
-            index++;
-            return ni;
-        } else {
-            bool negative = false;
-            if (s[index] == '-') {
-                negative = true;
-                index++;
-            }
-            int num = 0;
-            while (index < s.size() && isdigit(s[index])) {
-                num = num * 10 + s[index] - '0';
-                index++;
-            }
-            if (negative) {
-                num *= -1;
-            }
-            return NestedInteger(num);
         }
     }
 };
