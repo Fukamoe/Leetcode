@@ -1,19 +1,22 @@
 class Solution {
 public:
-    vector<int> lexicalOrder(int n) {
-        vector<int> ret(n);
-        int number = 1;
-        for (int i = 0; i < n; i++) {
-            ret[i] = number;
-            if (number * 10 <= n) {
-                number *= 10;
-            } else {
-                while (number % 10 == 9 || number + 1 > n) {
-                    number /= 10;
-                }
-                number++;
+    vector<int> shortestToChar(string s, char c) {
+        int n = s.length();
+        vector<int> ans(n);
+
+        for (int i = 0, idx = -n; i < n; ++i) {
+            if (s[i] == c) {
+                idx = i;
             }
+            ans[i] = i - idx;
         }
-        return ret;
+
+        for (int i = n - 1, idx = 2 * n; i >= 0; --i) {
+            if (s[i] == c) {
+                idx = i;
+            }
+            ans[i] = min(ans[i], idx - i);
+        }
+        return ans;
     }
 };
