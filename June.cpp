@@ -1,43 +1,32 @@
 class Solution {
 public:
-    int lengthLongestPath(string input) {
-        int n = input.size();
-        int pos = 0;
-        int ans = 0;
-        stack<int> st;
+    string toGoatLatin(string sentence) {
+        unordered_set<char> vowels = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
 
-        while (pos < n) {
-            /* 检测当前文件的深度 */
-            int depth = 1;
-            while (pos < n && input[pos] == '\t') {
-                pos++;
-                depth++;
-            }
-            /* 统计当前文件名的长度 */   
-            int len = 0; 
-            bool isFile = false;     
-            while (pos < n && input[pos] != '\n') {
-                if (input[pos] == '.') {
-                    isFile = true;
-                }
-                len++;
-                pos++;
-            }
-            /* 跳过换行符 */
-            pos++;
+        int n = sentence.size();
+        int i = 0, cnt = 1;
+        string ans;
 
-            while (st.size() >= depth) {
-                st.pop();
+        while (i < n) {
+            int j = i;
+            while (j < n && sentence[j] != ' ') {
+                ++j;
             }
-            if (!st.empty()) {
-                len += st.top() + 1;
+
+            ++cnt;
+            if (cnt != 2) {
+                ans += ' ';
             }
-            if (isFile) {
-                ans = max(ans, len);
-            } else {
-                st.emplace(len);
+            if (vowels.count(sentence[i])) {
+                ans += sentence.substr(i, j - i) + 'm' + string(cnt, 'a');
             }
+            else {
+                ans += sentence.substr(i + 1, j - i - 1) + sentence[i] + 'm' + string(cnt, 'a');
+            }
+
+            i = j + 1;
         }
+
         return ans;
     }
 };
