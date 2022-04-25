@@ -1,16 +1,14 @@
 class Solution {
+    unordered_map<int, vector<int>> pos;
 public:
-    int binaryGap(int n) {
-        int last = -1, ans = 0;
-        for (int i = 0; n; ++i) {
-            if (n & 1) {
-                if (last != -1) {
-                    ans = max(ans, i - last);
-                }
-                last = i;
-            }
-            n >>= 1;
+    Solution(vector<int> &nums) {
+        for (int i = 0; i < nums.size(); ++i) {
+            pos[nums[i]].push_back(i);
         }
-        return ans;
+    }
+
+    int pick(int target) {
+        auto &indices = pos[target];
+        return indices[rand() % indices.size()];
     }
 };
