@@ -1,14 +1,18 @@
 class Solution {
-    unordered_map<int, vector<int>> pos;
 public:
-    Solution(vector<int> &nums) {
-        for (int i = 0; i < nums.size(); ++i) {
-            pos[nums[i]].push_back(i);
+    int projectionArea(vector<vector<int>> &grid) {
+        int n = grid.size();
+        int xyArea = 0, yzArea = 0, zxArea = 0;
+        for (int i = 0; i < n; i++) {
+            int yzHeight = 0, zxHeight = 0;
+            for (int j = 0; j < n; j++) {
+                xyArea += grid[i][j] > 0 ? 1 : 0;
+                yzHeight = max(yzHeight, grid[j][i]);
+                zxHeight = max(zxHeight, grid[i][j]);
+            }
+            yzArea += yzHeight;
+            zxArea += zxHeight;
         }
-    }
-
-    int pick(int target) {
-        auto &indices = pos[target];
-        return indices[rand() % indices.size()];
+        return xyArea + yzArea + zxArea;
     }
 };
