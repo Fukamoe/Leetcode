@@ -1,35 +1,68 @@
 class Solution {
-    void inorder(TreeNode *node, vector<int> &res) {
-        if (node) {
-            inorder(node->left, res);
-            res.push_back(node->val);
-            inorder(node->right, res);
-        }
-    }
-
 public:
-    vector<int> getAllElements(TreeNode *root1, TreeNode *root2) {
-        vector<int> nums1, nums2;
-        inorder(root1, nums1);
-        inorder(root2, nums2);
+    bool isValid(string code) {
+        int n = code.size();
+        stack<string> tags;
 
-        vector<int> merged;
-        auto p1 = nums1.begin(), p2 = nums2.begin();
-        while (true) {
-            if (p1 == nums1.end()) {
-                merged.insert(merged.end(), p2, nums2.end());
-                break;
+        int i = 0;
+        while (i < n) {
+            if (code[i] == '<') {
+                if (i == n - 1) {
+                    return false;
+                }
+                if (code[i + 1] == '/') {
+                    int j = code.find('>', i);
+                    if (j == string::npos) {
+                        return false;
+                    }
+                    string tagname = code.substr(i + 2, j - (i + 2));
+                    if (tags.empty() || tags.top() != tagname) {
+                        return false;
+                    }
+                    tags.pop();
+                    i = j + 1;
+                    if (tags.empty() && i != n) {
+                        return false;
+                    }
+                }
+                else if (code[i + 1] == '!') {
+                    if (tags.empty()) {
+                        return false;
+                    }
+                    string cdata = code.substr(i + 2, 7);
+                    if (cdata != "[CDATA[") {
+                        return false;
+                    }
+                    int j = code.find("]]>", i);
+                    if (j == string::npos) {
+                        return false;
+                    }
+                    i = j + 1;
+                }
+                else {
+                    int j = code.find('>', i);
+                    if (j == string::npos) {
+                        return false;
+                    }
+                    string tagname = code.substr(i + 1, j - (i + 1));
+                    if (tagname.size() < 1 || tagname.size() > 9) {
+                        return false;
+                    }
+                    if (!all_of(tagname.begin(), tagname.end(), [](unsigned char c) { return isupper(c); })) {
+                        return false;
+                    }
+                    tags.push(move(tagname));
+                    i = j + 1;
+                }
             }
-            if (p2 == nums2.end()) {
-                merged.insert(merged.end(), p1, nums1.end());
-                break;
-            }
-            if (*p1 < *p2) {
-                merged.push_back(*p1++);
-            } else {
-                merged.push_back(*p2++);
+            else {
+                if (tags.empty()) {
+                    return false;
+                }
+                ++i;
             }
         }
-        return merged;
+
+        return tags.empty();
     }
 };
