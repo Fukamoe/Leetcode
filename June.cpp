@@ -1,68 +1,24 @@
 class Solution {
 public:
-    bool isValid(string code) {
-        int n = code.size();
-        stack<string> tags;
-
-        int i = 0;
-        while (i < n) {
-            if (code[i] == '<') {
-                if (i == n - 1) {
-                    return false;
-                }
-                if (code[i + 1] == '/') {
-                    int j = code.find('>', i);
-                    if (j == string::npos) {
-                        return false;
-                    }
-                    string tagname = code.substr(i + 2, j - (i + 2));
-                    if (tags.empty() || tags.top() != tagname) {
-                        return false;
-                    }
-                    tags.pop();
-                    i = j + 1;
-                    if (tags.empty() && i != n) {
-                        return false;
-                    }
-                }
-                else if (code[i + 1] == '!') {
-                    if (tags.empty()) {
-                        return false;
-                    }
-                    string cdata = code.substr(i + 2, 7);
-                    if (cdata != "[CDATA[") {
-                        return false;
-                    }
-                    int j = code.find("]]>", i);
-                    if (j == string::npos) {
-                        return false;
-                    }
-                    i = j + 1;
-                }
-                else {
-                    int j = code.find('>', i);
-                    if (j == string::npos) {
-                        return false;
-                    }
-                    string tagname = code.substr(i + 1, j - (i + 1));
-                    if (tagname.size() < 1 || tagname.size() > 9) {
-                        return false;
-                    }
-                    if (!all_of(tagname.begin(), tagname.end(), [](unsigned char c) { return isupper(c); })) {
-                        return false;
-                    }
-                    tags.push(move(tagname));
-                    i = j + 1;
-                }
+    vector<string> reorderLogFiles(vector<string>& logs) {
+        stable_sort(logs.begin(), logs.end(), [&](const string & log1, const string & log2) {
+            int pos1 = log1.find_first_of(" ");
+            int pos2 = log2.find_first_of(" ");
+            bool isDigit1 = isdigit(log1[pos1 + 1]);
+            bool isDigit2 = isdigit(log2[pos2 + 1]);
+            if (isDigit1 && isDigit2) {
+                return false;
             }
-            else {
-                if (tags.empty()) {
-                    return false;
+            if (!isDigit1 && !isDigit2) {
+                string s1 = log1.substr(pos1);
+                string s2 = log2.substr(pos2);
+                if (s1 != s2) {
+                    return s1 < s2;
                 }
-                ++i;
+                return log1 < log2;
             }
-        }
-
-        return tags.empty();
+            return isDigit1 ? false : true;
+        });
+        return logs;
     }
 };
