@@ -1,17 +1,20 @@
 class Solution {
 public:
-    int findTheWinner(int n, int k) {
-        queue<int> qu;
-        for (int i = 1; i <= n; i++) {
-            qu.emplace(i);
+    int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+        if (k == 0) {
+            return 0;
         }
-        while (qu.size() > 1) {
-            for (int i = 1; i < k; i++) {
-                qu.emplace(qu.front());
-                qu.pop();
-            }
-            qu.pop();
+        int n = nums.size();
+        vector<double> logPrefix(n + 1);
+        for (int i = 0; i < n; i++) {
+            logPrefix[i + 1] = logPrefix[i] + log(nums[i]);
         }
-        return qu.front();
+        double logk = log(k);
+        int ret = 0;
+        for (int j = 0; j < n; j++) {
+            int l = upper_bound(logPrefix.begin(), logPrefix.begin() + j + 1, logPrefix[j + 1] - log(k) + 1e-10) - logPrefix.begin();
+            ret += j + 1 - l;
+        }
+        return ret;
     }
 };
