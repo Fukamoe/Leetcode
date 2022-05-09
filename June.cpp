@@ -1,18 +1,12 @@
 class Solution {
 public:
-    vector<int> findDuplicates(vector<int>& nums) {
-        int n = nums.size();
+    vector<int> diStringMatch(string s) {
+        int n = s.length(), lo = 0, hi = n;
+        vector<int> perm(n + 1);
         for (int i = 0; i < n; ++i) {
-            while (nums[i] != nums[nums[i] - 1]) {
-                swap(nums[i], nums[nums[i] - 1]);
-            }
+            perm[i] = s[i] == 'I' ? lo++ : hi--;
         }
-        vector<int> ans;
-        for (int i = 0; i < n; ++i) {
-            if (nums[i] - 1 != i) {
-                ans.push_back(nums[i]);
-            }
-        }
-        return ans;
+        perm[n] = lo; // 最后剩下一个数，此时 lo == hi
+        return perm;
     }
 };
