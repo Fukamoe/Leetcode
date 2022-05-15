@@ -1,33 +1,19 @@
 class Solution {
 public:
-    int minStickers(vector<string>& stickers, string target) {
-        int m = target.size();
-        vector<int> dp(1 << m, -1);
-        dp[0] = 0;
-        function<int(int)> helper = [&](int mask) {
-            if (dp[mask] != -1) {
-                return dp[mask];
-            }
-            dp[mask] = m + 1;
-            for (auto & sticker : stickers) {
-                int left = mask;
-                vector<int> cnt(26);
-                for (char & c : sticker) {
-                    cnt[c - 'a']++;
-                }
-                for (int i = 0; i < m; i++) {
-                    if ((mask >> i & 1) && cnt[target[i] - 'a'] > 0) {
-                        cnt[target[i] - 'a']--;
-                        left ^= 1 << i;
-                    }
-                }
-                if (left < mask) {
-                    dp[mask] = min(dp[mask], helper(left) + 1);
+    double triangleArea(int x1, int y1, int x2, int y2, int x3, int y3) {
+        return 0.5 * abs(x1 * y2 + x2 * y3 + x3 * y1 - x1 * y3 - x2 * y1 - x3 * y2);
+    }
+
+    double largestTriangleArea(vector<vector<int>> & points) {
+        int n = points.size();
+        double ret = 0.0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                for (int k = j + 1; k < n; k++) {
+                    ret = max(ret, triangleArea(points[i][0], points[i][1], points[j][0], points[j][1], points[k][0], points[k][1]));
                 }
             }
-            return dp[mask];
-        };
-        int res = helper((1 << m) - 1);
-        return res > m ? -1 : res;
+        }
+        return ret;
     }
 };
