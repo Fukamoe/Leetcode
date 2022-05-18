@@ -1,29 +1,19 @@
 class Solution {
 public:
-    bool isAlienSorted(vector<string>& words, string order) {
-        vector<int> index(26);
-        for (int i = 0; i < order.size(); i++) {
-            index[order[i] - 'a'] = i;
-        }
-        for (int i = 1; i < words.size(); i++) {
-            bool valid = false;
-            for (int j = 0; j < words[i - 1].size() && j < words[i].size(); j++) {
-                int prev = index[words[i - 1][j] - 'a'];
-                int curr = index[words[i][j] - 'a'];
-                if (prev < curr) {
-                    valid = true;
-                    break;
-                } else if (prev > curr) {
-                    return false;
-                }
+    int findKthNumber(int m, int n, int k) {
+        int left = 1, right = m * n;
+        while (left < right) {
+            int x = left + (right - left) / 2;
+            int count = x / n * n;
+            for (int i = x / n + 1; i <= m; ++i) {
+                count += x / i;
             }
-            if (!valid) {
-                /* 比较两个字符串的长度 */
-                if (words[i - 1].size() > words[i].size()) {
-                    return false;
-                }
+            if (count >= k) {
+                right = x;
+            } else {
+                left = x + 1;
             }
         }
-        return true;
+        return left;
     }
 };
