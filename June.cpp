@@ -1,71 +1,27 @@
 class Solution {
 public:
-    const int VISITING = 1, VISITED = 2;
-    unordered_map<char, vector<char>> edges;
-    unordered_map<char, int> states;
-    bool valid = true;
-    string order;
-    int index;
-
-    string alienOrder(vector<string>& words) {
-        int length = words.size();
-        for (string & word : words) {
-            int wordLength = word.size();
-            for (int j = 0; j < wordLength; j++) {
-                char c = word[j];
-                if (!edges.count(c)) {
-                    edges[c] = vector<char>();
-                }
+    bool dfs(int index, vector<int> &matchsticks, vector<int> &edges, int len) {
+        if (index == matchsticks.size()) {
+            return true;
+        }
+        for (int i = 0; i < edges.size(); i++) {
+            edges[i] += matchsticks[index];
+            if (edges[i] <= len && dfs(index + 1, matchsticks, edges, len)) {
+                return true;
             }
+            edges[i] -= matchsticks[index];
         }
-        for (int i = 1; i < length && valid; i++) {
-            addEdge(words[i - 1], words[i]);
-        }
-        order = string(edges.size(), ' ');
-        index = edges.size() - 1;
-        for (auto [u, _] : edges) {
-            if (!states.count(u)) {
-                dfs(u);
-            }
-        }
-        if (!valid) {
-            return "";
-        }
-        return order;
+        return false;
     }
 
-    void addEdge(string before, string after) {
-        int length1 = before.size(), length2 = after.size();
-        int length = min(length1, length2);
-        int index = 0;
-        while (index < length) {
-            char c1 = before[index], c2 = after[index];
-            if (c1 != c2) {
-                edges[c1].emplace_back(c2);
-                break;
-            }
-            index++;
+    bool makesquare(vector<int> &matchsticks) {
+        int totalLen = accumulate(matchsticks.begin(), matchsticks.end(), 0);
+        if (totalLen % 4 != 0) {
+            return false;
         }
-        if (index == length && length1 > length2) {
-            valid = false;
-        }
-    }
+        sort(matchsticks.begin(), matchsticks.end(), greater<int>()); // 减少搜索量
 
-    void dfs(char u) {
-        states[u] = VISITING;
-        for (char v : edges[u]) {
-            if (!states.count(v)) {
-                dfs(v);
-                if (!valid) {
-                    return;
-                }
-            } else if (states[v] == VISITING) {
-                valid = false;
-                return;
-            }
-        }
-        states[u] = VISITED;
-        order[index] = u;
-        index--;
+        vector<int> edges(4);
+        return dfs(0, matchsticks, edges, totalLen / 4);
     }
 };
