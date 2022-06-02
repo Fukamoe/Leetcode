@@ -1,27 +1,36 @@
 class Solution {
 public:
-    bool dfs(int index, vector<int> &matchsticks, vector<int> &edges, int len) {
-        if (index == matchsticks.size()) {
-            return true;
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if (root == nullptr) {
+            return nullptr;
         }
-        for (int i = 0; i < edges.size(); i++) {
-            edges[i] += matchsticks[index];
-            if (edges[i] <= len && dfs(index + 1, matchsticks, edges, len)) {
-                return true;
+        if (root->val > key) {
+            root->left = deleteNode(root->left, key);
+            return root;
+        }
+        if (root->val < key) {
+            root->right = deleteNode(root->right, key);
+            return root;
+        }
+        if (root->val == key) {
+            if (!root->left && !root->right) {
+                return nullptr;
             }
-            edges[i] -= matchsticks[index];
+            if (!root->right) {
+                return root->left;
+            }
+            if (!root->left) {
+                return root->right;
+            }
+            TreeNode *successor = root->right;
+            while (successor->left) {
+                successor = successor->left;
+            }
+            root->right = deleteNode(root->right, successor->val);
+            successor->right = root->right;
+            successor->left = root->left;
+            return successor;
         }
-        return false;
-    }
-
-    bool makesquare(vector<int> &matchsticks) {
-        int totalLen = accumulate(matchsticks.begin(), matchsticks.end(), 0);
-        if (totalLen % 4 != 0) {
-            return false;
-        }
-        sort(matchsticks.begin(), matchsticks.end(), greater<int>()); // 减少搜索量
-
-        vector<int> edges(4);
-        return dfs(0, matchsticks, edges, totalLen / 4);
+        return root;
     }
 };
