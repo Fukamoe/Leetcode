@@ -1,36 +1,21 @@
 class Solution {
 public:
-    TreeNode* deleteNode(TreeNode* root, int key) {
-        if (root == nullptr) {
-            return nullptr;
-        }
-        if (root->val > key) {
-            root->left = deleteNode(root->left, key);
-            return root;
-        }
-        if (root->val < key) {
-            root->right = deleteNode(root->right, key);
-            return root;
-        }
-        if (root->val == key) {
-            if (!root->left && !root->right) {
-                return nullptr;
+    int consecutiveNumbersSum(int n) {
+        int ans = 0;
+        int bound = 2 * n;
+        for (int k = 1; k * (k + 1) <= bound; k++) {
+            if (isKConsecutive(n, k)) {
+                ans++;
             }
-            if (!root->right) {
-                return root->left;
-            }
-            if (!root->left) {
-                return root->right;
-            }
-            TreeNode *successor = root->right;
-            while (successor->left) {
-                successor = successor->left;
-            }
-            root->right = deleteNode(root->right, successor->val);
-            successor->right = root->right;
-            successor->left = root->left;
-            return successor;
         }
-        return root;
+        return ans;
+    }
+  
+    bool isKConsecutive(int n, int k) {
+        if (k % 2 == 1) {
+            return n % k == 0;
+        } else {
+            return n % k != 0 && 2 * n % k == 0;
+        }
     }
 };
