@@ -1,21 +1,19 @@
 class Solution {
 public:
-    int consecutiveNumbersSum(int n) {
-        int ans = 0;
-        int bound = 2 * n;
-        for (int k = 1; k * (k + 1) <= bound; k++) {
-            if (isKConsecutive(n, k)) {
-                ans++;
+    int numUniqueEmails(vector<string> &emails) {
+        unordered_set<string> emailSet;
+        for (auto &email: emails) {
+            string local;
+            for (char c: email) {
+                if (c == '+' || c == '@') {
+                    break;
+                }
+                if (c != '.') {
+                    local += c;
+                }
             }
+            emailSet.emplace(local + email.substr(email.find('@')));
         }
-        return ans;
-    }
-  
-    bool isKConsecutive(int n, int k) {
-        if (k % 2 == 1) {
-            return n % k == 0;
-        } else {
-            return n % k != 0 && 2 * n % k == 0;
-        }
+        return emailSet.size();
     }
 };
