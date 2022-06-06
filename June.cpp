@@ -1,18 +1,20 @@
-class Solution {
-private:
-    mt19937 gen{random_device{}()};
-    uniform_real_distribution<double> dis;
-    double xc, yc, r;
-
+class MyCalendarThree {
 public:
-    Solution(double radius, double x_center, double y_center): dis(-radius, radius), xc(x_center), yc(y_center), r(radius) {}
-    
-    vector<double> randPoint() {
-        while (true) {
-            double x = dis(gen), y = dis(gen);
-            if (x * x + y * y <= r * r) {
-                return {xc + x, yc + y};
-            }
-        }
+    MyCalendarThree() {
+        
     }
+    
+    int book(int start, int end) {
+        int ans = 0;
+        int maxBook = 0;
+        cnt[start]++;
+        cnt[end]--;
+        for (auto &[_, freq] : cnt) {
+            maxBook += freq;
+            ans = max(maxBook, ans);
+        }
+        return ans;
+    }
+private:
+    map<int, int> cnt;
 };
