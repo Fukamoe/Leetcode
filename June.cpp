@@ -1,20 +1,31 @@
-class MyCalendarThree {
+class Solution {
 public:
-    MyCalendarThree() {
-        
-    }
-    
-    int book(int start, int end) {
-        int ans = 0;
-        int maxBook = 0;
-        cnt[start]++;
-        cnt[end]--;
-        for (auto &[_, freq] : cnt) {
-            maxBook += freq;
-            ans = max(maxBook, ans);
+    int minEatingSpeed(vector<int>& piles, int h) {
+        int low = 1;
+        int high = 0;
+        for (int pile : piles) {
+            high = max(high, pile);
         }
-        return ans;
+        int k = high;
+        while (low < high) {
+            int speed = (high - low) / 2 + low;
+            long time = getTime(piles, speed);
+            if (time <= h) {
+                k = speed;
+                high = speed;
+            } else {
+                low = speed + 1;
+            }
+        }
+        return k;
     }
-private:
-    map<int, int> cnt;
+
+    long getTime(const vector<int>& piles, int speed) {
+        long time = 0;
+        for (int pile : piles) {
+            int curTime = (pile + speed - 1) / speed;
+            time += curTime;
+        }
+        return time;
+    }
 };
