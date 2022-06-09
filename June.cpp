@@ -1,8 +1,26 @@
 class Solution {
 public:
-    bool isBoomerang(vector<vector<int>>& points) {
-        vector<int> v1 = {points[1][0] - points[0][0], points[1][1] - points[0][1]};
-        vector<int> v2 = {points[2][0] - points[0][0], points[2][1] - points[0][1]};
-        return v1[0] * v2[1] - v1[1] * v2[0] != 0;
+    Solution(vector<vector<int>>& rects) : rects{rects} {
+        this->arr.emplace_back(0);
+        for (auto & rect : rects) {
+            this->arr.emplace_back(arr.back() + (rect[2] - rect[0] + 1) * (rect[3] - rect[1] + 1));
+        }
     }
+    
+    vector<int> pick() {
+        uniform_int_distribution<int> dis(0, arr.back() - 1);
+        int k = dis(gen) % arr.back();
+        int rectIndex = upper_bound(arr.begin(), arr.end(), k) - arr.begin() - 1;
+        k = k - arr[rectIndex];
+        int a = rects[rectIndex][0], b = rects[rectIndex][1];
+        int y = rects[rectIndex][3];
+        int col = y - b + 1;
+        int da = k / col;
+        int db = k - col * da;
+        return {a + da, b + db};
+    }    
+private:
+    vector<int> arr;
+    vector<vector<int>>& rects;
+    mt19937 gen{random_device{}()};
 };
