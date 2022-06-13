@@ -1,23 +1,12 @@
 class Solution {
-    bool match(string &word, string &pattern) {
-        unordered_map<char, char> mp;
-        for (int i = 0; i < word.length(); ++i) {
-            char x = word[i], y = pattern[i];
-            if (!mp.count(x)) {
-                mp[x] = y;
-            } else if (mp[x] != y) { // word 中的同一字母必须映射到 pattern 中的同一字母上
-                return false;
-            }
-        }
-        return true;
-    }
-
 public:
-    vector<string> findAndReplacePattern(vector<string> &words, string &pattern) {
-        vector<string> ans;
-        for (auto &word: words) {
-            if (match(word, pattern) && match(pattern, word)) {
-                ans.emplace_back(word);
+    int heightChecker(vector<int>& heights) {
+        vector<int> expected(heights);
+        sort(expected.begin(), expected.end());
+        int n = heights.size(), ans = 0;
+        for (int i = 0; i < n; ++i) {
+            if (heights[i] != expected[i]) {
+                ++ans;
             }
         }
         return ans;
