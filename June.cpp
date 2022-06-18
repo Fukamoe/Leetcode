@@ -1,31 +1,31 @@
 class Solution {
 public:
-    void duplicateZeros(vector<int>& arr) {
-        int n = arr.size();
-        int top = 0;
-        int i = -1;
-        while (top < n) {
-            i++;
-            if (arr[i] != 0) {
-                top++;
-            } else {
-                top += 2;
+    Node* insert(Node* head, int insertVal) {
+        Node *node = new Node(insertVal);
+        if (head == nullptr) {
+            node->next = node;
+            return node;
+        }
+        if (head->next == head) {
+            head->next = node;
+            node->next = head;
+            return head;
+        }
+        Node *curr = head, *next = head->next;
+        while (next != head) {
+            if (insertVal >= curr->val && insertVal <= next->val) {
+                break;
             }
+            if (curr->val > next->val) {
+                if (insertVal > curr->val || insertVal < next->val) {
+                    break;
+                }
+            }
+            curr = curr->next;
+            next = next->next;
         }
-        int j = n - 1;
-        if (top == n + 1) {
-            arr[j] = 0;
-            j--;
-            i--;
-        } 
-        while (j >= 0) {
-            arr[j] = arr[i];
-            j--;
-            if (!arr[i]) {
-                arr[j] = arr[i];
-                j--;
-            } 
-            i--;
-        }
+        curr->next = node;
+        node->next = next;
+        return head;
     }
 };
