@@ -1,31 +1,25 @@
 class Solution {
+    unordered_map<int, int> cnt;
+    int maxCnt = 0;
+
+    int dfs(TreeNode *node) {
+        if (node == nullptr) {
+            return 0;
+        }
+        int sum = node->val + dfs(node->left) + dfs(node->right);
+        maxCnt = max(maxCnt, ++cnt[sum]);
+        return sum;
+    }
+
 public:
-    Node* insert(Node* head, int insertVal) {
-        Node *node = new Node(insertVal);
-        if (head == nullptr) {
-            node->next = node;
-            return node;
-        }
-        if (head->next == head) {
-            head->next = node;
-            node->next = head;
-            return head;
-        }
-        Node *curr = head, *next = head->next;
-        while (next != head) {
-            if (insertVal >= curr->val && insertVal <= next->val) {
-                break;
+    vector<int> findFrequentTreeSum(TreeNode *root) {
+        dfs(root);
+        vector<int> ans;
+        for (auto &[s, c]: cnt) {
+            if (c == maxCnt) {
+                ans.emplace_back(s);
             }
-            if (curr->val > next->val) {
-                if (insertVal > curr->val || insertVal < next->val) {
-                    break;
-                }
-            }
-            curr = curr->next;
-            next = next->next;
         }
-        curr->next = node;
-        node->next = next;
-        return head;
+        return ans;
     }
 };
