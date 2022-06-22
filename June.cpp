@@ -1,14 +1,21 @@
 class Solution {
 public:
-    string defangIPaddr(string address) {
-        string ans;
-        for (auto & c : address) {
-            if (c == '.') {
-                ans.append("[.]");
-            } else {
-                ans.push_back(c);
-            }
+    void dfs(TreeNode *root, int height, int &curVal, int &curHeight) {
+        if (root == nullptr) {
+            return;
         }
-        return ans;
+        height++;
+        dfs(root->left, height, curVal, curHeight);
+        dfs(root->right, height, curVal, curHeight);
+        if (height > curHeight) {
+            curHeight = height;
+            curVal = root->val;
+        }
+    }
+
+    int findBottomLeftValue(TreeNode* root) {
+        int curVal, curHeight = 0;
+        dfs(root, 0, curVal, curHeight);
+        return curVal;
     }
 };
