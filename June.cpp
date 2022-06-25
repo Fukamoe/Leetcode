@@ -1,25 +1,18 @@
 class Solution {
 public:
-    void dfs(vector<int>& res, TreeNode* root, int curHeight) {
-        if (curHeight == res.size()) {
-            res.push_back(root->val);
-        } else {
-            res[curHeight] = max(res[curHeight], root->val);
+    int minCost(vector<vector<int>>& costs) {
+        int n = costs.size();
+        vector<int> dp(3);
+        for (int j = 0; j < 3; j++) {
+            dp[j] = costs[0][j];
         }
-        if (root->left) {
-            dfs(res, root->left, curHeight + 1);
+        for (int i = 1; i < n; i++) {
+            vector<int> dpNew(3);
+            for (int j = 0; j < 3; j++) {
+                dpNew[j] = min(dp[(j + 1) % 3], dp[(j + 2) % 3]) + costs[i][j];
+            }
+            dp = dpNew;
         }
-        if (root->right) {
-            dfs(res, root->right, curHeight + 1);
-        }
-    }
-
-    vector<int> largestValues(TreeNode* root) {
-        if (!root) {
-            return {};
-        }
-        vector<int> res;
-        dfs(res, root, 0);
-        return res;
-    }
+        return *min_element(dp.begin(), dp.end());
+    }   
 };
