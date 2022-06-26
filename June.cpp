@@ -1,18 +1,31 @@
 class Solution {
+    unordered_map<int, int> b2w;
+    int bound;
+
 public:
-    int minCost(vector<vector<int>>& costs) {
-        int n = costs.size();
-        vector<int> dp(3);
-        for (int j = 0; j < 3; j++) {
-            dp[j] = costs[0][j];
-        }
-        for (int i = 1; i < n; i++) {
-            vector<int> dpNew(3);
-            for (int j = 0; j < 3; j++) {
-                dpNew[j] = min(dp[(j + 1) % 3], dp[(j + 2) % 3]) + costs[i][j];
+    Solution(int n, vector<int> &blacklist) {
+        int m = blacklist.size();
+        bound = n - m;
+        unordered_set<int> black;
+        for (int b: blacklist) {
+            if (b >= bound) {
+                black.emplace(b);
             }
-            dp = dpNew;
         }
-        return *min_element(dp.begin(), dp.end());
-    }   
+
+        int w = bound;
+        for (int b: blacklist) {
+            if (b < bound) {
+                while (black.count(w)) {
+                    ++w;
+                }
+                b2w[b] = w++;
+            }
+        }
+    }
+
+    int pick() {
+        int x = rand() % bound;
+        return b2w.count(x) ? b2w[x] : x;
+    }
 };
