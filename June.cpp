@@ -1,31 +1,15 @@
 class Solution {
 public:
-    int findLUSlength(vector<string>& strs) {
-        auto is_subseq = [](const string& s, const string& t) -> bool {
-            int pt_s = 0, pt_t = 0;
-            while (pt_s < s.size() && pt_t < t.size()) {
-                if (s[pt_s] == t[pt_t]) {
-                    ++pt_s;
-                }
-                ++pt_t;
-            }
-            return pt_s == s.size();
-        };
-
-        int n = strs.size();
-        int ans = -1;
-        for (int i = 0; i < n; ++i) {
-            bool check = true;
-            for (int j = 0; j < n; ++j) {
-                if (i != j && is_subseq(strs[i], strs[j])) {
-                    check = false;
-                    break;
-                }
-            }
-            if (check) {
-                ans = max(ans, static_cast<int>(strs[i].size()));
+    void wiggleSort(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> arr = nums;
+        sort(arr.begin(), arr.end());
+        int x = (n + 1) / 2;
+        for (int i = 0, j = x - 1, k = n - 1; i < n; i += 2, j--, k--) {
+            nums[i] = arr[j];
+            if (i + 1 < n) {
+                nums[i + 1] = arr[k];
             }
         }
-        return ans;
     }
 };
