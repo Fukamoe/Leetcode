@@ -1,21 +1,23 @@
+
 class Solution {
 public:
-    int minRefuelStops(int target, int startFuel, vector<vector<int>>& stations) {
-        int n = stations.size();
-        vector<long> dp(n + 1);
-        dp[0] = startFuel;
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j >= 0; j--) {
-                if (dp[j] >= stations[i][0]) {
-                    dp[j + 1] = max(dp[j + 1], dp[j] + stations[i][1]);
-                }
-            }
+    int nextGreaterElement(int n) {
+        auto nums = to_string(n);
+        int i = (int) nums.length() - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
         }
-        for (int i = 0; i <= n; i++) {
-            if (dp[i] >= target) {
-                return i;
-            }
+        if (i < 0) {
+            return -1;
         }
-        return -1;
+
+        int j = nums.size() - 1;
+        while (j >= 0 && nums[i] >= nums[j]) {
+            j--;
+        }
+        swap(nums[i], nums[j]);
+        reverse(nums.begin() + i + 1, nums.end());
+        long ans = stol(nums);
+        return ans > INT_MAX ? -1 : ans;
     }
 };
