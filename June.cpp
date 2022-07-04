@@ -1,23 +1,21 @@
-
 class Solution {
 public:
-    int nextGreaterElement(int n) {
-        auto nums = to_string(n);
-        int i = (int) nums.length() - 2;
-        while (i >= 0 && nums[i] >= nums[i + 1]) {
-            i--;
-        }
-        if (i < 0) {
-            return -1;
+    vector<vector<int>> minimumAbsDifference(vector<int>& arr) {
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+
+        int best = INT_MAX;
+        vector<vector<int>> ans;
+        for (int i = 0; i < n - 1; ++i) {
+            if (int delta = arr[i + 1] - arr[i]; delta < best) {
+                best = delta;
+                ans = {{arr[i], arr[i + 1]}};
+            }
+            else if (delta == best) {
+                ans.emplace_back(initializer_list<int>{arr[i], arr[i + 1]});
+            }
         }
 
-        int j = nums.size() - 1;
-        while (j >= 0 && nums[i] >= nums[j]) {
-            j--;
-        }
-        swap(nums[i], nums[j]);
-        reverse(nums.begin() + i + 1, nums.end());
-        long ans = stol(nums);
-        return ans > INT_MAX ? -1 : ans;
+        return ans;
     }
 };
