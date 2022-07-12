@@ -1,33 +1,23 @@
-class MagicDictionary {
+class Solution {
 public:
-    MagicDictionary() {}
-    
-    void buildDict(vector<string> dictionary) {
-        words = dictionary;
-    }
-    
-    bool search(string searchWord) {
-        for (auto&& word: words) {
-            if (word.size() != searchWord.size()) {
-                continue;
+    int oddCells(int m, int n, vector<vector<int>>& indices) {
+        int res = 0;
+        vector<vector<int>> matrix(m, vector<int>(n));
+        for (auto &index : indices) {
+            for (int i = 0; i < n; i++) {
+                matrix[index[0]][i]++;
             }
-
-            int diff = 0;
-            for (int i = 0; i < word.size(); ++i) {
-                if (word[i] != searchWord[i]) {
-                    ++diff;
-                    if (diff > 1) {
-                        break;
-                    }
-                }
-            }
-            if (diff == 1) {
-                return true;
+            for (int i = 0; i < m; i++) {
+                matrix[i][index[1]]++;
             }
         }
-        return false;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] & 1) {
+                    res++;
+                }
+            }
+        }
+        return res;
     }
-
-private:
-    vector<string> words;
 };
