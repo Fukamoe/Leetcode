@@ -1,23 +1,19 @@
 class Solution {
 public:
-    int oddCells(int m, int n, vector<vector<int>>& indices) {
-        int res = 0;
-        vector<vector<int>> matrix(m, vector<int>(n));
-        for (auto &index : indices) {
-            for (int i = 0; i < n; i++) {
-                matrix[index[0]][i]++;
-            }
-            for (int i = 0; i < m; i++) {
-                matrix[i][index[1]]++;
-            }
-        }
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (matrix[i][j] & 1) {
-                    res++;
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        vector<int> st;
+        for (auto aster : asteroids) {
+            bool alive = true;
+            while (alive && aster < 0 && !st.empty() && st.back() > 0) {
+                alive = st.back() < -aster; // aster 是否存在
+                if (st.back() <= -aster) {  // 栈顶行星爆炸
+                    st.pop_back();
                 }
             }
+            if (alive) {
+                st.push_back(aster);
+            }
         }
-        return res;
+        return st;
     }
 };
