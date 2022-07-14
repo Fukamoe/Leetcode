@@ -1,19 +1,22 @@
-class Solution {
+class WordFilter {
+private:
+    unordered_map<string, int> dict;
 public:
-    vector<int> asteroidCollision(vector<int>& asteroids) {
-        vector<int> st;
-        for (auto aster : asteroids) {
-            bool alive = true;
-            while (alive && aster < 0 && !st.empty() && st.back() > 0) {
-                alive = st.back() < -aster; // aster 是否存在
-                if (st.back() <= -aster) {  // 栈顶行星爆炸
-                    st.pop_back();
+    WordFilter(vector<string>& words) {
+        for (int i = 0; i < words.size(); i++) {
+            int m = words[i].size();
+            string word = words[i];
+            for (int prefixLength = 1; prefixLength <= m; prefixLength++) {
+                for (int suffixLength = 1; suffixLength <= m; suffixLength++) {
+                    string key = word.substr(0, prefixLength) + '#' + word.substr(m - suffixLength);
+                    dict[key] = i;
                 }
             }
-            if (alive) {
-                st.push_back(aster);
-            }
         }
-        return st;
+    }
+    
+    int f(string pref, string suff) {
+        string target = pref + '#' + suff;
+        return dict.count(target) ? dict[target] : -1;
     }
 };
