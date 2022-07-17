@@ -12,10 +12,3 @@ public:
         }
         qu.emplace(val);
         sum += val;
-        return sum / qu.size();
-    }
-private:
-    int size;
-    double sum;
-    queue<int> qu;
-};
