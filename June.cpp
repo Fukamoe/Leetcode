@@ -1,24 +1,14 @@
-class MyCalendarTwo {
+class Solution {
 public:
-    MyCalendarTwo() {
-
-    }
-
-    bool book(int start, int end) {
-        for (auto &[l, r] : overlaps) {
-            if (l < end && start < r) {
-                return false;
+    vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) {
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<int>> ret(m, vector<int>(n));
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int index1 = (i * n + j + k) % (m * n);
+                ret[index1 / n][index1 % n] = grid[i][j];
             }
         }
-        for (auto &[l, r] : booked) {
-            if (l < end && start < r) {
-                overlaps.emplace_back(max(l, start), min(r, end));
-            }
-        }
-        booked.emplace_back(start, end);
-        return true;
+        return ret;
     }
-private:
-    vector<pair<int, int>> booked;
-    vector<pair<int, int>> overlaps;
 };
