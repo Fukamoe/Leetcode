@@ -1,14 +1,14 @@
 class Solution {
 public:
-    vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) {
-        int m = grid.size(), n = grid[0].size();
-        vector<vector<int>> ret(m, vector<int>(n));
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int index1 = (i * n + j + k) % (m * n);
-                ret[index1 / n][index1 % n] = grid[i][j];
-            }
+    TreeNode* pruneTree(TreeNode* root) {
+        if (!root) {
+            return nullptr;
         }
-        return ret;
-    }
+        root->left = pruneTree(root->left);
+        root->right = pruneTree(root->right);
+        if (!root->left && !root->right && !root->val) {
+            return nullptr;
+        }
+        return root;
+    }   
 };
