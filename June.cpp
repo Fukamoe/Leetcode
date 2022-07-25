@@ -1,11 +1,46 @@
-class Solution {
+class CBTInserter {
 public:
-    int distanceBetweenBusStops(vector<int>& distance, int start, int destination) {
-        if (start > destination) {
-            swap(start, destination);
+    CBTInserter(TreeNode* root) {
+        this->root = root;
+
+        queue<TreeNode*> q;
+        q.push(root);
+        
+        while (!q.empty()) {
+            TreeNode* node = q.front();
+            q.pop();
+            if (node->left) {
+                q.push(node->left);
+            }
+            if (node->right) {
+                q.push(node->right);
+            }
+            if (!(node->left && node->right)) {
+                candidate.push(node);
+            }
         }
-        return min(accumulate(distance.begin() + start, distance.begin() + destination, 0),
-                   accumulate(distance.begin(), distance.begin() + start, 0) +
-                   accumulate(distance.begin() + destination, distance.end(), 0));
     }
+    
+    int insert(int val) {
+        TreeNode* child = new TreeNode(val);
+        TreeNode* node = candidate.front();
+        int ret = node->val;
+        if (!node->left) {
+            node->left = child;
+        }
+        else {
+            node->right = child;
+            candidate.pop();
+        }
+        candidate.push(child);
+        return ret;
+    }
+    
+    TreeNode* get_root() {
+        return root;
+    }
+
+private:
+    queue<TreeNode*> candidate;
+    TreeNode* root;
 };
