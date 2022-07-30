@@ -1,45 +1,59 @@
+class UnionFind {
+public:
+    UnionFind(int n) {
+        parent = vector<int>(n);
+        rank = vector<int>(n);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    void uni(int x, int y) {
+        int rootx = find(x);
+        int rooty = find(y);
+        if (rootx != rooty) {
+            if (rank[rootx] > rank[rooty]) {
+                parent[rooty] = rootx;
+            } else if (rank[rootx] < rank[rooty]) {
+                parent[rootx] = rooty;
+            } else {
+                parent[rooty] = rootx;
+                rank[rootx]++;
+            }
+        }
+    }
+
+    int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+private:
+    vector<int> parent;
+    vector<int> rank;
+};
+
 class Solution {
 public:
-    bool checkLength(vector<int>& v1, vector<int>& v2) {
-        return (v1[0] * v1[0] + v1[1] * v1[1]) == (v2[0] * v2[0] + v2[1] * v2[1]);
-    }
-
-    bool checkMidPoint(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
-        return (p1[0] + p2[0]) == (p3[0] + p4[0]) && (p1[1] + p2[1]) == (p3[1] + p4[1]);
-    }
-
-    int calCos(vector<int>& v1, vector<int>& v2) {
-        return (v1[0] * v2[0] + v1[1] * v2[1]) == 0;
-    }
-
-    bool help(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
-        vector<int> v1 = {p1[0] - p2[0], p1[1] - p2[1]};
-        vector<int> v2 = {p3[0] - p4[0], p3[1] - p4[1]};
-        if (checkMidPoint(p1, p2, p3, p4) && checkLength(v1, v2) && calCos(v1, v2)) {
-            return true;
-        } 
-        return false;
-    }
-
-    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
-        if (p1 == p2) {
-            return false;
+    int largestComponentSize(vector<int>& nums) {
+        int m = *max_element(nums.begin(), nums.end());
+        UnionFind uf(m + 1);
+        for (int num : nums) {
+            for (int i = 2; i * i <= num; i++) {
+                if (num % i == 0) {
+                    uf.uni(num, i);
+                    uf.uni(num, num / i);
+                }
+            }
         }
-        if (help(p1, p2, p3, p4)) {
-            return true;
+        vector<int> counts(m + 1);
+        int ans = 0;
+        for (int num : nums) {
+            int root = uf.find(num);
+            counts[root]++;
+            ans = max(ans, counts[root]);
         }
-        if (p1 == p3) {
-            return false;
-        }
-        if (help(p1, p3, p2, p4)) {
-            return true;
-        }
-        if (p1 == p4) {
-            return false;
-        }
-        if (help(p1, p4, p2, p3)) {
-            return true;
-        }
-        return false;
+        return ans;
     }
 };
