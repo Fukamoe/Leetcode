@@ -1,21 +1,17 @@
 class Solution {
 public:
-    string orderlyQueue(string s, int k) {
-        if (k == 1) {
-            string smallest = s;
-            int n = s.size();
-            for (int i = 1; i < n; i++) {
-                char c = s[0];
-                s = s.substr(1);
-                s.push_back(c);
-                if (s < smallest) {
-                    smallest = s;
-                }
+    vector<int> minSubsequence(vector<int>& nums) {
+        int total = accumulate(nums.begin(), nums.end(), 0);
+        sort(nums.begin(), nums.end());
+        vector<int> ans;
+        int curr = 0;
+        for (int i = nums.size() - 1; i >= 0; --i) {
+            curr += nums[i];
+            ans.emplace_back(nums[i]);
+            if (total - curr < curr) {
+                break;
             }
-            return smallest;
-        } else {
-            sort(s.begin(), s.end());
-            return s;
         }
+        return ans;
     }
 };
