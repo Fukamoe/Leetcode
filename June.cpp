@@ -1,19 +1,15 @@
 class Solution {
 public:
-    TreeNode* addOneRow(TreeNode* root, int val, int depth) {
-        if (root == nullptr) {
-            return nullptr;
+    vector<string> stringMatching(vector<string>& words) {
+        vector<string> ret;
+        for (int i = 0; i < words.size(); i++) {
+            for (int j = 0; j < words.size(); j++) {
+                if (i != j && words[j].find(words[i]) != string::npos) {
+                    ret.push_back(words[i]);
+                    break;
+                }
+            }
         }
-        if (depth == 1) {
-            return new TreeNode(val, root, nullptr);
-        }
-        if (depth == 2) {
-            root->left = new TreeNode(val, root->left, nullptr);
-            root->right = new TreeNode(val, nullptr, root->right);
-        } else {
-            root->left = addOneRow(root->left, val, depth - 1);
-            root->right = addOneRow(root->right, val, depth - 1);
-        }
-        return root;
+        return ret;
     }
 };
