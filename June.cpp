@@ -1,27 +1,26 @@
 class Solution {
 public:
-    vector<int> exclusiveTime(int n, vector<string>& logs) {
-        stack<pair<int, int>> st; // {idx, 开始运行的时间}
-        vector<int> res(n, 0);
-        for (auto& log : logs) {
-            char type[10];
-            int idx, timestamp;
-            sscanf(log.c_str(), "%d:%[^:]:%d", &idx, type, &timestamp);
-            if (type[0] == 's') {
-                if (!st.empty()) {
-                    res[st.top().first] += timestamp - st.top().second;
-                    st.top().second = timestamp;
-                }
-                st.emplace(idx, timestamp);
-            } else {
-                auto t = st.top();
-                st.pop();
-                res[t.first] += timestamp - t.second + 1;
-                if (!st.empty()) {
-                    st.top().second = timestamp + 1;
+    string makeLargestSpecial(string s) {
+        if (s.size() <= 2) {
+            return s;
+        }
+        int cnt = 0, left = 0;
+        vector<string> subs;
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] == '1') {
+                ++cnt;
+            }
+            else {
+                --cnt;
+                if (cnt == 0) {
+                    subs.push_back("1" + makeLargestSpecial(s.substr(left + 1, i - left - 1)) + "0");
+                    left = i + 1;
                 }
             }
         }
-        return res;
+
+        sort(subs.begin(), subs.end(), greater<string>{});
+        string ans = accumulate(subs.begin(), subs.end(), ""s);
+        return ans;
     }
 };
