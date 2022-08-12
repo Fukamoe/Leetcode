@@ -1,25 +1,24 @@
 class Solution {
 public:
-    string reformat(string s) {
-        int sum_digit = 0;
-        for (auto& c : s) {
-            if (isdigit(c)) {
-                sum_digit++;
-            }
+    vector<vector<int>> groupThePeople(vector<int>& groupSizes) {
+        unordered_map<int, vector<int>> groups;
+        int n = groupSizes.size();
+        for (int i = 0; i < n; i++) {
+            int size = groupSizes[i];
+            groups[size].emplace_back(i);
         }
-        int sum_alpha = s.size() - sum_digit;
-        if (abs(sum_digit - sum_alpha) > 1) {
-            return "";
-        }
-        bool flag = sum_digit > sum_alpha;
-        for (int i = 0, j = 1; i < s.size(); i += 2) {
-            if (isdigit(s[i]) != flag) {
-                while (isdigit(s[j]) != flag) {
-                    j += 2;
+        vector<vector<int>> groupList;
+        for (auto &[size, people] : groups) {
+            int groupCount = people.size() / size;
+            for (int i = 0; i < groupCount; i++) {
+                vector<int> group;
+                int start = i * size;
+                for (int j = 0; j < size; j++) {
+                    group.emplace_back(people[start + j]);
                 }
-                swap(s[i], s[j]);
+                groupList.emplace_back(group);
             }
         }
-        return s;
+        return groupList;
     }
 };
