@@ -21,15 +21,6 @@ public:
     }
 
     bool insertLast(int value) {
-        if (isFull()) {
-            return false;
-        }
-        elements[rear] = value;
-        rear = (rear + 1) % capacity;
-        return true;
-    }
-
-    bool deleteFront() {
         if (isEmpty()) {
             return false;
         }
