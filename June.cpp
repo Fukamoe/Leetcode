@@ -1,60 +1,25 @@
-class MyCircularDeque {
+class Solution {
 private:
-    vector<int> elements;
-    int rear, front;
-    int capacity;
+    int maxLevel = -1;
+    int sum = 0;
 
 public:
-    MyCircularDeque(int k) {
-        capacity = k + 1;
-        rear = front = 0;
-        elements = vector<int>(k + 1);
+    int deepestLeavesSum(TreeNode* root) {
+        dfs(root, 0);
+        return sum;
     }
 
-    bool insertFront(int value) {
-        if (isFull()) {
-            return false;
+    void dfs(TreeNode* node, int level) {
+        if (node == nullptr) {
+            return;
         }
-        front = (front - 1 + capacity) % capacity;
-        elements[front] = value;
-        return true;
-    }
-
-    bool insertLast(int value) {
-        if (isEmpty()) {
-            return false;
+        if (level > maxLevel) {
+            maxLevel = level;
+            sum = node->val;
+        } else if (level == maxLevel) {
+            sum += node->val;
         }
-        front = (front + 1) % capacity;
-        return true;
-    }
-
-    bool deleteLast() {
-        if (isEmpty()) {
-            return false;
-        }
-        rear = (rear - 1 + capacity) % capacity;
-        return true;
-    }
-
-    int getFront() {
-        if (isEmpty()) {
-            return -1;
-        }
-        return elements[front];
-    }
-
-    int getRear() {
-        if (isEmpty()) {
-            return -1;
-        }
-        return elements[(rear - 1 + capacity) % capacity];
-    }   
-
-    bool isEmpty() {
-        return rear == front;
-    }
-
-    bool isFull() {
-        return (rear + 1) % capacity == front;
+        dfs(node->left, level + 1);
+        dfs(node->right, level + 1);
     }
 };
