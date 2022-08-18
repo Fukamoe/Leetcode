@@ -1,25 +1,22 @@
 class Solution {
-private:
-    int maxLevel = -1;
-    int sum = 0;
-
 public:
-    int deepestLeavesSum(TreeNode* root) {
-        dfs(root, 0);
-        return sum;
-    }
-
-    void dfs(TreeNode* node, int level) {
-        if (node == nullptr) {
-            return;
+    int maxEqualFreq(vector<int>& nums) {
+        unordered_map<int, int> freq, count;
+        int res = 0, maxFreq = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (count[nums[i]] > 0) {
+                freq[count[nums[i]]]--;
+            }
+            count[nums[i]]++;
+            maxFreq = max(maxFreq, count[nums[i]]);
+            freq[count[nums[i]]]++;
+            bool ok = maxFreq == 1 ||
+                    freq[maxFreq] * maxFreq + freq[maxFreq - 1] * (maxFreq - 1) == i + 1 && freq[maxFreq] == 1 ||
+                    freq[maxFreq] * maxFreq + 1 == i + 1 && freq[1] == 1;
+            if (ok) {
+                res = max(res, i + 1);
+            }
         }
-        if (level > maxLevel) {
-            maxLevel = level;
-            sum = node->val;
-        } else if (level == maxLevel) {
-            sum += node->val;
-        }
-        dfs(node->left, level + 1);
-        dfs(node->right, level + 1);
+        return res;
     }
 };
