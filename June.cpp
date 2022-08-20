@@ -1,13 +1,22 @@
 class Solution {
 public:
-    int busyStudent(vector<int>& startTime, vector<int>& endTime, int queryTime) {
-        int n = startTime.size();
-        int ans = 0;
-        for (int i = 0; i < n; i++) {
-            if (startTime[i] <= queryTime && endTime[i] >= queryTime) {
-                ans++;
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        return construct(nums, 0, nums.size() - 1);
+    }
+
+    TreeNode* construct(const vector<int>& nums, int left, int right) {
+        if (left > right) {
+            return nullptr;
+        }
+        int best = left;
+        for (int i = left + 1; i <= right; ++i) {
+            if (nums[i] > nums[best]) {
+                best = i;
             }
         }
-        return ans;
+        TreeNode* node = new TreeNode(nums[best]);
+        node->left = construct(nums, left, best - 1);
+        node->right = construct(nums, best + 1, right);
+        return node;
     }
 };
