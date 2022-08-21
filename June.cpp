@@ -1,22 +1,28 @@
 class Solution {
 public:
-    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
-        return construct(nums, 0, nums.size() - 1);
-    }
-
-    TreeNode* construct(const vector<int>& nums, int left, int right) {
-        if (left > right) {
-            return nullptr;
-        }
-        int best = left;
-        for (int i = left + 1; i <= right; ++i) {
-            if (nums[i] > nums[best]) {
-                best = i;
+    bool isPrefix(const string &sentence, int start, int end, const string &searchWord) {
+        for (int i = 0; i < searchWord.size(); i++) {
+            if (start + i >= end || sentence[start + i] != searchWord[i]) {
+                return false;
             }
         }
-        TreeNode* node = new TreeNode(nums[best]);
-        node->left = construct(nums, left, best - 1);
-        node->right = construct(nums, best + 1, right);
-        return node;
+        return true;
+    }
+
+    int isPrefixOfWord(string sentence, string searchWord) {
+        int n = sentence.size(), index = 1, start = 0, end = 0;
+        while (start < n) {
+            while (end < n && sentence[end] != ' ') {
+                end++;
+            }
+            if (isPrefix(sentence, start, end, searchWord)) {
+                return index;
+            }
+
+            index++;
+            end++;
+            start = end;
+        }
+        return -1;
     }
 };
