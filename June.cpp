@@ -1,28 +1,32 @@
 class Solution {
 public:
-    bool isPrefix(const string &sentence, int start, int end, const string &searchWord) {
-        for (int i = 0; i < searchWord.size(); i++) {
-            if (start + i >= end || sentence[start + i] != searchWord[i]) {
-                return false;
-            }
+    int calDepth(TreeNode* root) {
+        int h = 0;
+        if (root->left) {
+            h = max(h, calDepth(root->left) + 1);
         }
-        return true;
+        if (root->right) {
+            h = max(h, calDepth(root->right) + 1);
+        }
+        return h;
     }
 
-    int isPrefixOfWord(string sentence, string searchWord) {
-        int n = sentence.size(), index = 1, start = 0, end = 0;
-        while (start < n) {
-            while (end < n && sentence[end] != ' ') {
-                end++;
-            }
-            if (isPrefix(sentence, start, end, searchWord)) {
-                return index;
-            }
-
-            index++;
-            end++;
-            start = end;
+    void dfs(vector<vector<string>>& res, TreeNode* root, int r, int c, const int& height) {
+        res[r][c] = to_string(root->val);
+        if (root->left) {
+            dfs(res, root->left, r + 1, c - (1 << (height - r - 1)), height);
         }
-        return -1;
+        if (root->right) {
+            dfs(res, root->right, r + 1, c + (1 << (height - r - 1)), height);
+        }
+    }
+
+    vector<vector<string>> printTree(TreeNode* root) {
+        int height = calDepth(root);
+        int m = height + 1;
+        int n = (1 << (height + 1)) - 1;
+        vector<vector<string>> res(m, vector<string>(n, ""));
+        dfs(res, root, 0, (n - 1) / 2, height);
+        return res;
     }
 };
