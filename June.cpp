@@ -1,29 +1,11 @@
 class Solution {
 public:
-    int zeta(long x) {
-        int res = 0;
-        while (x) {
-            res += x / 5;
-            x /= 5;
+    vector<int> shuffle(vector<int>& nums, int n) {
+        vector<int> ans(2 * n);
+        for (int i = 0; i < n; i++) {
+            ans[2 * i] = nums[i];
+            ans[2 * i + 1] = nums[i + n];
         }
-        return res;
-    }
-
-    long long help(int k) {
-        long long r = 5LL * k;
-        long long l = 0;
-        while (l <= r) {
-            long long mid = (l + r) / 2;
-            if (zeta(mid) < k) {
-                l = mid + 1;
-            } else {
-                r = mid - 1;
-            }
-        }
-        return r + 1;
-    }
-
-    int preimageSizeFZF(int k) {
-        return help(k + 1) - help(k);
+        return ans;
     }
 };
