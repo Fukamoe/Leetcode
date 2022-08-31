@@ -1,23 +1,15 @@
 class Solution {
 public:
-    TreeNode* insertIntoMaxTree(TreeNode* root, int val) {
-        TreeNode* parent = nullptr;
-        TreeNode* cur = root;
-        while (cur) {
-            if (val > cur->val) {
-                if (!parent) {
-                    return new TreeNode(val, root, nullptr);
-                }
-                TreeNode* node = new TreeNode(val, cur, nullptr);
-                parent->right = node;
-                return root;
-            }
-            else {
-                parent = cur;
-                cur = cur->right;
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        stack<int> st;
+        int n = pushed.size();
+        for (int i = 0, j = 0; i < n; i++) {
+            st.emplace(pushed[i]);
+            while (!st.empty() && st.top() == popped[j]) {
+                st.pop();
+                j++;
             }
         }
-        parent->right = new TreeNode(val);
-        return root;
+        return st.empty();
     }
 };
