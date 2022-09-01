@@ -1,15 +1,18 @@
 class Solution {
 public:
-    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
-        stack<int> st;
-        int n = pushed.size();
-        for (int i = 0, j = 0; i < n; i++) {
-            st.emplace(pushed[i]);
-            while (!st.empty() && st.top() == popped[j]) {
-                st.pop();
-                j++;
+    vector<int> finalPrices(vector<int>& prices) {
+        int n = prices.size();
+        vector<int> ans;
+        for (int i = 0; i < n; ++i) {
+            int discount = 0;
+            for (int j = i + 1; j < n; ++j) {
+                if(prices[j] <= prices[i]){
+                    discount = prices[j];
+                    break;
+                }
             }
+            ans.emplace_back(prices[i] - discount);
         }
-        return st.empty();
+        return ans;
     }
 };
