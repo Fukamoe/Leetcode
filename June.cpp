@@ -1,18 +1,16 @@
 class Solution {
 public:
-    int uniqueLetterString(string s) {
-        unordered_map<char, vector<int>> index;
-        for (int i = 0; i < s.size(); i++) {
-            index[s[i]].emplace_back(i);
+    vector<int> constructArray(int n, int k) {
+        vector<int> answer;
+        for (int i = 1; i < n - k; ++i) {
+            answer.push_back(i);
         }
-        int res = 0;
-        for (auto &&[_, arr]: index) {
-            arr.insert(arr.begin(), -1);
-            arr.emplace_back(s.size());
-            for (int i = 1; i < arr.size() - 1; i++) {
-                res += (arr[i] - arr[i - 1]) * (arr[i + 1] - arr[i]);
+        for (int i = n - k, j = n; i <= j; ++i, --j) {
+            answer.push_back(i);
+            if (i != j) {
+                answer.push_back(j);
             }
         }
-        return res;
+        return answer;
     }
 };
