@@ -1,16 +1,18 @@
 class Solution {
 public:
-    vector<int> constructArray(int n, int k) {
-        vector<int> answer;
-        for (int i = 1; i < n - k; ++i) {
-            answer.push_back(i);
-        }
-        for (int i = n - k, j = n; i <= j; ++i, --j) {
-            answer.push_back(i);
-            if (i != j) {
-                answer.push_back(j);
+    int minOperations(vector<string>& logs) {
+        int depth = 0;
+        for (auto & log : logs) {
+            if (log == "./") {
+                continue;
+            } else if (log == "../") {
+                if (depth > 0) {
+                    depth--;
+                }
+            } else {
+                depth++;
             }
         }
-        return answer;
+        return depth;
     }
 };
