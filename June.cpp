@@ -1,18 +1,17 @@
 class Solution {
 public:
-    int minOperations(vector<string>& logs) {
-        int depth = 0;
-        for (auto & log : logs) {
-            if (log == "./") {
-                continue;
-            } else if (log == "../") {
-                if (depth > 0) {
-                    depth--;
-                }
-            } else {
-                depth++;
-            }
+    TreeNode* trimBST(TreeNode* root, int low, int high) {
+        if (root == nullptr) {
+            return nullptr;
         }
-        return depth;
+        if (root->val < low) {
+            return trimBST(root->right, low, high);
+        } else if (root->val > high) {
+            return trimBST(root->left, low, high);
+        } else {
+            root->left = trimBST(root->left, low, high);
+            root->right = trimBST(root->right, low, high);
+            return root;
+        }
     }
 };
