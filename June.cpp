@@ -1,13 +1,9 @@
 class Solution {
 public:
-    int specialArray(vector<int>& nums) {
-        sort(nums.begin(), nums.end(), greater<int>());
-        int n = nums.size();
-        for (int i = 1; i <= n; ++i) {
-            if (nums[i - 1] >= i && (i == n || nums[i] < i)) {
-                return i;
-            }
-        }
-        return 1;
+    double trimMean(vector<int>& arr) {
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        int partialSum = accumulate(arr.begin() + n / 20, arr.begin() + (19 * n / 20), 0);
+        return partialSum / (n * 0.9);
     }
 };
