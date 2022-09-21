@@ -1,37 +1,33 @@
 class Solution {
 public:
-    bool canPartitionKSubsets(vector<int>& nums, int k) {
-        int all = accumulate(nums.begin(), nums.end(), 0);
-        if (all % k > 0) {
-            return false;
-        }
-        int per = all / k; 
-        sort(nums.begin(), nums.end());
-        if (nums.back() > per) {
-            return false;
-        }
-        int n = nums.size();
-        vector<bool> dp(1 << n, true);
-        function<bool(int,int)> dfs = [&](int s, int p)->bool {
-            if (s == 0) {
-                return true;
-            }
-            if (!dp[s]) {
-                return dp[s];
-            }
-            dp[s] = false;
-            for (int i = 0; i < n; i++) {
-                if (nums[i] + p > per) {
-                    break;
+    int kSimilarity(string s1, string s2) {
+        int n = s1.size();
+        queue<pair<string, int>> qu;
+        unordered_set<string> visit;
+        qu.emplace(s1, 0);
+        visit.emplace(s1);
+        for (int step = 0;; step++) {
+            int sz = qu.size();
+            for (int i = 0; i < sz; i++) {
+                auto [cur, pos] = qu.front();
+                qu.pop();
+                if (cur == s2) {
+                    return step;
                 }
-                if ((s >> i) & 1) {
-                    if (dfs(s ^ (1 << i), (p + nums[i]) % per)) {
-                        return true;
+                while (pos < n && cur[pos] == s2[pos]) {
+                    pos++;
+                }
+                for (int j = pos + 1; j < n; j++) {
+                    if (cur[j] != s2[j] && cur[j] == s2[pos]) { // 剪枝，只在 cur[j] != s2[j] 时去交换
+                        swap(cur[pos], cur[j]);
+                        if (!visit.count(cur)) {
+                            visit.emplace(cur);
+                            qu.emplace(cur, pos + 1);
+                        }
+                        swap(cur[pos], cur[j]);
                     }
                 }
             }
-            return false;
-        };
-        return dfs((1 << n) - 1, 0);
+        }
     }
 };
