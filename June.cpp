@@ -1,21 +1,58 @@
-class Solution {
+class MyLinkedList {
 public:
-    bool canFormArray(vector<int> &arr, vector<vector<int>> &pieces) {
-        unordered_map<int, int> index;
-        for (int i = 0; i < pieces.size(); i++) {
-            index[pieces[i][0]] = i;
-        }
-        for (int i = 0; i < arr.size();) {
-            auto it = index.find(arr[i]);
-            if (it == index.end()) {
-                return false;
-            }
-            for (int x : pieces[it->second]) {
-                if (arr[i++] != x) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    MyLinkedList() {
+        this->size = 0;
+        this->head = new ListNode(0);
     }
+    
+    int get(int index) {
+        if (index < 0 || index >= size) {
+            return -1;
+        }
+        ListNode *cur = head;
+        for (int i = 0; i <= index; i++) {
+            cur = cur->next;
+        }
+        return cur->val;
+    }
+    
+    void addAtHead(int val) {
+        addAtIndex(0, val);
+    }
+    
+    void addAtTail(int val) {
+        addAtIndex(size, val);
+    }
+    
+    void addAtIndex(int index, int val) {
+        if (index > size) {
+            return;
+        }
+        index = max(0, index);
+        size++;
+        ListNode *pred = head;
+        for (int i = 0; i < index; i++) {
+            pred = pred->next;
+        }
+        ListNode *toAdd = new ListNode(val);
+        toAdd->next = pred->next;
+        pred->next = toAdd;
+    }
+    
+    void deleteAtIndex(int index) {
+        if (index < 0 || index >= size) {
+            return;
+        }
+        size--;
+        ListNode *pred = head;
+        for (int i = 0; i < index; i++) {
+            pred = pred->next;
+        }
+        ListNode *p = pred->next;
+        pred->next = pred->next->next;
+        delete p;
+    }
+private:
+    int size;
+    ListNode *head;
 };
