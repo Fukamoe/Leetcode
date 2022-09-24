@@ -1,58 +1,26 @@
-class MyLinkedList {
+class Solution {
 public:
-    MyLinkedList() {
-        this->size = 0;
-        this->head = new ListNode(0);
-    }
-    
-    int get(int index) {
-        if (index < 0 || index >= size) {
-            return -1;
+    vector<int> decrypt(vector<int>& code, int k) {
+        int n = code.size();
+        vector<int> res(n);
+        if (k == 0) {
+            return res;
         }
-        ListNode *cur = head;
-        for (int i = 0; i <= index; i++) {
-            cur = cur->next;
+        code.resize(n * 2);
+        copy(code.begin(), code.begin() + n, code.begin() + n);
+        int l = k > 0 ? 1 : n + k;
+        int r = k > 0 ? k : n - 1;
+        int w = 0;
+        for (int i = l; i <= r; i++) {
+            w += code[i];
         }
-        return cur->val;
-    }
-    
-    void addAtHead(int val) {
-        addAtIndex(0, val);
-    }
-    
-    void addAtTail(int val) {
-        addAtIndex(size, val);
-    }
-    
-    void addAtIndex(int index, int val) {
-        if (index > size) {
-            return;
+        for (int i = 0; i < n; i++) {
+            res[i] = w;
+            w -= code[l];
+            w += code[r + 1];
+            l++;
+            r++;
         }
-        index = max(0, index);
-        size++;
-        ListNode *pred = head;
-        for (int i = 0; i < index; i++) {
-            pred = pred->next;
-        }
-        ListNode *toAdd = new ListNode(val);
-        toAdd->next = pred->next;
-        pred->next = toAdd;
+        return res;
     }
-    
-    void deleteAtIndex(int index) {
-        if (index < 0 || index >= size) {
-            return;
-        }
-        size--;
-        ListNode *pred = head;
-        for (int i = 0; i < index; i++) {
-            pred = pred->next;
-        }
-        ListNode *p = pred->next;
-        pred->next = pred->next->next;
-        delete p;
-    }
-private:
-    int size;
-    ListNode *head;
 };
