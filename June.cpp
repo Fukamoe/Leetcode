@@ -1,26 +1,25 @@
 class Solution {
 public:
-    vector<int> decrypt(vector<int>& code, int k) {
-        int n = code.size();
-        vector<int> res(n);
-        if (k == 0) {
-            return res;
+    int rotatedDigits(int n) {
+        int ans = 0;
+        for (int i = 1; i <= n; ++i) {
+            string num = to_string(i);
+            bool valid = true, diff = false;
+            for (char ch: num) {
+                if (check[ch - '0'] == -1) {
+                    valid = false;
+                }
+                else if (check[ch - '0'] == 1) {
+                    diff = true;
+                }
+            }
+            if (valid && diff) {
+                ++ans;
+            }
         }
-        code.resize(n * 2);
-        copy(code.begin(), code.begin() + n, code.begin() + n);
-        int l = k > 0 ? 1 : n + k;
-        int r = k > 0 ? k : n - 1;
-        int w = 0;
-        for (int i = l; i <= r; i++) {
-            w += code[i];
-        }
-        for (int i = 0; i < n; i++) {
-            res[i] = w;
-            w -= code[l];
-            w += code[r + 1];
-            l++;
-            r++;
-        }
-        return res;
+        return ans;
     }
+
+private:
+    static constexpr int check[10] = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
 };
