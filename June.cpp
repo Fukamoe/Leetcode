@@ -1,25 +1,31 @@
 class Solution {
 public:
-    int rotatedDigits(int n) {
-        int ans = 0;
-        for (int i = 1; i <= n; ++i) {
-            string num = to_string(i);
-            bool valid = true, diff = false;
-            for (char ch: num) {
-                if (check[ch - '0'] == -1) {
-                    valid = false;
-                }
-                else if (check[ch - '0'] == 1) {
-                    diff = true;
-                }
-            }
-            if (valid && diff) {
-                ++ans;
+    vector<int> missingTwo(vector<int>& nums) {
+        int xorsum = 0;
+        int n = nums.size() + 2;
+        for (int num : nums) {
+            xorsum ^= num;
+        }
+        for (int i = 1; i <= n; i++) {
+            xorsum ^= i;
+        }
+        // 防止溢出
+        int lsb = (xorsum == INT_MIN ? xorsum : xorsum & (-xorsum));
+        int type1 = 0, type2 = 0;
+        for (int num : nums) {
+            if (num & lsb) {
+                type1 ^= num;
+            } else {
+                type2 ^= num;
             }
         }
-        return ans;
+        for (int i = 1; i <= n; i++) {
+            if (i & lsb) {
+                type1 ^= i;
+            } else {
+                type2 ^= i;
+            }
+        }
+        return {type1, type2};
     }
-
-private:
-    static constexpr int check[10] = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
 };
