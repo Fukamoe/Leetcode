@@ -1,31 +1,11 @@
 class Solution {
 public:
-    vector<int> missingTwo(vector<int>& nums) {
-        int xorsum = 0;
-        int n = nums.size() + 2;
-        for (int num : nums) {
-            xorsum ^= num;
+    bool CheckPermutation(string s1, string s2) {
+        if (s1.length() != s2.length()) {
+            return false;
         }
-        for (int i = 1; i <= n; i++) {
-            xorsum ^= i;
-        }
-        // 防止溢出
-        int lsb = (xorsum == INT_MIN ? xorsum : xorsum & (-xorsum));
-        int type1 = 0, type2 = 0;
-        for (int num : nums) {
-            if (num & lsb) {
-                type1 ^= num;
-            } else {
-                type2 ^= num;
-            }
-        }
-        for (int i = 1; i <= n; i++) {
-            if (i & lsb) {
-                type1 ^= i;
-            } else {
-                type2 ^= i;
-            }
-        }
-        return {type1, type2};
+        sort(s1.begin(), s1.end());
+        sort(s2.begin(), s2.end());
+        return s1 == s2;
     }
 };
