@@ -1,24 +1,25 @@
 class Solution {
 public:
-    int getKthMagicNumber(int k) {
-        vector<int> factors = {3, 5, 7};
-        unordered_set<long> seen;
-        priority_queue<long, vector<long>, greater<long>> heap;
-        seen.insert(1L);
-        heap.push(1L);
-        int magic = 0;
-        for (int i = 0; i < k; i++) {
-            long curr = heap.top();
-            heap.pop();
-            magic = (int)curr;
-            for (int factor : factors) {
-                long next = curr * factor;
-                if (!seen.count(next)) {
-                    seen.insert(next);
-                    heap.push(next);
+    bool isFlipedString(string s1, string s2) {
+        int m = s1.size(), n = s2.size();
+        if (m != n) {
+            return false;
+        }
+        if (n == 0) {
+            return true;
+        }
+        for (int i = 0; i < n; i++) {
+            bool flag = true;
+            for (int j = 0; j < n; j++) {
+                if (s1[(i + j) % n] != s2[j]) {
+                    flag = false;
+                    break;
                 }
             }
+            if (flag) {
+                return true;
+            }
         }
-        return magic;
+        return false;
     }
 };
