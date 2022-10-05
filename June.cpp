@@ -1,26 +1,23 @@
 class Solution {
 public:
-    bool checkOnesSegment(string s) {
-        return s.find("01") == string::npos;
-    }
-};
-class Solution {
-public:
-    int minAddToMakeValid(string s) {
-        int ans = 0;
-        int leftCount = 0;
-        for (auto &c : s) {
-            if (c == '(') {
-                leftCount++;
-            } else {
-                if (leftCount > 0) {
-                    leftCount--;
-                } else {
-                    ans++;
+    vector<string> subdomainVisits(vector<string>& cpdomains) {
+        vector<string> ans;
+        unordered_map<string, int> counts;
+        for (auto &&cpdomain : cpdomains) {
+            int space = cpdomain.find(' ');
+            int count = stoi(cpdomain.substr(0, space));
+            string domain = cpdomain.substr(space + 1);
+            counts[domain] += count;
+            for (int i = 0; i < domain.size(); i++) {
+                if (domain[i] == '.') {
+                    string subdomain = domain.substr(i + 1);
+                    counts[subdomain] += count;
                 }
             }
         }
-        ans += leftCount;
+        for (auto &&[subdomain, count] : counts) {
+            ans.emplace_back(to_string(count) + " " + subdomain);
+        }
         return ans;
     }
 };
