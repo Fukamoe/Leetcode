@@ -1,21 +1,20 @@
 class Solution {
 public:
-    int scoreOfParentheses(string s) {
-        if (s.size() == 2) {
-            return 1;
-        }
-        int bal = 0, n = s.size(), len;
-        for (int i = 0; i < n; i++) {
-            bal += (s[i] == '(' ? 1 : -1);
-            if (bal == 0) {
-                len = i + 1;
-                break;
+    int minSwap(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        int a = 0, b = 1;
+        for (int i = 1; i < n; i++) {
+            int at = a, bt = b;
+            a = b = n;
+            if (nums1[i] > nums1[i - 1] && nums2[i] > nums2[i - 1])  {
+                a = min(a, at);
+                b = min(b, bt + 1);
+            }
+            if (nums1[i] > nums2[i - 1] && nums2[i] > nums1[i - 1]) {
+                a = min(a, bt);
+                b = min(b, at + 1);
             }
         }
-        if (len == n) {
-            return 2 * scoreOfParentheses(s.substr(1, n - 2));
-        } else {
-            return scoreOfParentheses(s.substr(0, len)) + scoreOfParentheses(s.substr(len, n - len));
-        }
+        return min(a, b);
     }
 };
