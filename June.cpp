@@ -1,20 +1,22 @@
 class Solution {
 public:
-    int minSwap(vector<int>& nums1, vector<int>& nums2) {
-        int n = nums1.size();
-        int a = 0, b = 1;
-        for (int i = 1; i < n; i++) {
-            int at = a, bt = b;
-            a = b = n;
-            if (nums1[i] > nums1[i - 1] && nums2[i] > nums2[i - 1])  {
-                a = min(a, at);
-                b = min(b, bt + 1);
-            }
-            if (nums1[i] > nums2[i - 1] && nums2[i] > nums1[i - 1]) {
-                a = min(a, bt);
-                b = min(b, at + 1);
+    bool areAlmostEqual(string s1, string s2) {
+        int n = s1.size();
+        vector<int> diff;
+        for (int i = 0; i < n; ++i) {
+            if (s1[i] != s2[i]) {
+                if (diff.size() >= 2) {
+                    return false;
+                }
+                diff.emplace_back(i);
             }
         }
-        return min(a, b);
+        if (diff.size() == 0) {
+            return true;
+        }
+        if (diff.size() != 2) {
+            return false;
+        }
+        return s1[diff[0]] == s2[diff[1]] && s1[diff[1]] == s2[diff[0]];
     }
 };
