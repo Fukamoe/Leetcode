@@ -1,22 +1,23 @@
 class Solution {
 public:
-    bool areAlmostEqual(string s1, string s2) {
-        int n = s1.size();
-        vector<int> diff;
-        for (int i = 0; i < n; ++i) {
-            if (s1[i] != s2[i]) {
-                if (diff.size() >= 2) {
-                    return false;
+    int numComponents(ListNode* head, vector<int>& nums) {
+        unordered_set<int> numsSet;
+        for (int num : nums) {
+            numsSet.emplace(num);
+        }
+        bool inSet = false;
+        int res = 0;
+        while (head != nullptr) {
+            if (numsSet.count(head->val)) {
+                if (!inSet) {
+                    inSet = true;
+                    res++;
                 }
-                diff.emplace_back(i);
+            } else {
+                inSet = false;
             }
+            head = head->next;
         }
-        if (diff.size() == 0) {
-            return true;
-        }
-        if (diff.size() != 2) {
-            return false;
-        }
-        return s1[diff[0]] == s2[diff[1]] && s1[diff[1]] == s2[diff[0]];
+        return res;
     }
 };
