@@ -1,22 +1,12 @@
 class Solution {
 public:
-    int numComponents(ListNode* head, vector<int>& nums) {
-        unordered_set<int> numsSet;
-        for (int num : nums) {
-            numsSet.emplace(num);
-        }
-        bool inSet = false;
-        int res = 0;
-        while (head != nullptr) {
-            if (numsSet.count(head->val)) {
-                if (!inSet) {
-                    inSet = true;
-                    res++;
-                }
-            } else {
-                inSet = false;
+    int maxChunksToSorted(vector<int>& arr) {
+        int m = 0, res = 0;
+        for (int i = 0; i < arr.size(); i++) {
+            m = max(m, arr[i]);
+            if (m == i) {
+                res++;
             }
-            head = head->next;
         }
         return res;
     }
