@@ -1,44 +1,30 @@
 class Solution {
 public:
-    int distinctSubseqII(string s) {
-        vector<int> last(26, -1);
-        
-        int n = s.size();
-        vector<int> f(n, 1);
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < 26; ++j) {
-                if (last[j] != -1) {
-                    f[i] = (f[i] + f[last[j]]) % mod;
-                }
+    bool dfs(int curnode, int nowcolor, vector<int>& color, const vector<vector<int>>& g) {
+        color[curnode] = nowcolor;
+        for (auto& nextnode : g[curnode]) {
+            if (color[nextnode] && color[nextnode] == color[curnode]) {
+                return false;
             }
-            last[s[i] - 'a'] = i;
-        }
-        
-        int ans = 0;
-        for (int i = 0; i < 26; ++i) {
-            if (last[i] != -1) {
-                ans = (ans + f[last[i]]) % mod;
+            if (!color[nextnode] && !dfs(nextnode, 3 ^ nowcolor, color, g)) {
+                return false;
             }
         }
-        return ans;
+        return true;
     }
 
-private:
-    static constexpr int mod = 1000000007;
-};
-class Solution {
-public:
-    vector<string> buildArray(vector<int>& target, int n) {
-        vector<string> res;
-        int prev = 0;
-        for (int number : target) {
-            for (int i = 0; i < number - prev - 1; i++) {
-                res.emplace_back("Push");
-                res.emplace_back("Pop");
-            }
-            res.emplace_back("Push");
-            prev = number;
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        vector<int> color(n + 1, 0);
+        vector<vector<int>> g(n + 1);
+        for (auto& p : dislikes) {
+            g[p[0]].push_back(p[1]);
+            g[p[1]].push_back(p[0]);
         }
-        return res;
+        for (int i = 1; i <= n; ++i) {
+            if (color[i] == 0 && !dfs(i, 1, color, g)) {
+                return false;
+            }
+        }
+        return true;
     }
 };
