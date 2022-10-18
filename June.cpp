@@ -1,22 +1,24 @@
 class Solution {
 public:
-    int totalFruit(vector<int>& fruits) {
-        int n = fruits.size();
-        unordered_map<int, int> cnt;
-
-        int left = 0, ans = 0;
-        for (int right = 0; right < n; ++right) {
-            ++cnt[fruits[right]];
-            while (cnt.size() > 2) {
-                auto it = cnt.find(fruits[left]);
-                --it->second;
-                if (it->second == 0) {
-                    cnt.erase(it);
+    int atMostNGivenDigitSet(vector<string>& digits, int n) {
+        string s = to_string(n);
+        int m = digits.size(), k = s.size();
+        vector<vector<int>> dp(k + 1, vector<int>(2));
+        dp[0][1] = 1;
+        for (int i = 1; i <= k; i++) {
+            for (int j = 0; j < m; j++) {
+                if (digits[j][0] == s[i - 1]) {
+                    dp[i][1] = dp[i - 1][1];
+                } else if (digits[j][0] < s[i - 1]) {
+                    dp[i][0] += dp[i - 1][1];
+                } else {
+                    break;
                 }
-                ++left;
             }
-            ans = max(ans, right - left + 1);
+            if (i > 1) {
+                dp[i][0] += m + dp[i - 1][0] * m;
+            }
         }
-        return ans;
+        return dp[k][0] + dp[k][1];
     }
 };
