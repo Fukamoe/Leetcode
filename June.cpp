@@ -1,1 +1,21 @@
-送你一张 1024 卡牌，快来合成 1024 吧。https://leetcode.cn/2022-1024?id=402359&userSlug=fukamoe
+class StockSpanner {
+public:
+    StockSpanner() {
+        this->stk.emplace(-1, INT_MAX);
+        this->idx = -1;
+    }
+    
+    int next(int price) {
+        idx++;
+        while (price >= stk.top().second) {
+            stk.pop();
+        }
+        int ret = idx - stk.top().first;
+        stk.emplace(idx, price);
+        return ret;
+    }
+
+private:
+    stack<pair<int, int>> stk; 
+    int idx;
+};
