@@ -1,40 +1,56 @@
 class Solution {
 public:
-    string mergeAlternately(string word1, string word2) {
-        int m = word1.size(), n = word2.size();
-        int i = 0, j = 0;
-        
-        string ans;
-        ans.reserve(m + n);
-        while (i < m || j < n) {
-            if (i < m) {
-                ans.push_back(word1[i]);
-                ++i;
-            }
-            if (j < n) {
-                ans.push_back(word2[j]);
-                ++j;
+    int shortestBridge(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<vector<int>> dirs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+        vector<pair<int, int>> island;
+        queue<pair<int, int>> qu;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    qu.emplace(i, j);
+                    grid[i][j] = -1;
+                    while (!qu.empty()) {
+                        auto [x, y] = qu.front();
+                        qu.pop();
+                        island.emplace_back(x, y);
+                        for (int k = 0; k < 4; k++) {
+                            int nx = x + dirs[k][0];
+                            int ny = y + dirs[k][1];
+                            if (nx >= 0 && ny >= 0 && nx < n && ny < n && grid[nx][ny] == 1) {
+                                qu.emplace(nx, ny);
+                                grid[nx][ny] = -1;
+                            }
+                        }
+                    }
+                    for (auto &&[x, y] : island) {
+                        qu.emplace(x, y);
+                    }
+                    int step = 0;
+                    while (!qu.empty()) {
+                        int sz = qu.size();
+                        for (int i = 0; i < sz; i++) {
+                            auto [x, y] = qu.front();
+                            qu.pop();
+                            for (int k = 0; k < 4; k++) {
+                                int nx = x + dirs[k][0];
+                                int ny = y + dirs[k][1];
+                                if (nx >= 0 && ny >= 0 && nx < n && ny < n) {
+                                    if (grid[nx][ny] == 0) {
+                                        qu.emplace(nx, ny);
+                                        grid[nx][ny] = -1;
+                                    } else if (grid[nx][ny] == 1) {
+                                        return step;
+                                    }
+                                }
+                            }
+                        }
+                        step++;
+                    }
+                }
             }
         }
-        return ans;
+        return 0;
     }
 };
-public class Solution {
-    public int PartitionDisjoint(int[] nums) {
-        int n = nums.Length;
-        int[] minRight = new int[n];
-        minRight[n - 1] = nums[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            minRight[i] = Math.Min(nums[i], minRight[i + 1]);
-        }
-
-        int maxLeft = 0;
-        for (int i = 0; i < n - 1; i++) {
-            maxLeft = Math.Max(maxLeft, nums[i]);
-            if (maxLeft <= minRight[i + 1]) {
-                return i + 1;
-            }
-        }
-        return n - 1;
-    }
-}
