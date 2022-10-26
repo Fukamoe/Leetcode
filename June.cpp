@@ -1,56 +1,24 @@
 class Solution {
 public:
-    int shortestBridge(vector<vector<int>>& grid) {
-        int n = grid.size();
-        vector<vector<int>> dirs = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
-        vector<pair<int, int>> island;
-        queue<pair<int, int>> qu;
-
+    int shortestSubarray(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<long> preSumArr(n + 1);
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1) {
-                    qu.emplace(i, j);
-                    grid[i][j] = -1;
-                    while (!qu.empty()) {
-                        auto [x, y] = qu.front();
-                        qu.pop();
-                        island.emplace_back(x, y);
-                        for (int k = 0; k < 4; k++) {
-                            int nx = x + dirs[k][0];
-                            int ny = y + dirs[k][1];
-                            if (nx >= 0 && ny >= 0 && nx < n && ny < n && grid[nx][ny] == 1) {
-                                qu.emplace(nx, ny);
-                                grid[nx][ny] = -1;
-                            }
-                        }
-                    }
-                    for (auto &&[x, y] : island) {
-                        qu.emplace(x, y);
-                    }
-                    int step = 0;
-                    while (!qu.empty()) {
-                        int sz = qu.size();
-                        for (int i = 0; i < sz; i++) {
-                            auto [x, y] = qu.front();
-                            qu.pop();
-                            for (int k = 0; k < 4; k++) {
-                                int nx = x + dirs[k][0];
-                                int ny = y + dirs[k][1];
-                                if (nx >= 0 && ny >= 0 && nx < n && ny < n) {
-                                    if (grid[nx][ny] == 0) {
-                                        qu.emplace(nx, ny);
-                                        grid[nx][ny] = -1;
-                                    } else if (grid[nx][ny] == 1) {
-                                        return step;
-                                    }
-                                }
-                            }
-                        }
-                        step++;
-                    }
-                }
-            }
+            preSumArr[i + 1] = preSumArr[i] + nums[i];
         }
-        return 0;
+        int res = n + 1;
+        deque<int> qu;
+        for (int i = 0; i <= n; i++) {
+            long curSum = preSumArr[i];
+            while (!qu.empty() && curSum - preSumArr[qu.front()] >= k) {
+                res = min(res, i - qu.front());
+                qu.pop_front();
+            }
+            while (!qu.empty() && preSumArr[qu.back()] >= curSum) {
+                qu.pop_back();
+            }
+            qu.push_back(i);
+        }
+        return res < n + 1 ? res : -1;
     }
 };
