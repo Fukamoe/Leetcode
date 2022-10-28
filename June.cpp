@@ -1,15 +1,29 @@
 class Solution {
 public:
-    int arraySign(vector<int>& nums) {
-        int sign = 1;
-        for (auto num : nums) {
-            if (num == 0) {
-                return 0;
+    int sumSubarrayMins(vector<int>& arr) {
+        int n = arr.size();
+        vector<int> monoStack;
+        vector<int> left(n), right(n);
+        for (int i = 0; i < n; i++) {
+            while (!monoStack.empty() && arr[i] <= arr[monoStack.back()]) {
+                monoStack.pop_back();
             }
-            if (num < 0) {
-                sign = -sign;
-            }
+            left[i] = i - (monoStack.empty() ? -1 : monoStack.back());
+            monoStack.emplace_back(i);
         }
-        return sign;
+        monoStack.clear();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!monoStack.empty() && arr[i] < arr[monoStack.back()]) {
+                monoStack.pop_back();
+            }
+            right[i] = (monoStack.empty() ? n : monoStack.back()) - i;
+            monoStack.emplace_back(i);
+        }
+        long long ans = 0;
+        long long mod = 1e9 + 7;
+        for (int i = 0; i < n; i++) {
+            ans = (ans + (long long)left[i] * right[i] * arr[i]) % mod; 
+        }
+        return ans;
     }
 };
