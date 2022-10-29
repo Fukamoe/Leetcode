@@ -1,29 +1,13 @@
 class Solution {
 public:
-    int sumSubarrayMins(vector<int>& arr) {
-        int n = arr.size();
-        vector<int> monoStack;
-        vector<int> left(n), right(n);
-        for (int i = 0; i < n; i++) {
-            while (!monoStack.empty() && arr[i] <= arr[monoStack.back()]) {
-                monoStack.pop_back();
+    int countMatches(vector<vector<string>>& items, string ruleKey, string ruleValue) {
+        unordered_map<string, int> dictionary = {{"type", 0}, {"color", 1}, {"name", 2}};
+        int res = 0, index = dictionary[ruleKey];
+        for (auto &&item : items) {
+            if (item[index] == ruleValue) {
+                res++;
             }
-            left[i] = i - (monoStack.empty() ? -1 : monoStack.back());
-            monoStack.emplace_back(i);
         }
-        monoStack.clear();
-        for (int i = n - 1; i >= 0; i--) {
-            while (!monoStack.empty() && arr[i] < arr[monoStack.back()]) {
-                monoStack.pop_back();
-            }
-            right[i] = (monoStack.empty() ? n : monoStack.back()) - i;
-            monoStack.emplace_back(i);
-        }
-        long long ans = 0;
-        long long mod = 1e9 + 7;
-        for (int i = 0; i < n; i++) {
-            ans = (ans + (long long)left[i] * right[i] * arr[i]) % mod; 
-        }
-        return ans;
+        return res;
     }
 };
