@@ -1,13 +1,24 @@
 class Solution {
 public:
-    int countMatches(vector<vector<string>>& items, string ruleKey, string ruleValue) {
-        unordered_map<string, int> dictionary = {{"type", 0}, {"color", 1}, {"name", 2}};
-        int res = 0, index = dictionary[ruleKey];
-        for (auto &&item : items) {
-            if (item[index] == ruleValue) {
-                res++;
+    vector<string> letterCasePermutation(string s) {
+        vector<string> ans;
+        queue<string> qu;
+        qu.emplace("");
+        while (!qu.empty()) {
+            string &curr = qu.front();
+            if (curr.size() == s.size()) {
+                ans.emplace_back(curr);
+                qu.pop();
+            } else {
+                int pos = curr.size();
+                if (isalpha(s[pos])) {
+                    string next = curr;
+                    next.push_back(s[pos] ^ 32);
+                    qu.emplace(next);
+                }
+                curr.push_back(s[pos]);                
             }
         }
-        return res;
+        return ans;
     }
 };
