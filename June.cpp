@@ -1,41 +1,36 @@
 class Solution {
 public:
-    int magicalString(int n) {
-        if (n < 4) {
-            return 1;
+    vector<int> bestCoordinate(vector<vector<int>>& towers, int radius) {
+        int xMax = INT_MIN, yMax = INT_MIN;
+        for (auto &&tower : towers) {
+            int x = tower[0], y = tower[1];
+            xMax = max(xMax, x);
+            yMax = max(yMax, y);
         }
-        string s(n, '0');
-        s[0] = '1', s[1] = '2', s[2] = '2';
-        int res = 1;
-        int i = 2;
-        int j = 3;
-        while (j < n) {
-            int size = s[i] - '0';
-            int num = 3 - (s[j - 1] - '0');
-            while (size > 0 && j < n) {
-                s[j] = '0' + num;
-                if (num == 1) {
-                    ++res;
+        int cx = 0, cy = 0;
+        int maxQuality = 0;
+        for (int x = 0; x <= xMax; x++) {
+            for (int y = 0; y <= yMax; y++) {
+                vector<int> coordinate = {x, y};
+                int quality = 0;
+                for (auto &&tower : towers) {
+                    int squaredDistance = getSquaredDistance(coordinate, tower);
+                    if (squaredDistance <= radius * radius) {
+                        double distance = sqrt((double)squaredDistance);
+                        quality += floor((double)tower[2] / (1 + distance));
+                    }
                 }
-                ++j;
-                --size;
+                if (quality > maxQuality) {
+                    cx = x;
+                    cy = y;
+                    maxQuality = quality;
+                }
             }
-            ++i;
         }
-        return res;
-    }
-};
-class Solution {
-public:
-    string join(vector<string>& words) {
-        string ret = "";
-        for (auto &s : words) {
-            ret += s;
-        }
-        return ret;
+        return {cx, cy};
     }
 
-    bool arrayStringsAreEqual(vector<string>& word1, vector<string>& word2) {
-        return join(word1) == join(word2);
+    int getSquaredDistance(const vector<int> &coordinate, const vector<int> &tower) {
+        return (tower[0] - coordinate[0]) * (tower[0] - coordinate[0]) + (tower[1] - coordinate[1]) * (tower[1] - coordinate[1]);
     }
 };
