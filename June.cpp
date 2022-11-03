@@ -1,36 +1,25 @@
 class Solution {
 public:
-    vector<int> bestCoordinate(vector<vector<int>>& towers, int radius) {
-        int xMax = INT_MIN, yMax = INT_MIN;
-        for (auto &&tower : towers) {
-            int x = tower[0], y = tower[1];
-            xMax = max(xMax, x);
-            yMax = max(yMax, y);
+    int maxRepeating(string sequence, string word) {
+        int n = sequence.size(), m = word.size();
+        if (n < m) {
+            return 0;
         }
-        int cx = 0, cy = 0;
-        int maxQuality = 0;
-        for (int x = 0; x <= xMax; x++) {
-            for (int y = 0; y <= yMax; y++) {
-                vector<int> coordinate = {x, y};
-                int quality = 0;
-                for (auto &&tower : towers) {
-                    int squaredDistance = getSquaredDistance(coordinate, tower);
-                    if (squaredDistance <= radius * radius) {
-                        double distance = sqrt((double)squaredDistance);
-                        quality += floor((double)tower[2] / (1 + distance));
-                    }
-                }
-                if (quality > maxQuality) {
-                    cx = x;
-                    cy = y;
-                    maxQuality = quality;
+
+        vector<int> f(n);
+        for (int i = m - 1; i < n; ++i) {
+            bool valid = true;
+            for (int j = 0; j < m; ++j) {
+                if (sequence[i - m + j + 1] != word[j]) {
+                    valid = false;
+                    break;
                 }
             }
+            if (valid) {
+                f[i] = (i == m - 1 ? 0 : f[i - m]) + 1;
+            }
         }
-        return {cx, cy};
-    }
-
-    int getSquaredDistance(const vector<int> &coordinate, const vector<int> &tower) {
-        return (tower[0] - coordinate[0]) * (tower[0] - coordinate[0]) + (tower[1] - coordinate[1]) * (tower[1] - coordinate[1]);
+        
+        return *max_element(f.begin(), f.end());
     }
 };
