@@ -1,27 +1,18 @@
 class Solution {
 public:
-    vector<string> getPos(string s) {
-        vector<string> pos;
-        if (s[0] != '0' || s == "0") pos.push_back(s);
-        for (int p = 1; p < s.size(); ++p) {
-            if ((p != 1 && s[0] == '0') || s.back() == '0') continue;
-            pos.push_back(s.substr(0, p) + "." + s.substr(p));
+    int countConsistentStrings(string allowed, vector<string>& words) {
+        int mask = 0;
+        for (auto c : allowed) {
+            mask |= 1 << (c - 'a');
         }
-        return pos;
-    }
-    vector<string> ambiguousCoordinates(string s) {
-        int n = s.size() - 2;
-        vector<string> res;
-        s = s.substr(1, s.size() - 2);
-        for (int l = 1; l < n; ++l) {
-            vector<string> lt = getPos(s.substr(0, l));
-            if (lt.empty()) continue;
-            vector<string> rt = getPos(s.substr(l));
-            if (rt.empty()) continue;
-            for (auto& i : lt) {
-                for (auto& j : rt) {
-                    res.push_back("(" + i + ", " + j + ")");
-                }
+        int res = 0;
+        for (auto &&word : words) {
+            int mask1 = 0;
+            for (auto c : word) {
+                mask1 |= 1 << (c - 'a');
+            }
+            if ((mask1 | mask) == mask) {
+                res++;
             }
         }
         return res;
