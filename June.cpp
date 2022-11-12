@@ -1,20 +1,15 @@
+const long long mod = 1e9 + 7;
 class Solution {
 public:
-    bool halvesAreAlike(string s) {
-        string a = s.substr(0, s.size() / 2);
-        string b = s.substr(s.size() / 2);
-        string h = "aeiouAEIOU";
-        int sum1 = 0, sum2 = 0;
-        for (int i = 0; i < a.size(); i++) {
-            if (h.find_first_of(a[i]) != string::npos) {
-                sum1++;
-            }
+    int numTilings(int n) {
+        vector<vector<long long>> dp(n + 1, vector<long long>(4));
+        dp[0][3] = 1;
+        for (int i = 1; i <= n; i++) {
+            dp[i][0] = dp[i - 1][3];
+            dp[i][1] = (dp[i - 1][0] + dp[i - 1][2]) % mod;
+            dp[i][2] = (dp[i - 1][0] + dp[i - 1][1]) % mod;
+            dp[i][3] = (dp[i - 1][0] + dp[i - 1][1] + dp[i - 1][2] + dp[i - 1][3]) % mod;
         }
-        for (int i = 0; i < b.size(); i++) {
-            if (h.find_first_of(b[i]) != string::npos) {
-                sum2++;
-            }
-        }
-        return sum1 == sum2;
+        return dp[n][3];
     }
 };
