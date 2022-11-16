@@ -1,21 +1,13 @@
 class Solution {
 public:
-    int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
-        sort(boxTypes.begin(), boxTypes.end(), [](const vector<int> &a, const vector<int> &b) {
-            return a[1] > b[1];
-        });
-        int res = 0;
-        for (auto &boxType : boxTypes) {
-            int numberOfBoxes = boxType[0];
-            int numberOfUnitsPerBox = boxType[1];
-            if (numberOfBoxes < truckSize) {
-                res += numberOfBoxes * numberOfUnitsPerBox;
-                truckSize -= numberOfBoxes;
-            } else {
-                res += truckSize * numberOfUnitsPerBox;
-                break;
+    bool isIdealPermutation(vector<int>& nums) {
+        int n = nums.size(), minSuff = nums[n - 1];
+        for (int i = n - 3; i >= 0; i--) {
+            if (nums[i] > minSuff) {
+                return false;
             }
+            minSuff = min(minSuff, nums[i + 1]);
         }
-        return res;
+        return true;
     }
 };
