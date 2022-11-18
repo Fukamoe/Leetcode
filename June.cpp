@@ -1,27 +1,14 @@
 class Solution {
 public:
-    int numMatchingSubseq(string s, vector<string> &words) {
-        vector<vector<int>> pos(26);
-        for (int i = 0; i < s.size(); ++i) {
-            pos[s[i] - 'a'].push_back(i);
+    int sumSubseqWidths(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        long long res = 0, mod = 1e9 + 7;
+        long long x = nums[0], y = 2;
+        for (int j = 1; j < nums.size(); j++) {
+            res = (res + nums[j] * (y - 1) - x) % mod;
+            x = (x * 2 + nums[j]) % mod;
+            y = y * 2 % mod;
         }
-        int res = words.size();
-        for (auto &w : words) {
-            if (w.size() > s.size()) {
-                --res;
-                continue;
-            }
-            int p = -1;
-            for (char c : w) {
-                auto &ps = pos[c - 'a'];
-                auto it = upper_bound(ps.begin(), ps.end(), p);
-                if (it == ps.end()) {
-                    --res;
-                    break;
-                }
-                p = *it;
-            }
-        }
-        return res;
+        return (res + mod) % mod;
     }
 };
