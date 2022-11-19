@@ -1,14 +1,11 @@
 class Solution {
 public:
-    int sumSubseqWidths(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        long long res = 0, mod = 1e9 + 7;
-        long long x = nums[0], y = 2;
-        for (int j = 1; j < nums.size(); j++) {
-            res = (res + nums[j] * (y - 1) - x) % mod;
-            x = (x * 2 + nums[j]) % mod;
-            y = y * 2 % mod;
+    int largestAltitude(vector<int>& gain) {
+        int ans = 0, sum = 0;
+        for (int x: gain) {
+            sum += x;
+            ans = max(ans, sum);
         }
-        return (res + mod) % mod;
+        return ans;
     }
 };
