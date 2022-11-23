@@ -1,19 +1,17 @@
 class Solution {
 public:
-    const int MOD = 1e9 + 7;
-    int nthMagicalNumber(int n, int a, int b) {
-        long long l = min(a, b);
-        long long r = (long long) n * min(a, b);
-        int c = lcm(a, b);
-        while (l <= r) {
-            long long mid = (l + r) / 2;
-            long long cnt = mid / a + mid / b - mid / c;
-            if (cnt >= n) {
-                r = mid - 1;
-            } else {
-                l = mid + 1;
+    int countBalls(int lowLimit, int highLimit) {
+        unordered_map<int, int> count;
+        int res = 0;
+        for (int i = lowLimit; i <= highLimit; i++) {
+            int box = 0, x = i;
+            while (x) {
+                box += x % 10;
+                x /= 10;
             }
+            count[box]++;
+            res = max(res, count[box]);
         }
-        return (r + 1) % MOD;
+        return res;
     }
 };
