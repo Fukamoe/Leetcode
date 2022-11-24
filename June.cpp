@@ -1,16 +1,17 @@
 class Solution {
 public:
-    int countBalls(int lowLimit, int highLimit) {
-        unordered_map<int, int> count;
-        int res = 0;
-        for (int i = lowLimit; i <= highLimit; i++) {
-            int box = 0, x = i;
-            while (x) {
-                box += x % 10;
-                x /= 10;
+    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
+        int res = 0, last2 = -1, last1 = -1;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] >= left && nums[i] <= right) {
+                last1 = i;
+            } else if (nums[i] > right) {
+                last2 = i;
+                last1 = -1;
             }
-            count[box]++;
-            res = max(res, count[box]);
+            if (last1 != -1) {
+                res += last1 - last2;
+            }
         }
         return res;
     }
