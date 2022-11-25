@@ -1,18 +1,40 @@
 class Solution {
 public:
-    int numSubarrayBoundedMax(vector<int>& nums, int left, int right) {
-        int res = 0, last2 = -1, last1 = -1;
-        for (int i = 0; i < nums.size(); i++) {
-            if (nums[i] >= left && nums[i] <= right) {
-                last1 = i;
-            } else if (nums[i] > right) {
-                last2 = i;
-                last1 = -1;
-            }
-            if (last1 != -1) {
-                res += last1 - last2;
+    int expressiveWords(string s, vector<string>& words) {
+        int ans = 0;
+        for (const string& word: words) {
+            if (expand(s, word)) {
+                ++ans;
             }
         }
-        return res;
+        return ans;
+    }
+
+private:
+    bool expand(const string& s, const string& t) {
+        int i = 0, j = 0;
+        while (i < s.size() && j < t.size()) {
+            if (s[i] != t[j]) {
+                return false;
+            }
+            char ch = s[i];
+            int cnti = 0;
+            while (i < s.size() && s[i] == ch) {
+                ++cnti;
+                ++i;
+            }
+            int cntj = 0;
+            while (j < t.size() && t[j] == ch) {
+                ++cntj;
+                ++j;
+            }
+            if (cnti < cntj) {
+                return false;
+            }
+            if (cnti != cntj && cnti < 3) {
+                return false;
+            }
+        }
+        return i == s.size() && j == t.size();
     }
 };
