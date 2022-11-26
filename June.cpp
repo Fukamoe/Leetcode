@@ -1,40 +1,42 @@
 class Solution {
 public:
-    int expressiveWords(string s, vector<string>& words) {
-        int ans = 0;
-        for (const string& word: words) {
-            if (expand(s, word)) {
-                ++ans;
-            }
-        }
-        return ans;
+    int encode(int u, int v, int n) {
+        return u * n + v;
     }
 
-private:
-    bool expand(const string& s, const string& t) {
-        int i = 0, j = 0;
-        while (i < s.size() && j < t.size()) {
-            if (s[i] != t[j]) {
-                return false;
+    int reachableNodes(vector<vector<int>>& edges, int maxMoves, int n) {
+        vector<vector<pair<int, int>>> adList(n);
+        for (auto &edge : edges) {
+            int u = edge[0], v = edge[1], nodes = edge[2];
+            adList[u].emplace_back(v, nodes);
+            adList[v].emplace_back(u, nodes);
+        }
+
+        unordered_map<int, int> used;
+        unordered_set<int> visited;
+        int reachableNodes = 0;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        pq.emplace(0, 0);
+        while (!pq.empty() && pq.top().first <= maxMoves) {
+            auto [step, u] = pq.top();
+            pq.pop();
+            if (visited.count(u)) {
+                continue;
             }
-            char ch = s[i];
-            int cnti = 0;
-            while (i < s.size() && s[i] == ch) {
-                ++cnti;
-                ++i;
-            }
-            int cntj = 0;
-            while (j < t.size() && t[j] == ch) {
-                ++cntj;
-                ++j;
-            }
-            if (cnti < cntj) {
-                return false;
-            }
-            if (cnti != cntj && cnti < 3) {
-                return false;
+            visited.emplace(u);
+            reachableNodes++;
+            for (auto [v, nodes] : adList[u]) {
+                if (nodes + step + 1 <= maxMoves && !visited.count(v)) {
+                    pq.emplace(nodes + step + 1, v);
+                }
+                used[encode(u, v, n)] = min(nodes, maxMoves - step);
             }
         }
-        return i == s.size() && j == t.size();
+
+        for (auto &edge : edges) {
+            int u = edge[0], v = edge[1], nodes = edge[2];
+            reachableNodes += min(nodes, used[encode(u, v, n)] + used[encode(v, u, n)]);
+        }
+        return reachableNodes;
     }
 };
