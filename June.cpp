@@ -1,21 +1,22 @@
 class Solution {
 public:
-    bool check(vector<int>& nums) {
-        int n = nums.size(), x = 0;
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] < nums[i - 1]) {
-                x = i;
-                break;
+    double largestSumOfAverages(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<double> prefix(n + 1);
+        for (int i = 0; i < n; i++) {
+            prefix[i + 1] = prefix[i] + nums[i];
+        }
+        vector<vector<double>> dp(n + 1, vector<double>(k + 1));
+        for (int i = 1; i <= n; i++) {
+            dp[i][1] = prefix[i] / i;
+        }
+        for (int j = 2; j <= k; j++) {
+            for (int i = j; i <= n; i++) {
+                for (int x = j - 1; x < i; x++) {
+                    dp[i][j] = max(dp[i][j], dp[x][j - 1] + (prefix[i] - prefix[x]) / (i - x));
+                }
             }
         }
-        if (x == 0) {
-            return true;
-        }
-        for (int i = x + 1; i < n; ++i) {
-            if (nums[i] < nums[i - 1]) {
-                return false;
-            }
-        }
-        return nums[0] >= nums[n - 1];
+        return dp[n][k];
     }
 };
