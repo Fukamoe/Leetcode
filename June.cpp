@@ -1,23 +1,17 @@
 class Solution {
 public:
-    int nearestValidPoint(int x, int y, vector<vector<int>>& points) {
-        int n = points.size();
-        int best = numeric_limits<int>::max(), bestid = -1;
-        for (int i = 0; i < n; ++i) {
-            int px = points[i][0], py = points[i][1];
-            if (x == px) {
-                if (int dist = abs(y - py); dist < best) {
-                    best = dist;
-                    bestid = i;
+    vector<int> minOperations(string boxes) {
+        int n = boxes.size();
+        vector<int> res(n);
+        for (int i = 0; i < n; i++) {
+            int sm = 0;
+            for (int j = 0; j < n; j++) {
+                if (boxes[j] == '1') {
+                    sm += abs(j - i);
                 }
             }
-            else if (y == py) {
-                if (int dist = abs(x - px); dist < best) {
-                    best = dist;
-                    bestid = i;
-                }
-            }
+            res[i] = sm;
         }
-        return bestid;
+        return res;
     }
 };
