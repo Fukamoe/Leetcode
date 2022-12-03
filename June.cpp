@@ -1,17 +1,18 @@
 class Solution {
 public:
-    vector<int> minOperations(string boxes) {
-        int n = boxes.size();
-        vector<int> res(n);
-        for (int i = 0; i < n; i++) {
-            int sm = 0;
-            for (int j = 0; j < n; j++) {
-                if (boxes[j] == '1') {
-                    sm += abs(j - i);
+    int secondHighest(string s) {
+        int first = -1, second = -1;
+        for (auto c : s) {
+            if (isdigit(c)) {
+                int num = c - '0';
+                if (num > first) {
+                    second = first;
+                    first = num;
+                } else if (num < first && num > second) {
+                    second = num;
                 }
             }
-            res[i] = sm;
         }
-        return res;
+        return second;
     }
 };
