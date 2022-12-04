@@ -1,18 +1,28 @@
 class Solution {
 public:
-    int secondHighest(string s) {
-        int first = -1, second = -1;
-        for (auto c : s) {
-            if (isdigit(c)) {
-                int num = c - '0';
-                if (num > first) {
-                    second = first;
-                    first = num;
-                } else if (num < first && num > second) {
-                    second = num;
-                }
+    void dfs(const vector<int>& toppingCosts, int p, int curCost, int& res, const int& target) {
+        if (abs(res - target) < curCost - target) {
+            return;
+        } else if (abs(res - target) >= abs(curCost - target)) {
+            if (abs(res - target) > abs(curCost - target)) {
+                res = curCost;
+            } else {
+                res = min(res, curCost);
             }
         }
-        return second;
+        if (p == toppingCosts.size()) {
+            return;
+        }
+        dfs(toppingCosts, p + 1, curCost + toppingCosts[p] * 2, res, target);
+        dfs(toppingCosts, p + 1, curCost + toppingCosts[p], res, target);
+        dfs(toppingCosts, p + 1, curCost, res, target);
+    }
+
+    int closestCost(vector<int>& baseCosts, vector<int>& toppingCosts, int target) {
+        int res = *min_element(baseCosts.begin(), baseCosts.end());
+        for (auto& b : baseCosts) {
+            dfs(toppingCosts, 0, b, res, target);
+        }
+        return res;
     }
 };
