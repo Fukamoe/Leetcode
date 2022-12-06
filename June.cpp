@@ -1,28 +1,25 @@
 class Solution {
 public:
-    void dfs(const vector<int>& toppingCosts, int p, int curCost, int& res, const int& target) {
-        if (abs(res - target) < curCost - target) {
-            return;
-        } else if (abs(res - target) >= abs(curCost - target)) {
-            if (abs(res - target) > abs(curCost - target)) {
-                res = curCost;
-            } else {
-                res = min(res, curCost);
+    int numDifferentIntegers(string word) {
+        unordered_set<string> s;
+        int n = word.size(), p1 = 0, p2;
+        while (true) {
+            while (p1 < n && !isdigit(word[p1])) {
+                p1++;
             }
+            if (p1 == n) {
+                break;
+            }
+            p2 = p1;
+            while (p2 < n && isdigit(word[p2])) {
+                p2++;
+            }
+            while (p2 - p1 > 1 && word[p1] == '0') { // 去除前导 0
+                p1++;
+            }
+            s.insert(word.substr(p1, p2 - p1));
+            p1 = p2;
         }
-        if (p == toppingCosts.size()) {
-            return;
-        }
-        dfs(toppingCosts, p + 1, curCost + toppingCosts[p] * 2, res, target);
-        dfs(toppingCosts, p + 1, curCost + toppingCosts[p], res, target);
-        dfs(toppingCosts, p + 1, curCost, res, target);
-    }
-
-    int closestCost(vector<int>& baseCosts, vector<int>& toppingCosts, int target) {
-        int res = *min_element(baseCosts.begin(), baseCosts.end());
-        for (auto& b : baseCosts) {
-            dfs(toppingCosts, 0, b, res, target);
-        }
-        return res;
+        return s.size();
     }
 };
