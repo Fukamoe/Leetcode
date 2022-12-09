@@ -1,6 +1,12 @@
 class Solution {
 public:
-    bool squareIsWhite(string coordinates) {
-        return ((coordinates[0] - 'a' + 1) + (coordinates[1] - '0')) % 2 == 1;
+    bool checkPowersOfThree(int n) {
+        while (n) {
+            if (n % 3 == 2) {
+                return false;
+            }
+            n /= 3;
+        }
+        return true;
     }
 };
